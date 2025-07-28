@@ -38,7 +38,7 @@ uint8_t counter = 0;
 //88, 89, 90, 91, 92, 93, 94, 95, 96            
 //97, 98, 99, 100, 101, 102, 103 
 
-uint8_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
+uint16_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
 //int8_t learningArray[302];          //an array that, for each neuron, holds its firing history
 bool outputList[302];     //list of neurons
 bool nextOutputList[302]; //buffer to solve conflicting time differentials in firing
