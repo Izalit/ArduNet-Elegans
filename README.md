@@ -369,28 +369,24 @@ I plan to make it so you can see which neuron this is soon, but for right now he
 :D
 ## Credits
 
-______: The neural rom design and idea of putting C. Elegans was hugely inspired by ____, so thank you for the cool project, it served as massive inspiration.
+https://github.com/Dinokaiz2/: Dinokaiz2, who made edits to make the code more efficient and functional, as well as for their assistance when I consulted them in logic and debugging the activation function. They've been an incredible friend and support while I've worked on this project over the years and I really cannot thank them enough.
 
-______: as their work was used for finding connections between neurons and for debugging.
+EleganSign: A webtool by Fenyves et al. that allows the user to choose from multiple different data sets (https://elegansign.linkgroup.hu/#!Overview). We used their NT+R dataset, which used expression of neurotransmitters and receptors to predict synaptic weights. This was extremely useful, and alongside the other tools here was used to generate a list of data for our neural rom. Their datasets were an invaluable contribution!
 
-______: thank you for your articles, they helped me design some wonderful stuff and was valuable input when attaching neurons to the sensory functions.
+Gwyndoll: (https://github.com/gwyndoll) who helped with building datasets and debugging. You're a great friend, thanks so so much!
 
-______: Dinokaiz2, who made edits to make the code more efficient and functional, as well as for their assistance when I consulted them in logic and debugging the activation function. They've been an incredible friend and support while I've worked on this project over the years and I really cannot thank them enough.
+K. Oshio et al.: who made another great tool for looking at wiring, CCEP-Tool (http://ims.dse.ibaraki.ac.jp/ccep-tool/) which served useful as well during this project.
 
-______: Thanks goes to the people at open worm project, who made these data sets availabe and open source so a random programmer like me could make this.
+https://github.com/nategri/nematoduino: The neural rom design and idea of putting C. Elegans was hugely inspired by nategri's nematoduino, so thank you for the cool project, it served as massive inspiration for putting a brain on arduboy!
 
-I would also like to personally thank my partner, Molly, for all her help with debugging, formatting large data files, and generally just keeping me sane while working on this. Love ya molls.
+Nikhil Bhatla: as their work on wormweb (http://wormweb.org/neuralnet#c=BAG&m=1) was used for finding connections between neurons and for debugging. I love their webtool it is amazingly rad.
 
-Lastly, to both Molly, Kaiz, and Nova, all of you, thanks so much for your help with this crazy ambitious project, with debugging and discussing the logic and talking it out, simply just being rubber ducky was immensely helpful, but so has all that you've done for me while I've been struggling with my illness these past few years. Your friendship and your wonderful brains are more valuable than gold. Love ya'll.
+Open Worm Project: Thanks goes to the people at open worm project, who make these curated data sets (https://openworm.org/ConnectomeToolbox/Witvliet_2021/) availabe and open source so a random programmer like me could make this.
 
-
-
+Worm Atlas: who has a wonderful website (https://www.wormatlas.org/index.html) with tons of references for each individual neuron! I love all that they've done, and highly reccomend checking it out.
 
 . . .
 
+I would also like to personally thank my partner, Molly, for all her help with debugging, formatting large data files, and generally just keeping me sane while working on this. You're an incredible partner, parent, and programmer. Love ya molls.
 
-. .
-
-.
-
-...and to anyone who finds this silly arduboy project... I sincerely hope this project is able to demonstrate to you just how intricate, complex and full of life even the smallest creatures are, and maybe give ya a little friend to keep around with you :3
+Lastly, to my friends Molly, Kaiz, and Nova, all of you, thanks so much for your help with this crazy ambitious project, with debugging and discussing the logic and talking it out, simply just being rubber ducky was immensely helpful, but so has all that you've done for me while I've been struggling with my illness these past few years. Your friendship and your wonderful brains are more valuable than gold!
