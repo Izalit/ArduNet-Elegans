@@ -11,7 +11,7 @@ class BitArray {
 
     private:
     static constexpr uint8_t size = (length + 7) / 8 ; // size in bytes
-    uint8_t arr[size] = {0};
+    uint8_t arr[size] = { 0 };
 
     // holds reference to byte in array and specific bit so bits can be set with subscript operator
     struct bit_proxy {
@@ -19,6 +19,9 @@ class BitArray {
         uint8_t bit;
         void operator=(bool val) {
             *byte = (*byte & ~(1 << bit)) | (val << bit); // change bit in referenced byte when setting
+        }
+        void operator=(bit_proxy proxy) {
+            *this = static_cast<int>(proxy); // setting to element of another array, cast to int type
         }
         operator int() {
             return (*byte & (1 << bit)) >> bit; // get the bit on its own for standard use
