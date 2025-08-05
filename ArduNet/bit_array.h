@@ -27,18 +27,18 @@ class BitArray {
      * operator to return an object with logic to mutate the element of the
      * enclosing BitArray when assigned.
      */
-    struct bit_proxy {
+    struct BitProxy {
 
         uint8_t* byte;
         uint8_t bit;
 
-        bit_proxy& operator=(bool val) {
+        BitProxy& operator=(bool val) {
             *byte = (*byte & ~(1 << bit)) | (val << bit);
             return *this;
         }
 
-        // When assigned another bit_proxy, only assign the value of the bit
-        bit_proxy& operator=(bit_proxy& other) {
+        // When assigned another BitProxy, only assign the value of the bit
+        BitProxy& operator=(BitProxy& other) {
             *this = static_cast<int>(other);
             return *this;
         }
@@ -59,8 +59,8 @@ class BitArray {
      * @param idx the index of the element to get
      * @return a proxy for the element
      */
-    bit_proxy operator[](uint16_t idx) {
-        bit_proxy b = { arr + (idx / 8), static_cast<uint8_t>(idx % 8) };
+    BitProxy operator[](uint16_t idx) {
+        BitProxy b = { arr + (idx / 8), static_cast<uint8_t>(idx % 8) };
         return b;
     }
 
