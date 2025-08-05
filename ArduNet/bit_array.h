@@ -17,11 +17,13 @@ class BitArray {
     struct bit_proxy {
         uint8_t* byte;
         uint8_t bit;
-        void operator=(bool val) {
+        bit_proxy& operator=(bool val) {
             *byte = (*byte & ~(1 << bit)) | (val << bit); // change bit in referenced byte when setting
+            return *this;
         }
-        void operator=(bit_proxy proxy) {
-            *this = static_cast<int>(proxy); // setting to element of another array, cast to int type
+        bit_proxy& operator=(bit_proxy& other) {
+            *this = static_cast<int>(other); // setting to element of another array, cast to int type
+            return *this;
         }
         operator int() {
             return (*byte & (1 << bit)) >> bit; // get the bit on its own for standard use
