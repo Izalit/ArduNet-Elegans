@@ -33,7 +33,7 @@ Input Select Screen: This simple screen lets you choose between three input moda
 ...and right now that's it. I plan to do a lot more in the future. I actually want to add a whole new screen as the main screen later. A whole simulation that works kinda like a digital pet. But we'll see if that ends up happening. The update that allows the worm to learn should be coming out soon though so stay tuned!
 
 ## Neural ROM Versions
-As of right now, there are a few different versions of the "Neural ROM", the data specifying the edges and weights of the neural network. Each of these versions is based on a few different approaches one could take in analyzing data that is either missing or too complex to incorporate into this simulation. In the case of data that is too complex, certain synapses require a model that is many magnitudes more complex to simulate; these synapses are not as simple as the ionotropic synapses that make up the majority of the network used in this connectome. Instead they require modeling individual neurotransmitter-receptor interactions, with timers on those receptors, modelling the gradients of neurochemicals, and factoring in spatial locations of each neuron... While these are things that we want to address in later versions of this simulation, in this early-stage Arduboy simulation it is simply not possible. 
+As of right now, there are a few different versions of the "Neural ROM" we are developing. Each of these versions is based on a few different approaches one could take in analyzing data that is either missing or too complex to incorporate into this simulation. In the case of data that is too complex, certain synapses require a model that is many magnitudes more complex to simulate; these synapses are not as simple as the ionotropic synapses that make up the majority of the network used in this connectome. Instead they require modeling individual neurotransmitter-receptor interactions, with timers on those receptors, modelling the gradients of neurochemicals, and factoring in spatial locations of each neuron... While these are things that we want to address in later versions of this simulation, in this early-stage Arduboy simulation it is simply not possible. 
 
 Similarly we are not able to model each and every gap junction in the network with our limited resources on the Arduboy. So complex and electrical synapses are not accounted for, except in the cases of a few specific gap junctions. As for the missing data, there are many ionotropic synapses with unknown signs; that is, we do not know if they are excitatory or inhibitory...
 
@@ -52,7 +52,9 @@ In order to solve all these issues we are assembling datasets with the following
 
 I plan to do a few key things with this in the future, some crazier than others.. if I can fit it in the program. Some of these may not be possible on arduboy, given the constraints, but I'll add as much as I can with that in mind. But since space is tight given the huge arrays of neuron data and few thousand synapses... well, it'll be a challenge! Regardless the following features are things I want to try to add:
 
-* Add multiple different data set options for Neural ROM
+* Fix the current neural rom... (data set is made with inaccurate randomized ratios for unknown and complex synapses)
+
+* Add multiple different data set options for Neural ROM (listed above)
 
 * Initialize the direction the worm is in as "stationary" so it doesn't start in "forward" [not yet implemented; high priority]
 
