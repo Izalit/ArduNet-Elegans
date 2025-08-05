@@ -3,6 +3,14 @@
 
 #include <stdint.h>
 
+/**
+ * An array of bits, similar to bool[], implemented for memory efficiency.
+ * Eight elements can be stored per byte of space. Accessible and settable with
+ * subscript operator, like a regular array. Does not support pointer operations
+ * like an array does.
+ *
+ * @tparam Length maximum number of elements this array can store
+ */
 template <uint16_t Length>
 class BitArray {
 
@@ -10,28 +18,47 @@ class BitArray {
     static const uint16_t length = Length;
 
     private:
-    static constexpr uint8_t size = (length + 7) / 8 ; // size in bytes
+    static constexpr uint8_t size = (length + 7) / 8 ; // in bytes
     uint8_t arr[size] = { 0 };
 
-    // holds reference to byte in array and specific bit so bits can be set with subscript operator
+    /*
+     * The subscript operator does not usually support assignment. To allow
+     * operations like `b[3] = true`, this type is used by the subscript
+     * operator to return an object with logic to mutate the element of the
+     * enclosing BitArray when assigned.
+     */
     struct bit_proxy {
+
         uint8_t* byte;
         uint8_t bit;
+
         bit_proxy& operator=(bool val) {
-            *byte = (*byte & ~(1 << bit)) | (val << bit); // change bit in referenced byte when setting
+            *byte = (*byte & ~(1 << bit)) | (val << bit);
             return *this;
         }
+
+        // When assigned another bit_proxy, only assign the value of the bit
         bit_proxy& operator=(bit_proxy& other) {
-            *this = static_cast<int>(other); // setting to element of another array, cast to int type
+            *this = static_cast<int>(other);
             return *this;
         }
-        operator int() {
-            return (*byte & (1 << bit)) >> bit; // get the bit on its own for standard use
+
+        // Implicit conversion to mimic bool
+        operator bool() {
+            return (*byte & (1 << bit)) >> bit;
         }
     };
 
     public:
-    // when subscripting, quietly return a proxy that references the byte and remembers the relevant bit
+
+    /**
+     * Returns a proxy for the element at idx that remembers the element's
+     * location in the array. The proxy is required in order to allow assignment
+     * of array elements through the subscript operator, i.e. `b[3] = true`.
+     *
+     * @param idx the index of the element to get
+     * @return a proxy for the element
+     */
     bit_proxy operator[](uint16_t idx) {
         bit_proxy b = { arr + (idx / 8), static_cast<uint8_t>(idx % 8) };
         return b;
