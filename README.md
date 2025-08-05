@@ -7,7 +7,15 @@ This project is a little attempt of mine to try to fit a simplified neural netwo
 
 
 
-DISCLAIMER! 
+DISCLAIMERS! 
+
+As of right now, there are a few different versions of the "Neural ROM", the data specifying the edges and weights of the neural network. Each of these versions is based on a few different approaches one could take in analyzing data that is either missing or too complex to incorporate into this simulation. In the case of data that is too complex, certain synapses require a model that is many magnitudes more complex to simulate; these synapses are not as simple as the ionotropic synapses that make up the majority of the network used in this connectome. Instead they require modeling individual neurotransmitter-receptor interactions, timers on those receptors, diffuse gradients of chemicals, and spatial locations of each neuron to that gradient. While these are things that we want to address in later versions of this simulation, in this early-stage compact arduboy simulation it is simply not possible... Similarly we are not able to provide resources to model each and every gap junction in the network. So complex and electrical synapses are not accounted for, except in the cases of a few specific gap junctions. As for the missing data, there are many ionotropic synapses with unknown signs; that is, we do not know if they are excitatory or inhibitory. In order to solve these issues we are assembling datasets with the following attributes:
+* Complete Simulation: unknown sign synapses and complex synapses have a randomized sign (with 4:1, +:-), relevant gap junctions approximated
+* No Unknown, With GJ: complex synapses have randomized signs, unknown sign synapses not included, relevant gap junctions approximated
+* No Unknown, No GJ: complex synapses have randomized signs, unknown sign synapses not included, relevant gap junctions not included
+* No Complex, With GJ: unknown sign synapses have randomized signs, complex synapses not included, relevant gap junctions approximated
+* No Complex, No GJ: unknown sign synapses have randomized signs, complex synapses not included, relevant gap junctions not included
+* Bare-Bones: unknown signs and complex synapses are not included, relevant gap junctions not included
 
 [so. it turns out that debugging a brain is really really hard, and while I built a tool into this that allows me to scroll through the network and verify the neurons are read properly from the neural rom (the diagnostic screen which I decided to keep because it is cool af), actually telling if its crunching numbers correctly is really hard, and so I am currently in the process of making small neural circuits with a more easily distinguishable output so I can verify that the small-world network that is the C. elegans brain is implemented with 100% accurate activation function calculation. Regardless, for small circuits it has been demonstrated to be functional so at least something works!]
 ## Philosophy
