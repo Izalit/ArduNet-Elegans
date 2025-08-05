@@ -27,13 +27,22 @@ class BitArray {
      * operator to return an object with logic to mutate the element of the
      * enclosing BitArray when assigned.
      */
-    struct BitProxy {
+    class BitProxy {
 
         uint8_t* byte;
-        uint8_t bit;
+        uint8_t bit_idx;
+
+        public:
+        BitProxy(uint8_t* byte, uint8_t bit_idx) : byte(byte), bit_idx(bit_idx) {}
+        BitProxy(BitProxy&);
+
+        // Implicit conversion to mimic bool
+        operator bool() {
+            return (*byte & (1 << bit_idx)) >> bit_idx;
+        }
 
         BitProxy& operator=(bool val) {
-            *byte = (*byte & ~(1 << bit)) | (val << bit);
+            *byte = (*byte & ~(1 << bit_idx)) | (val << bit_idx);
             return *this;
         }
 
@@ -43,10 +52,6 @@ class BitArray {
             return *this;
         }
 
-        // Implicit conversion to mimic bool
-        operator bool() {
-            return (*byte & (1 << bit)) >> bit;
-        }
     };
 
     public:
