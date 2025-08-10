@@ -1,27 +1,19 @@
 /**
- * Graphics to Add to the Sim
- *    Make the surface line five or ten pixels further down (double the current space?)
- *    edit stick sprite to be flat at the bottom, put a few on the surface
- *    Add grass in front of the sticks (for loop with pixel columns drawn; heights- 4 3 3 4 3 4... loop this across the entire top line)
- *    Add a simple tree trunk sprite on the far right side of the surface
- *    Add a sun sprite (randomize to moon? deactivate phototaxis when doing so?)
- *    edit rock sprites on the left and right to frame the display, remove middle rock
- *    larger cursor crosshair
- *    Add stipling to the dirt for depth-- more stippling further down (draw a pixel every 8 pixels, remove a pixel every layer)
- *    Add roots under the tree - spawn food here
- *
  *      Simulation Version TODOs
- * Make room for the ascii faces
+ * Make room for the ascii faces, title screen, satiety, and drawWorm
+ *
  * Implement satiety
  *    create a counter for food eaten
  *    use tick variable to check every so many ticks how much food has been eaten
- * Implement phasic activation (current system for gradient activation is tonic, non-gradient is a single call)
- *
- * Add collisions
+ * Phasic and Tonic Firing Types
+ *    Implement phasic activation (current system for gradient activation is tonic, non-gradient is a single call)
+ *    Implement proper activation (phasic or tonic) for the senses seperated via height (light, temp, aerotaxis)
+ * Add collisions for full obstacle (1, 2, 3, 4, 5) sprite hit-boxes
  * Fix the randomizers
- *    multiple food; spawn points are under the stick, inside of the tree roots
+ *    multiple food; spawn points are under the stick, inside of the tree roots, and the user placed food
  *    multiple toxins; spawn points are near the bottom rocks, top left of surface
  *    leaves on surface in random spots
+ *    Randomize to moon deactivate phototaxis when doing so
  *    smaller rocks in random spots?
  * Make motor neurons --> worm movement more biologically accurate
  *    move away from tank drive and instead move to a proper sinusoid
@@ -87,31 +79,32 @@ float vbRatio = 0;
 float daRatio = 0;
 float dbRatio = 0;
 uint8_t cursorX = 64;     //cursor
-uint8_t cursorY = 32;     //cursor
+uint8_t cursorY = 27;     //cursor
 uint8_t wormX = 64;       //worm
-uint8_t wormY = 20;       //worm
-uint8_t wormFacing = 0;
-uint8_t prevWormDir = 0;
-uint8_t foodX = 94;       //food
-uint8_t foodY = 52;       //food
-uint8_t obstacleX1 = 8;   //rock
-uint8_t obstacleY1 = 44;  //rock
-uint8_t obstacleX2 = 57;  //rock
-uint8_t obstacleY2 = 38;  //rock
-uint8_t obstacleX3 = 104; //rock
-uint8_t obstacleY3 = 38;  //rock
-uint8_t obstacleX4 = 40;  //leaf
-uint8_t obstacleY4 = 37;  //leaf
-uint8_t obstacleX5 = 85;  //leaf
-uint8_t obstacleY5 = 40;  //leaf
-uint16_t tick = 0;
+uint8_t wormY = 40;       //worm
+uint8_t wormFacing = 0;   //the direction the worm is facing
+uint8_t prevWormDir = 0;  //the previous direction of the worm
+uint8_t foodX = 99;       //food
+uint8_t foodY = 30;       //food
+uint8_t obstacleX1 = 5;   //rock
+uint8_t obstacleY1 = 49;  //rock
+uint8_t obstacleX2 = 40;  //stick
+uint8_t obstacleY2 = 13;  //stick
+uint8_t obstacleX3 = 105; //rock
+uint8_t obstacleY3 = 45;  //rock
+uint8_t obstacleX4 = 114; //leaf
+uint8_t obstacleY4 = 11;  //leaf
+uint8_t obstacleX5 = 75;  //leaf
+uint8_t obstacleY5 = 11;  //leaf
+uint16_t tick = 0;        //connectome ticks
 uint8_t repellentX = 34;  //repellent
 uint8_t repellentY = 52;  //repellent
-bool isRepel = true;
-bool isFood = true;
-bool isAsleep = false;
-uint16_t foodTouchCounter = 0;
+bool isRepel = true;      //if theres any repellents
+bool isFood = true;       //if theres any food
+bool isAsleep = false;    //if sleep state is active
+//uint16_t foodTouchCounter = 0;  //how long the food has been eaten for
 
+//massive thanks to Dinokaiz2 for help with the bit array functionality!!!
 //uint8_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
 //BitArray<> learningArray;  //an array that, for each neuron that does hebbian learning, holds a form of simplified output history
 BitArray<302> outputList;     //list of neurons
@@ -137,7 +130,7 @@ void loop() {
     return;
   }
   
-  doTitleScreen();
+  //doTitleScreen();
 
   arduboy.pollButtons();        //get buttons pressed and send to function to process them
   doButtons();
@@ -179,27 +172,27 @@ void doButtons() {
     }
 
     if (cursorY >= 5 && arduboy.justPressed(UP_BUTTON)) {
-      if (!(cursorY-5 >= 44 && cursorY-5 <= 62 && cursorY-5 >= 38 && cursorY-5 <= 54 && cursorY-5 >= 38 && cursorY-5 <= 57)) {
+      //if (!(cursorY-5 >= 49 && cursorY-5 <= 64 && cursorY-5 >= 45 && cursorY-5 <= 64)) {
         cursorY -= 5;
-      }
+      //}
     }
 
     if (cursorX >= 5 && arduboy.justPressed(LEFT_BUTTON)) {
-      if (!(cursorX-5 <= 8 && cursorX-5 >= 23 && cursorX-5 <= 57 && cursorX-5 >= 75 && cursorX-5 <= 104 && cursorX-5 >= 122)) {
+      //if (!(cursorX-5 <= 5 && cursorX-5 >= 20 && cursorX-5 <= 105 && cursorX-5 >= 123)) {
         cursorX -= 5;
-      }
+      //}
     }
 
     if (cursorX <= 123 && arduboy.justPressed(RIGHT_BUTTON)) {
-      if (!(cursorX+5 <= 8 && cursorX+5 >= 23 && cursorX+5 <= 57 && cursorX+5 >= 75 && cursorX+5 <= 104 && cursorX+5 >= 122)) {
+      //if (!(cursorX+5 <= 5 && cursorX+5 >= 20 && cursorX+5 <= 105 && cursorX+5 >= 123)) {
         cursorX += 5;
-      }
+      //}
     }
 
     if (cursorY <= 59 && arduboy.justPressed(DOWN_BUTTON)) {
-      if (!(cursorY+5 >= 44 && cursorY+5 <= 62 && cursorY+5 >= 38 && cursorY+5 <= 54 && cursorY+5 >= 38 && cursorY+5 <= 57)) {
+      //if (!(cursorY+5 >= 49 && cursorY+5 <= 64 && cursorY+5 >= 45 && cursorY+5 <= 64)) {
         cursorY += 5;
-      }
+      //}
     }
 
   arduboy.display();
@@ -227,33 +220,73 @@ void doTitleScreen() {
 void simulation() {
   arduboy.clear();
 
-  //draw border
-  arduboy.drawRoundRect(0, 0, 128, 64, 3);
-  
-  //draw demarcations on left for temp gradients
-  arduboy.setCursor(7, 2);
-  arduboy.print("C");
-  Sprites::drawOverwrite(2, 2, degree, 0);
-  Sprites::drawOverwrite(1, 12, demarc, 0);
-
-  //draw demarcations on right for O2/CO2 gradients
-  arduboy.setCursor(116, 2);
-  arduboy.print("O");
-  Sprites::drawOverwrite(122, 5, sub2, 0);
-  Sprites::drawOverwrite(124, 12, demarc, 0);
-
-  //draw line showing surface and light exposure activation
-  arduboy.drawLine(0, 10, 128, 10);
-
-  //draw cursor centered on cursorX, cursorY 
-  arduboy.drawPixel(cursorX, cursorY - 1);
-  arduboy.drawPixel(cursorX - 1, cursorY);
-  arduboy.drawPixel(cursorX + 1, cursorY);
-  arduboy.drawPixel(cursorX, cursorY + 1);
-
   //draw repellant on screen
   if (isRepel) {
     Sprites::drawOverwrite(repellentX, repellentY, toxin, 0);
+  }
+
+  //draw stipling in the dirt to indicate depth
+  bool offset = false;
+  uint8_t widthOffset = 1;
+  for (uint8_t j = 25; j <= 64; j+=3) {
+    for (uint8_t i = 0; i <= 128; i+=widthOffset) {
+      if (j > 55) {
+        widthOffset = 3;
+      } else if (j > 45) {
+        widthOffset = 6;
+      } else if (j > 35) {
+        widthOffset = 12;
+      } else if (j > 25) {
+        widthOffset = 24;
+      } else if (j > 20) {
+        widthOffset = 48;
+      }
+        
+      if (offset) {
+        arduboy.drawPixel(i, j, WHITE);
+      } else {
+        arduboy.drawPixel(i+(widthOffset/2), j, WHITE);
+      }
+    }
+    offset = !offset;
+  }
+
+  Sprites::drawOverwrite(obstacleX1, obstacleY1, rock1, 0);
+  Sprites::drawOverwrite(obstacleX2, obstacleY2, stick, 0);
+  Sprites::drawOverwrite(obstacleX3, obstacleY3, rock3, 0);
+  Sprites::drawOverwrite(obstacleX4, obstacleY4, leaf, 0);
+  Sprites::drawOverwrite(obstacleX5, obstacleY5, leaf, 0);
+  Sprites::drawOverwrite(20, 2, sun, 0);    //draw a sun on surface
+  Sprites::drawOverwrite(90, 0, tree, 0);   //draw the tree in top right
+
+  //draw grass on surface
+  for (uint8_t i = 1; i < 127; i += 10) {
+    arduboy.drawPixel(i, 19, WHITE);
+    arduboy.drawPixel(i, 18, WHITE);
+    arduboy.drawPixel(i, 17, WHITE);
+    arduboy.drawPixel(i, 16, WHITE);
+    
+    arduboy.drawPixel(i+2, 19, WHITE);
+    arduboy.drawPixel(i+2, 18, WHITE);
+    arduboy.drawPixel(i+2, 17, WHITE);
+
+    arduboy.drawPixel(i+4, 19, WHITE);
+    arduboy.drawPixel(i+4, 18, WHITE);
+    arduboy.drawPixel(i+4, 17, WHITE);
+
+    arduboy.drawPixel(i+6, 19, WHITE);
+    arduboy.drawPixel(i+6, 18, WHITE);
+    arduboy.drawPixel(i+6, 17, WHITE);
+    arduboy.drawPixel(i+6, 16, WHITE);
+
+    arduboy.drawPixel(i+8, 19, WHITE);
+    arduboy.drawPixel(i+8, 18, WHITE);
+    arduboy.drawPixel(i+8, 17, WHITE);
+
+    arduboy.drawPixel(i+10, 19, WHITE);
+    arduboy.drawPixel(i+10, 18, WHITE);
+    arduboy.drawPixel(i+10, 17, WHITE);
+    arduboy.drawPixel(i+10, 16, WHITE);    
   }
 
   //draw food on screen (store this in sprites.h)
@@ -261,18 +294,40 @@ void simulation() {
     Sprites::drawOverwrite(foodX, foodY, food, 0);
   }
 
-  drawWorm();
-
-  Sprites::drawOverwrite(obstacleX1, obstacleY1, rock1, 0);
-  Sprites::drawOverwrite(obstacleX2, obstacleY2, rock2, 0);
-  Sprites::drawOverwrite(obstacleX3, obstacleY3, rock3, 0);
-  Sprites::drawOverwrite(obstacleX4, obstacleY4, leaf, 0);
-  Sprites::drawOverwrite(obstacleX5, obstacleY5, leaf, 0);
-
+  //draw line showing surface and light exposure activation
+  arduboy.drawLine(0, 20, 128, 20);
+  
   calculateCollisions();
   calculateGradients();
-  drawFaces();
+  //drawFaces();
+  //drawWorm();
+
+  //draw cursor centered on cursorX, cursorY 
+  arduboy.drawPixel(cursorX, cursorY - 1);
+  arduboy.drawPixel(cursorX, cursorY - 2);
+  arduboy.drawPixel(cursorX - 1, cursorY);
+  arduboy.drawPixel(cursorX - 2, cursorY);
+  arduboy.drawPixel(cursorX + 1, cursorY);
+  arduboy.drawPixel(cursorX + 2, cursorY);
+  arduboy.drawPixel(cursorX, cursorY + 1);
+  arduboy.drawPixel(cursorX, cursorY + 2);
+
   wormMove();
+
+  //draw border
+  arduboy.drawRoundRect(0, 0, 128, 64, 3);
+  
+  //draw demarcations on left for temp gradients
+  Sprites::drawOverwrite(1, 2, demarc, 0);
+  arduboy.setCursor(7, 2);
+  arduboy.print("C");
+  Sprites::drawOverwrite(2, 2, degree, 0);
+
+  //draw demarcations on right for O2/CO2 gradients
+  Sprites::drawOverwrite(124, 2, demarc, 0);
+  arduboy.setCursor(116, 2);
+  arduboy.print("O");
+  Sprites::drawOverwrite(122, 5, sub2, 0);
 
   if (isAsleep == true) {   //if asleep, keep the worm asleep until network is powered off
     maintainSleep();
@@ -551,7 +606,7 @@ void drawFaces() {
  */
 void makeGradients(bool isFullRadius, uint8_t compX, uint8_t compY, void (*senseFunction)(), bool isStimulant) {
   if (!isStimulant) return;
-
+  //Credit again to Dinokaiz2, math whiz who helped with the math for this beautiful tonic activation system
   /**    
   * On the left, y axis, each gradient step is five. The x axis is the ticks of the connectome up to 3628800.
   * 3628800 is the factorial of 10; which is a multiple of 1 - 10, which allows each of the first 
@@ -632,26 +687,21 @@ void calculateGradients() {
 //noxious temp is phasic
 //cooling and heating is tonic
 //CO2 sensation is tonic
-  if (54 <= wormY && wormY <= 64) {           //temp frigid; oxygen too low
+  if (55 <= wormY && wormY <= 64) {           //temp frigid; oxygen too low
     doNoxiousColdResponse();
     doCO2Sensation();
-  }
-  if (44 <= wormY && wormY < 54) {          //temp cold; oxygen low
+  } else if (45 <= wormY && wormY < 55) {          //temp cold; oxygen low
     doCoolingResponse();             
     doCO2Sensation();                             
-  }
-  if (34 <= wormY && wormY < 44) {        //temp ideal; oxygen ideal
+  } else if (35 <= wormY && wormY < 45) {        //temp ideal; oxygen ideal
     doCO2Sensation();               
-  }
-  if (14 <= wormY && wormY < 24) {    //temp warm; oxygen high
+  } else if (25 <= wormY && wormY < 35) {    //temp warm; oxygen high
     doHeatingResponse();        
     doOxygenSensation();        
-  }
-  if (wormY < 14) {                 //temp hot; oxygen too high
+  } else if (wormY < 25) {                 //temp hot; oxygen too high
     doNoxiousHeatResponse();  
     doOxygenSensation();      
-  }
-  if (wormY < 10) {               //surface; light
+  } else if (wormY < 20) {               //surface; light
     doPhotosensation();
   }
 
@@ -672,7 +722,8 @@ void calculateGradients() {
  * Function to calculate collisions of simulation objects
  */
 void calculateCollisions() {
-  //if worm hits rock, activate harsh touch
+//TODO: add collisions for other obstacles: 4 (leaf) and 5 (leaf)
+  //if worm hits obstacles 1 (rock), 2 (stick), or 3 (rock), activate harsh touch
   if ((wormX == obstacleX1 && wormY == obstacleY1) || (wormX == obstacleX2 && wormY == obstacleY2) || (wormX == obstacleX3 && wormY == obstacleY3)) {
     //activate harsh touch
     doGentleNoseTouch();
