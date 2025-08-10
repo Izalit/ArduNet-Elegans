@@ -13,9 +13,10 @@
  *    Quick scroll for diag and matrix screen lists?
  */
 
-#include "neuralROM.h"            //import libraries
-#include "sprites.h"
+#include "sprites.h"              //import libraries
+#include "neuralROM.h"
 #include "bit_array.h"
+#include "sized_int_array_reader.h"
 #include <Arduboy2.h>
 #include <stdlib.h>
 
@@ -39,6 +40,8 @@ float daRatio = 0;
 float dbRatio = 0;
 uint8_t counter = 0;
 
+
+SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70);
 
 uint16_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
 //BitArray<302> <maxSynapse> learningArray;    //an array that, for each neuron, holds its firing history
@@ -463,21 +466,21 @@ void matrixToNeuron(uint16_t cellID) {
 
   // Skip to the correct neuron's data
   for (uint16_t i = 0; i < cellID; i++) {
-    int16_t skipLen = pgm_read_word(&NEURAL_ROM[index]);     //read the value of the first neuron's input Len
+    int16_t skipLen = NEURAL_ROM[index];     //read the value of the first neuron's input Len
     index += 1 + skipLen + skipLen;       //add double that value plus one, to skip the entire neuron entry
   }
 
-  n.inputLen = pgm_read_word(&NEURAL_ROM[index]);
+  n.inputLen = NEURAL_ROM[index];
   index++;
 
   // Read neuron inputs
   for (uint8_t i = 0; i < n.inputLen; i++) {
-    n.inputs[i] = pgm_read_word(&NEURAL_ROM[index++]);
+    n.inputs[i] = NEURAL_ROM[index++];
   }
 
   // Read neuron weights
   for (uint8_t i = 0; i < n.inputLen; i++) {
-    n.weights[i] = pgm_read_word(&NEURAL_ROM[index++]);
+    n.weights[i] = NEURAL_ROM[index++];
   }
 }
 
