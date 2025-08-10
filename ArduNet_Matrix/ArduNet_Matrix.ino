@@ -1,16 +1,24 @@
-//TODO: design some test circuits and ROM... verify this is crunching numbers right
-
 /**
- *                    STRETCH GOALS
- *  -reduce global variable memory use to make room for hebbian learning
- *  -save weight adjustments between on-off cycles? eeprom?
- *  -finish the simulation and output screen function
+ *      Both Version TODOs
+ *    BottleNeck: Waiting on K to finish
+ *      Goal: Implement the hebbian long term potentiation and long term depression functions
+ *            Saving the hebbian array to eeprom (saves every time user presses up to go to matrix screen? tell user this at titlescreen?)
+ *            Using remaining space, add as many necessary gap junction synapses into neural ROM as possible
+ *
+ *      Matrix Version TODOs
+ *    update code with generalized advancements from the simulation version
+ *    implement save to eeprom
+ *    implement output save over serial
+ *    replace neuron IDs with their proper neuron names
+ *    Quick scroll for diag and matrix screen lists?
  */
 
 #include "neuralROM.h"            //import libraries
 #include "sprites.h"
+#include "bit_array.h"
 #include <Arduboy2.h>
 #include <stdlib.h>
+
 
 Arduboy2 arduboy;                 //create arduboy object
 
@@ -32,16 +40,10 @@ float dbRatio = 0;
 uint8_t counter = 0;
 
 
-//              non-learning neurons??
-//260, 264, 265, 266, 267, 268, 269, 270, 271, 261, 262, 263            
-//272, 275, 276, 277, 278, 279, 280, 281, 282, 273, 274            
-//88, 89, 90, 91, 92, 93, 94, 95, 96            
-//97, 98, 99, 100, 101, 102, 103 
-
 uint16_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
-//int8_t learningArray[302];          //an array that, for each neuron, holds its firing history
-bool outputList[302];     //list of neurons
-bool nextOutputList[302]; //buffer to solve conflicting time differentials in firing
+//BitArray<302> <maxSynapse> learningArray;    //an array that, for each neuron, holds its firing history
+BitArray<302> outputList;                    //list of neurons
+BitArray<302> nextOutputList;                //buffer to solve conflicting time differentials in firing
 
 struct Neuron {
   int16_t cellID;
@@ -73,10 +75,9 @@ void loop() {
 
   //go to the proper screens based on the direction button last clicked
   if (arduboy.justPressed(UP_BUTTON) || startFlag) doMatrixScreen();
-  //if (arduboy.justPressed(DOWN_BUTTON))  doOutputScreen();
   if (arduboy.justPressed(LEFT_BUTTON)) doDiagnosticScreen();
   if (arduboy.justPressed(RIGHT_BUTTON)) doInputScreen();
-
+  if (arduboy.justPressed(DOWN_BUTTON)) doSaveScreen();
   arduboy.display();
   
   startFlag = false;            //set the flag off; only do the title screen once
@@ -91,7 +92,6 @@ void doDiagnosticScreen() {
 
       arduboy.clear();    
       arduboy.setCursor(10, 10);
-      arduboy.print("# ");
       arduboy.print(currentID);
       arduboy.print(" Syn: ");
       arduboy.print(numSynapses); 
@@ -105,6 +105,7 @@ void doDiagnosticScreen() {
       arduboy.print("postID: ");
       arduboy.print(currentID);
 
+//TODO: print the actual neuron name above the sprite
       if (outputList[currentID]) Sprites::drawOverwrite(85, 30, perceptronON, 0);
       if (!outputList[currentID]) Sprites::drawOverwrite(85, 30, perceptronOFF, 0);
 
@@ -123,33 +124,42 @@ void doInputScreen() {
       arduboy.setCursor(10,0);
       arduboy.print("Select Input Type: ");
       arduboy.setCursor(10,20);
-      arduboy.print("-Nose Touch");
+      arduboy.print("- Gentle Nose Touch");
       arduboy.setCursor(10,30);
-      arduboy.print("-Chemorepulsion");
+      arduboy.print("- Aerotaxis");
       arduboy.setCursor(10,40);
-      arduboy.print("-Chemoattraction");
+      arduboy.print("- Chemoattraction");
+      arduboy.setCursor(10,50);
+      arduboy.print("- Phototaxis");
 
         if (posCount == 0) {
-          arduboy.drawPixel(0, 33, WHITE);
-          arduboy.drawPixel(1, 33, WHITE);
-          arduboy.drawPixel(2, 33, WHITE);
-          arduboy.drawPixel(1, 32, WHITE);
-          arduboy.drawPixel(1, 34, WHITE);
-          arduboy.display();
-        } else if (posCount == 1) {
-          arduboy.drawPixel(0, 43, WHITE);
-          arduboy.drawPixel(1, 43, WHITE);
-          arduboy.drawPixel(2, 43, WHITE);
-          arduboy.drawPixel(1, 42, WHITE);
-          arduboy.drawPixel(1, 44, WHITE);
-          arduboy.display();
-        } else if (posCount == 2) {
           arduboy.drawPixel(0, 23, WHITE);
           arduboy.drawPixel(1, 23, WHITE);
           arduboy.drawPixel(2, 23, WHITE);
           arduboy.drawPixel(1, 22, WHITE);
           arduboy.drawPixel(1, 24, WHITE);
           arduboy.display();
+        } else if (posCount == 1) {
+          arduboy.drawPixel(0, 33, WHITE);
+          arduboy.drawPixel(1, 33, WHITE);
+          arduboy.drawPixel(2, 33, WHITE);
+          arduboy.drawPixel(1, 32, WHITE);
+          arduboy.drawPixel(1, 34, WHITE);
+          arduboy.display();
+        } else if (posCount == 2) {
+          arduboy.drawPixel(0, 43, WHITE);
+          arduboy.drawPixel(1, 43, WHITE);
+          arduboy.drawPixel(2, 43, WHITE);
+          arduboy.drawPixel(1, 42, WHITE);
+          arduboy.drawPixel(1, 44, WHITE);
+          arduboy.display();          
+        } else if (posCount == 3) {
+          arduboy.drawPixel(0, 53, WHITE);
+          arduboy.drawPixel(1, 53, WHITE);
+          arduboy.drawPixel(2, 53, WHITE);
+          arduboy.drawPixel(1, 52, WHITE);
+          arduboy.drawPixel(1, 54, WHITE);
+          arduboy.display();       
         }
 }
 
@@ -160,11 +170,13 @@ void doButtons() {
   //if last screen was the matrix screen
   if (lastScreen == 1) {
     if (arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON)) {
-      if (sense == 0) doNoseTouch(); 
-      if (sense == 1) doChemorepulsion();
+      if (sense == 0) doGentleNoseTouch(); 
+      if (sense == 1) doOxygenSensation();
       if (sense == 2) doChemoattraction();
+      if (sense == 3) doPhotosensation();
     }
 
+//TODO: implement quick scrolling for A
     if (arduboy.justPressed(A_BUTTON)) {
       if (currentID < 302 - 1) {
         currentID++;
@@ -173,6 +185,7 @@ void doButtons() {
       }
     }
 
+//TODO: implement decrement for B
     if (arduboy.justPressed(B_BUTTON)) {
       if (currentID < 302 - 1) {
         if (currentID + 10 > 302 - 1) {
@@ -188,15 +201,22 @@ void doButtons() {
     doMatrixScreen();
   }
 
-  //if last screen was the Output Screen
-  /*if (lastScreen == 2) {
-     if (arduboy.justPressed(A_BUTTON)) {
-        simView = 1;
-     }
-     if (arduboy.justPressed(B_BUTTON)) {
-        simView = 0;
-     }
-  }*/
+  //if last screen was the serial output screen
+  if (lastScreen == 2) {
+    if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(B_BUTTON)) {
+      Serial.begin(9600);
+//TODO: print eeprom data over serial out
+      //PRINT SERIAL HERE
+      arduboy.drawRect(10, 30, 54, 5);
+      //arduboy.drawPixel(11 + , 30, WHITE);
+      //arduboy.drawPixel(11 + , 30, WHITE);
+      //arduboy.drawPixel(11 + , 30, WHITE);
+      Serial.end();
+
+//TODO: print out on screen that the data is now done being sent
+      delay(5000);
+    }
+  }
 
   //if last screen was the diagnostic screen
   if (lastScreen == 3) {
@@ -227,7 +247,7 @@ void doButtons() {
   if (lastScreen == 4) {
     if (arduboy.justPressed(A_BUTTON)) {
        posCount++;
-       if (posCount > 2) posCount = 0;
+       if (posCount > 3) posCount = 0;
   
        if (posCount == 0) {
          sense = 0;
@@ -239,7 +259,11 @@ void doButtons() {
           
        if (posCount == 2) {
          sense = 2;
-       }            
+       }  
+
+       if (posCount == 3) {
+         sense = 3;
+       }          
     }
 
     doInputScreen();
@@ -262,124 +286,6 @@ void doTitleScreen() {
     delay(5000);  
   }
 }
-
-/**
- * Function to show the output of muscle movement ratios to the user
- */
-/*void doOutputScreen() {
-  //if pressed left draw output screen
-      lastScreen = 2;
-      
-      //draw graphic of worm for cell output
-      //draw grid of interneurons
-      //draw muscle ratios
-      //draw direction of movement
-    
-      arduboy.clear();    
-      arduboy.setCursor(0, 0);
-
-      if (!simView) {
-          //print the motor ratios for the motor cells
-          uint8_t VAcount = 12;
-          uint8_t VBcount = 11;
-          uint8_t DAcount = 9;
-          uint8_t DBcount = 7;
-          uint8_t VAsum = 0;
-          uint8_t VBsum = 0;
-          uint8_t DAsum = 0;
-          uint8_t DBsum = 0;
-
-          //backward ventral locomotion motor neurons
-          const uint16_t motorNeuronAVentral[VAcount] = {
-            VA1, VA2, VA3, VA4, VA5, VA6, VA7, VA8, VA9, VA10, VA11, VA12
-          };
-  
-          //forward ventral locomotion motor neurons
-          const uint16_t motorNeuronBVentral[VBcount] = {
-            VB1, VB2, VB3, VB4, VB5, VB6, VB7, VB8, VB9, VB10, VB11
-          };
-  
-          //backward dorsal locomotion motor neurons
-          const uint16_t motorNeuronADorsal[DAcount] = {
-            DA1, DA2, DA3, DA4, DA5, DA6, DA7, DA8, DA9
-          };
-  
-          //forward dorsal locomotion motor neurons
-          const uint16_t motorNeuronBDorsal[DBcount] = {
-            DB1, DB2, DB3, DB4, DB5, DB6, DB7
-          };
-  
-  
-          for (uint16_t i = 0; i < VAcount; i++) {
-              if (outputList[i]) {
-                  VAsum++;
-              }
-          }
-  
-          for (uint16_t i = 0; i < VBcount; i++) {
-              if (outputList[i]) {
-                  VBsum++;
-              }
-          }
-  
-          for (uint16_t i = 0; i < DAcount; i++) {
-              if (outputList[i]) {
-                  DAsum++;
-              }
-          }
-  
-          for (uint16_t i = 0; i < DBcount; i++) {
-              if (outputList[i]) {
-                  DBsum++;
-             }
-          }
-  
-          vaRatio = float(VAsum)/float(VAcount);
-          vbRatio = float(VBsum)/float(VBcount);
-          daRatio = float(DAsum)/float(DAcount);
-          dbRatio = float(DBsum)/float(DBcount);
-  
-          arduboy.setCursor(10, 20);
-          arduboy.print("VA Ratio: ");
-          arduboy.print(vaRatio);
-          arduboy.setCursor(10, 30);    
-          arduboy.print("VB Ratio: ");
-          arduboy.print(vbRatio);
-          arduboy.setCursor(10, 40);
-          arduboy.print("DA Ratio: ");
-          arduboy.print(daRatio);
-          arduboy.setCursor(10, 50);
-          arduboy.print("DB Ratio: ");
-          arduboy.print(dbRatio);
-      
-          printMovementDir(5, 10);
-      } else {
-        arduboy.drawRoundRect(0, 0, 128, 64, 3);         //border around screen (wall)
-//TODO: finish simulation here
-        //demarcation on left for temp gradients
-        //demarcation on right for O2/CO2 gradients
-        //single line showing surface and light exposure activation
-        //screen border activates soft touch
-        //when A+B is hit food is randomly generated, releasing chemical gradient
-        //when food is touched it stimulates gustatory neurons
-        //emote icon that follows worm and queries different neurons for output
-
-      /if (vaRatio + daRatio > vbRatio + dbRatio) {    //worm is moving backward
-
-        } else {                                        //worm is moving forward
-
-        }
-  
-        if (vaRatio + vbRatio > daRatio + dbRatio) {    //worm is moving left
-
-        } else {                                        //worm is moving right
-
-        }
-      }  
-    }   
-    
-    arduboy.display();
-}*/
 
 /**
  * A function that displays the main "matrix" screen to the user, allows them to activate
@@ -427,44 +333,22 @@ void doMatrixScreen() {
   }
 }
 
+/**
+ * Function to display the screen that saves data and gives the user the option to 
+ * export the eeprom save data
+ */
+void doSaveScreen() {
+  lastScreen = 2;
+
+  arduboy.clear();
+  arduboy.drawRoundRect(0, 0, 128, 64, 3);
+  arduboy.setCursor(5, 5);
+  arduboy.print("Save Data? (A) / (B)");
+  //arduboy.setCursor(5, 25);
+  //arduboy.print("Save --> Serial");
+}
 /******************************************SENSES********************************************/
-/**
- * Do nose touch sense
- */
-void doNoseTouch() {
-    for (uint16_t id = 0; id < 302; id++) {
-            //if nosetouch neuron is in cellular matrix then set output to true
-            if (id == 113 || id == 114) {
-                outputList[id] = true;
-            }
-        }
-} //FLP
-
-/**
- * Do chemorepulsive sense
- */
-void doChemorepulsion() {
-    for (uint16_t id = 0; id < 302; id++) {
-            //if nosetouch neuron is in cellular matrix then set output to true
-            if (id == 161 || id == 162 || id == 163|| id == 164) {
-                outputList[id] = true;
-            }
-        }
-} //PHA, PHB
-
-/**
- * Do chemoattractive sense
- */
-void doChemoattraction() {
-    for (uint16_t id = 0; id < 302; id++) {
-            //if nosetouch neuron is in cellular matrix then set output to true
-            if (id == 39 || id == 40) {
-                outputList[id] = true;
-            }
-        }
-} //ASE
-
-/*void doGentleNoseTouch() {
+void doGentleNoseTouch() {
       for (uint16_t id = 0; id < 302; id++) {
             if (id == 153 || id == 154 || id == 155 || id == 156 ||
                 id == 125 || id == 126 || id == 127 || id == 128 || 
@@ -472,31 +356,7 @@ void doChemoattraction() {
                 outputList[id] = true;
             }
         }
-}     //OLQ, IL1, FLP
-
-void doGentlePosBodyTouch() {
-      for (uint16_t id = 0; id < 302; id++) {
-            if (id == 167 || id == 168) {
-                outputList[id] = true;
-            }
-        }
-}  //PLM
-
-void doGentleAntBodyTouch() {
-      for (uint16_t id = 0; id < 302; id++) {
-            if (id == 23 || id == 24 || id == 71) {
-                outputList[id] = true;
-            }
-        }
-}  //ALM, AVM
-
-void doHarshBodyTouch() {
-      for (uint16_t id = 0; id < 302; id++) {
-            if (id == 174 || id == 174) {
-                outputList[id] = true;
-            }
-        }
-}      //PVD
+}       //OLQ, IL1, FLP
 
 void doHarshNoseTouch() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -504,15 +364,7 @@ void doHarshNoseTouch() {
                 outputList[id] = true;
             }
         }
-}      //FLP, ASH
-
-void doOsmoticResponse() {
-      for (uint16_t id = 0; id < 302; id++) {
-            if (id == 43 || id == 44 || id == 6 || id == 7) {
-                outputList[id] = true;
-            }
-        }
-}     //Educated guess based on protein presence on neurons: ASH, ADL
+}       //FLP, ASH
 
 void doTextureSense() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -521,7 +373,7 @@ void doTextureSense() {
                 outputList[id] = true;
             }
         }
-}        //CEP, ADE, PDE
+}       //CEP, ADE, PDE
 
 void doChemoattraction() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -531,7 +383,7 @@ void doChemoattraction() {
                 outputList[id] = true;
             }
         }
-}     //ASE (primary), ADF, ASG, ASI, ASJ, ASK
+}       //ASE (primary), ADF, ASG, ASI, ASJ, ASK
 
 void doChemorepulsion() {
     for (uint16_t id = 0; id < 302; id++) {
@@ -540,7 +392,7 @@ void doChemorepulsion() {
                 outputList[id] = true;
             }
         }
-  }      //ASH (primary), ADL, ASK, ASE
+}       //ASH (primary), ADL, ASK, ASE
 
 void doCoolingResponse() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -548,7 +400,7 @@ void doCoolingResponse() {
                 outputList[id] = true;
             }
         }
-}     //AWC
+}       //AWC
 
 void doHeatingResponse() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -556,7 +408,7 @@ void doHeatingResponse() {
                 outputList[id] = true;
             }
         }
-}     //AFD
+}       //AFD
 
 void doNoxiousHeatResponse() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -565,7 +417,7 @@ void doNoxiousHeatResponse() {
                 outputList[id] = true;
             }
         }
-} //AFD (head), FLP (head), and PHC (tail)
+}       //AFD (head), FLP (head), and PHC (tail)
 
 void doNoxiousColdResponse() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -573,7 +425,7 @@ void doNoxiousColdResponse() {
                 outputList[id] = true;
             }
         }
-}      //PVD
+}       //PVD
 
 void doPhotosensation() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -581,7 +433,7 @@ void doPhotosensation() {
                 outputList[id] = true;
             }
         }
-}      //Educated guess based on protein presence on neurons: AVG
+}       //Educated guess based on protein presence on neurons: AVG
 
 void doOxygenSensation() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -590,7 +442,7 @@ void doOxygenSensation() {
                 outputList[id] = true;
             }
         }
-}     //AQR, PQR, URX, ASH (very likely based on protein presence)
+}       //AQR, PQR, URX, ASH (very likely based on protein presence); senses O2 increase
 
 void doCO2Sensation() {
       for (uint16_t id = 0; id < 302; id++) {
@@ -599,8 +451,8 @@ void doCO2Sensation() {
                 outputList[id] = true;
             }
         }
-}      //AFD, BAG, and ASE
-*/
+}       //AFD, BAG, and ASE; senses O2 decrease, CO2 increase
+
 /*************************************SIMULATION FUNCTIONS***************************************/
 /**
  * The function that reads in the neural rom into a format that is able to be read 
@@ -650,24 +502,28 @@ void activationFunction() {
       }
 
       sum += n.weights[j] * outputList[n.inputs[j]];  //do the summation calculation on the neuron
-      //sum += learningArray[i];                        //add hebbian learning and LTD
+      //sum += learningArray[i][j];                     //add hebbian learning and LTD
     }
 
     if (sum >= threshold) {                           //note it as being true or false
       nextOutputList[i] = true;
-      
-      /*if (learningArray[i] < 0) {                     //hebbian learning
-        learningArray[i] = 0;
-      } else {
-        learningArray[i]++;
+
+/*      for (uint8_t j = 0; j < n.inputLen; j++) {
+        if (learningArray[i][j] < 0) {                //hebbian learning
+          learningArray[i][j] = 0;
+        } else if (learningArray[i][j] < 10) {
+          learningArray[i][j]++;
+        }
       }*/
     } else {
       nextOutputList[i] = false;
       
-      /*if (learningArray[i] > 0) {
-        learningArray[i] = 0;
-      } else {
-        learningArray[i]--;
+/*      for (uint8_t j = 0; j < n.inputLen; j++) {
+        if (learningArray[i][j] > 0) {                //hebbian learning
+          learningArray[i][j] = 0;
+        } else if (learningArray[i][j] > -10) {
+          learningArray[i][j]--;
+        }
       }*/
     }
   }
@@ -706,53 +562,3 @@ void printMovementDir(uint16_t xpos, uint16_t ypos) {
     arduboy.print("R/DORSAL");
   }
 }
-
-/*************************NOTES*****************************/
-
-/**
- *                         References
- * http://ims.dse.ibaraki.ac.jp/ccep-tool/
- * https://www.sciencedirect.com/science/article/pii/S0960982205009401
- * https://pubmed.ncbi.nlm.nih.gov/40666838/
- * https://www.nature.com/articles/s42003-021-02561-9
- * https://www.wormatlas.org/hermaphrodite/nervous/Neuroframeset.html
- * https://www.wormatlas.org/neurons/Individual%20Neurons/ASIframeset.html
- * https://www.ncbi.nlm.nih.gov/books/NBK19787/
- * https://www.science.org/doi/10.1126/science.aam6851
- * https://www.cell.com/current-biology/fulltext/S0960-9822(14)01501-2
- */
-
- //escape behavior - fear (O_O)
- //slow reversal - indecisive (-_n)
- //foraging behavior - happy (^v^)
- //attractive chemosensation - content (^-^)
- //repulsive chemosensation - disgust? (-x-)
- //noxious temp, harsh touch, bad air - pain/discomfort (>.<)
- //temperature shock response - (@_@)
- //lethargy, social sleeping - sleepy (UwU)
- //social feeding - ???
- //solitary feeding - ???
- //egg laying - ???
-
-/**
- *                     SENSORY INFO
- *
- * Gentle Nose Touch (suppress lateral foraging, head withdrawal, escape behavior)- OLQ, IL1, FLP
- * Gentle Anterior Body Touch (causes backwards movement) - ALM, AVM
- * Gentle Posterior Body Touch (causes forward movement) - PLM
- * Harsh Body Touch (causes reversal) - PVD, potentially also ALM
- * Harsh Head/Nose Touch - FLP, ASH, potentially also OLQ
- * Osmomtic Pressure - potentially ASH and ADL
- * Texture Sensation (sense small round objects, food-induced slowing foraging behavior) - CEP, ADE, PDE
- * Proprioception (stretch and tension during movements) - DVA, potentially PHC and PVD
- * Nociception - ASH
- * Attractive Chemosensation - ADF, ASE (primary sensor), ASG, ASI, ASJ, ASK
- * Repulsive Chemosensation - ASH (primary nociceptor), ADL, ASK, ASE
- * ??? chemo - AWA, AWB, AWB
- * Thermosensation - AFD (primary sensor - seeks cooler temp), AWC (seeks warmer temp), ASI
- * Noxious Cold Thermosensation - PVD (acute cold-shock)
- * Noxious Heat Thermosensation (prolonged 30*C causes heat-shock response/thermal avoidance) - AFD (head), FLP (head), and PHC (tail)
- * Photosensation (photoboic movement reversal response) - potentially VNC but largely unknown
- * Oxygen sensation (nociceptive) - AQR, PQR, URX, possibly SDQ, ALN, BDU, ADF, and ASH
- * Carbon Dioxide sensation (nociceptive, particularly when well-fed) - FD, BAG, and AE
- */
