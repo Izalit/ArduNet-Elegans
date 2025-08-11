@@ -1,73 +1,73 @@
 /**
- *      Simulation Version TODOs
- * Make room for the ascii faces, title screen, satiety, and drawWorm
+ *      SIM TODOs
+ * Reduce the number of necessary learning neurons in learning array                 (manually; via research)
+ * Compress the learning neurons and neural rom                                      (using K's tool)
+ *      uncomment ascii faces/title screen/drawWorm in simulation()
+ * Implement hebbian LTP and LTD learning array                                      (using K's code)
+ *      Implement learning array EEPROM save
+ *      Implement learning array logic in the activation function
+ *      Implement gap junction logic in the activation function
+ * Collisions     
+ *      Add collision sensory activation for all pixels in the entire sprite 
+ *      Keep the worm from moving past frame in moveWorm()
  *
- * Implement satiety
- *    create a counter for food eaten
- *    use tick variable to check every so many ticks how much food has been eaten
- * Phasic and Tonic Firing Types
- *    Implement phasic activation (current system for gradient activation is tonic, non-gradient is a single call)
- *    Implement proper activation (phasic or tonic) for the senses seperated via height (light, temp, aerotaxis)
- * Add collisions for full obstacle (1, 2, 3, 4, 5) sprite hit-boxes
- * Fix the randomizers
- *    multiple food; spawn points are under the stick, inside of the tree roots, and the user placed food
- *    multiple toxins; spawn points are near the bottom rocks, top left of surface
- *    leaves on surface in random spots
- *    Randomize to moon deactivate phototaxis when doing so
- *    smaller rocks in random spots?
- * Make motor neurons --> worm movement more biologically accurate
+ *      ADDITIONS 
+ * Leaf complexity
+ *    falls from tree periodically
+ *    blink after so long
+ *    erase sprite and make food under surface
+ * Petting
+ *    activates ALM, AVM, PLM, PVM, CEP, PDE, ADE
+ *    still causes a reversal, but activates dopamine circuits
+ *    add CEP, ADE to the learning neurons list
+ * Make worm movement more biologically accurate
  *    move away from tank drive and instead move to a proper sinusoid
- * Make DVA activation (proprioception) more accurate
- *    activate when doing turns and rapid forward oscillations
- * Leaves periodically fall from tree and blink after so many ticks, then dissappear and drop food direclty under the surface
- * Randomized or timed Weather, Day-Night cycle, etc
- *
- * BottleNeck: Waiting on K to finish
- *   Goal: Implement the hebbian long term potentiation and long term depression functions
- *     Save the hebbian array to eeprom
- *     Gap junctions: manually add synapses marked with a weight of "75" - the largest is 71, smallest is -70
- *        add an "if" statement in the activation function which, detects a gap junction and adds a large + or - weight depending on presynaptic neurons output state
- *     Using remaining space, add as many necessary gap junction synapses into neural ROM as possible
- *
+ *    do proprioception when stretching from turns or sinusoids
+ * Randomizers
+ *    toxin position randomized between a few spawns
+ *    randomly show a sun or a moon on boot
+ *        if moon, deactivated phototaxis
+ *        if moon, remove noxious heat on surface
+ *        if moon, use noxious cold on surface
+*/
 
-sensory neurons (35)
-FLPL, FLPR, PHAL, PHAR, PHBL, PHBR, OLQDL, OLQDR, OLQVL, OLQVR, IL1DL, 
-IL1DR, IL1L, IL1R, IL1VL, IL1VR, ADLL, ADLR, CEPDL, CEPDR, CEPVL, CEPVR, 
-ADEL, ADER, ASGL, ASGR, ASJL, ASJR, ASKL, ASKR, PHCL, PHCR, AVG, BAGL, BAGR,
+/*
+    secondary list 1: sensory neurons                     (29)
+PHBL, PHBR, OLQDL, OLQDR, OLQVL, OLQVR, IL1DL, IL1DR, IL1L, IL1R, IL1VL, 
+IL1VR, ADLL, ADLR, CEPDL, CEPDR, CEPVL, CEPVR, ADEL, ADER, ASGL, ASGR, 
+ASJL, ASJR, ASKL, ASKR, AVG, BAGL, BAGR,
 
-sensory-interneurons and interneurons(62)
+    secondary list 2: behavior-specific neurons           (36)
+FLPL, FLPR, PHAL, PHAR, PHCL, PHCR, PVM, SDQL, SDQR, HSNL, HSNR, SAADL, 
+SAADR, SAAVL, SAAVR, VB1, VB2, VB3, VB4, VB5, VB6, VB7, VB8, VB9, VB10, 
+VB11, AVBL, AVBR, PVCL, PVCR, AVEL, AVER, AWAL, AWAR, RIBL, RIBR
+
+    primary list: sensory-interneurons and interneurons   (60)
 SIADL, SIADR, SIAVL, SIAVR, AIYL, AIYR, ASIL, ASIR, ASEL, ASER, RIML, RIMR,
 PDEL, PDER, AVKL, AVKR, DVA, AWCL, AWCR, RIAL, RIAR, AVAL, AVAR, AVDL, AVDR,
 ALML, ALMR, AVM, PLML, PLMR, PVDL, PVDR, ASHL, ASHR, ADFL, ADFR, AIAL, AIAR, 
-NSML, NSMR, AFDL, AFDR, AIZL, AIZR, AQR, PQR, URXL, URXR, AWBL, 
-AWBR, AIBL, AIBR, SMDDL, SMDDR, SMDVL, SMDVR, OLLL, OLLR, RICL, RICR
+NSML, NSMR, AFDL, AFDR, AIZL, AIZR, AQR, PQR, URXL, URXR, AWBL, AWBR, AIBL, 
+AIBR, SMDDL, SMDDR, SMDVL, SMDVR, OLLL, OLLR, RICL, RICR
 
-sensory neurons to DVA: AQR, FLPL/FLPR, PDEL/PDER, PHAL/PHAR, PHCL/PHCR, PLML/PLMR, PVDL/PVDR, PVM, SDQL/SDQR
-motor neurons to RIM: HSNL/HSNR, SAADL/SAADR/SAAVL/SAAVR, VB1/VB2/VB3/VB4/VB5/VB6/VB7/VB8/VB9/VB10/VB11, AS1-11?
-neurons to add according to below sources: AVBL/AVBR, PVCL/PVCR, PVM, AVEL/AVER, AWAL/AWAR, RIBL/RIBR
 
-Sources for Memory Neurons (other than wormatlas):
+-try to use the secondary, and the primary first...        total learning neurons: 96
+-potentially just sensory neurons and the primary list...  total learning neurons: 89
+-otherwise, if possible all three...                       total learning neurons: 125
+
+
+Sources for Memory Neurons:
+    Wormatlas
     https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2013.00088/full
     https://www.eneuro.org/content/6/4/ENEURO.0014-19.2019
     https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006019
     https://www.eneuro.org/content/9/4/ENEURO.0084-22.2022
- */
-
-/*
-Random Notes:
-  Consider adding petting! User can "pet" the worm, activating ALM/AVM/PLM/PVM
-    signal relayed to command interneurons
-    causes a reversal or forward acceleration
-    pair the activation with CEP/PDE/ADE (dopaminergic reward-like neurons)
-    behavioral changes to increased exploration, mild energetic arousal-like state
-    will need to implement learning in the relevent neurons to allow this
 */
+
 
 #include "neuralROM.h"            //import libraries
 #include "sprites.h"
 #include "bit_array.h"
 #include <Arduboy2.h>
-//#include <stdlib.h>
 
 Arduboy2 arduboy;                 //create arduboy object
 
@@ -78,6 +78,7 @@ float vaRatio = 0;                //muscle ratios for interface printout
 float vbRatio = 0;
 float daRatio = 0;
 float dbRatio = 0;
+uint8_t foodEaten = 0;            //how much food has been eaten
 uint8_t cursorX = 64;     //cursor
 uint8_t cursorY = 27;     //cursor
 uint8_t wormX = 64;       //worm
@@ -102,6 +103,7 @@ uint8_t repellentY = 52;  //repellent
 bool isRepel = true;      //if theres any repellents
 bool isFood = true;       //if theres any food
 bool isAsleep = false;    //if sleep state is active
+bool sated = false;       //if the worm is not hungry
 //uint16_t foodTouchCounter = 0;  //how long the food has been eaten for
 
 //massive thanks to Dinokaiz2 for help with the bit array functionality!!!
@@ -225,6 +227,20 @@ void simulation() {
     Sprites::drawOverwrite(repellentX, repellentY, toxin, 0);
   }
 
+  //logic to regulate hunger
+  uint8_t fullTick = 0;
+  if (foodEaten >= 5 && (tick % 100 == 0)) {                  //if the worm has eaten enough food, and given time to digest, then it is full
+    sated = true; 
+    fullTick = tick;
+  }     
+  if (sated) phasic(false, 20, doSatiety);                    //if the worm is full then activate the satiety neurons in a phasic pattern
+  if (!sated && (tick % 100 == 0)) isHungry();                //if the worm is hungry then activate neurons to inhibit satiety every little while
+  if (sated && (tick - fullTick >= 1000)) {                   //if the worm is full and it has been enough time to be hungry, then it is hungry again
+    sated = false;             
+    foodEaten = 0;
+  }
+//TESTING REQUIRED: unsure if params in this satiety code needs to be tuned
+
   //draw stipling in the dirt to indicate depth
   bool offset = false;
   uint8_t widthOffset = 1;
@@ -297,7 +313,7 @@ void simulation() {
   //draw line showing surface and light exposure activation
   arduboy.drawLine(0, 20, 128, 20);
   
-  calculateCollisions();
+  //calculateCollisions();
   calculateGradients();
   //drawFaces();
   //drawWorm();
@@ -312,7 +328,7 @@ void simulation() {
   arduboy.drawPixel(cursorX, cursorY + 1);
   arduboy.drawPixel(cursorX, cursorY + 2);
 
-  wormMove();
+  //wormMove();
 
   //draw border
   arduboy.drawRoundRect(0, 0, 128, 64, 3);
@@ -330,7 +346,9 @@ void simulation() {
   Sprites::drawOverwrite(122, 5, sub2, 0);
 
   if (isAsleep == true) {   //if asleep, keep the worm asleep until network is powered off
-    maintainSleep();
+//TESTING REQUIRED: unsure if this should be active every single step or a dispersed phasic firing pattern?
+    //maintainSleep();
+    phasic(false, 90, maintainSleep);
 
     arduboy.drawRoundRect(25, 23, 76, 21, 3);
     arduboy.setCursor(27, 25);
@@ -344,9 +362,30 @@ void simulation() {
 
 /***********************************SIM FUNCTIONS*************************************/
 /**
+ * Function to do ASE neuron baseline chemotaxis
+ */
+void doBaseline() {
+  if (!isFood && !isRepel) {  //activate baseline ASER chemotaxis
+    outputList[40] = true;
+  } else {
+    outputList[40] = false;   //activates in response to increases in NaCl
+  }
+}
+
+/**
+ * Function to create a hunger response
+ */
+void isHungry() {  //phasic?
+  outputList[45] = false;
+  outputList[46] = false;
+  outputList[149] = false;
+  outputList[150] = false;
+}
+
+/**
  * Function to create a satiety response
  */
-void doSatiety() { //tonic
+void doSatiety() { //phasic?
   outputList[45] = true;
   outputList[46] = true;
   outputList[149] = true;
@@ -484,51 +523,51 @@ void drawWorm() {
  * Function to calculate worm's movement based on its muscle outputs
  */
 void wormMove() {
+//TODO: add logic to make sure the worm cannot pass borders
 
   prevWormDir = wormFacing;                       //update previous worm direction
-  bool isPropTick = tick == 4 || tick == 8 || tick == 12;
 
   if (vaRatio + daRatio > vbRatio + dbRatio) {    //worm is moving backward
     if (wormFacing == 0 && wormY <= 64 && wormY >= 0) {
       if (!(wormY-1 >= 44 && wormY-1 <= 62 && wormY-1 >= 38 && wormY-1 <= 54 && wormY-1 >= 38 && wormY-1 <= 57)) {
-        if(isPropTick) doProprioception();
+        phasic(false, 90, doProprioception);
         wormY--;
       }
     } else if (wormFacing == 1 && wormX <= 128 && wormX >= 0) {
       if (!(wormX-1 <= 8 && wormX-1 >= 23 && wormX-1 <= 57 && wormX-1 >= 75 && wormX-1 <= 104 && wormX-1 >= 122)) {
-        if(isPropTick) doProprioception();
+        phasic(false, 90, doProprioception);
         wormX--;
       }
     } else if (wormFacing == 2 && wormY <= 64 && wormY >= 0) {
       if (!(wormY+1 >= 44 && wormY+5 <= 62 && wormY+1 >= 38 && wormY+5 <= 54 && wormY+1 >= 38 && wormY+5 <= 57)) {
-        if(isPropTick) doProprioception();
+        phasic(false, 90, doProprioception);
         wormY++;
       }
     } else if (wormFacing == 3 && wormX <= 128 && wormX >= 0) {
       if (!(wormX+1 <= 8 && wormX+1 >= 23 && wormX+1 <= 57 && wormX+1 >= 75 && wormX+1 <= 104 && wormX+1 >= 122)) {
-        if(isPropTick) doProprioception();
+        phasic(false, 90, doProprioception);
         wormX++;
       }
     }
   } else {                                        //worm is moving forward
     if (wormFacing == 0 && wormY <= 64 && wormY >= 0) {
       if (!(wormY+1 >= 44 && wormY+1 <= 62 && wormY+1 >= 38 && wormY+1 <= 54 && wormY+1 >= 38 && wormY+1 <= 57)) {
-        if(isPropTick) doProprioception();
+        phasic(false, 90, doProprioception);
         wormY++;
       }
     } else if (wormFacing == 1 && wormX <= 128 && wormX >= 0) {
       if (!(wormX+1 <= 8 && wormX+1 >= 23 && wormX+1 <= 57 && wormX+1 >= 75 && wormX+1 <= 104 && wormX+1 >= 122)) {
-        if(isPropTick) doProprioception();
+        phasic(false, 90, doProprioception);
         wormX++;
       }
     } else if (wormFacing == 2 && wormY <= 64 && wormY >= 0) {
       if (!(wormY-1 >= 44 && wormY-1 <= 62 && wormY-1 >= 38 && wormY-1 <= 54 && wormY-1 >= 38 && wormY-1 <= 57)) {
-        if(isPropTick) doProprioception();
+        phasic(false, 90, doProprioception);
         wormY--;
       }
     } else if (wormFacing == 3 && wormX <= 128 && wormX >= 0) {
       if (!(wormX-1 <= 8 && wormX-1 >= 23 && wormX-1 <= 57 && wormX-1 >= 75 && wormX-1 <= 104 && wormX-1 >= 122)) {
-        if(isPropTick) doProprioception();
+        phasic(false, 90, doProprioception);
         wormX--;
       }
     }
@@ -604,7 +643,7 @@ void drawFaces() {
 /**
  * Function to make stepwise gradients on the screen
  */
-void makeGradients(bool isFullRadius, uint8_t compX, uint8_t compY, void (*senseFunction)(), bool isStimulant) {
+void makeGradients(bool isFullRadius, uint8_t compX, uint8_t compY, void (*senseFunction)(), bool isStimulant, bool isPhasic, bool onlyVertical) {
   if (!isStimulant) return;
   //Credit again to Dinokaiz2, math whiz who helped with the math for this beautiful tonic activation system
   /**    
@@ -630,92 +669,91 @@ void makeGradients(bool isFullRadius, uint8_t compX, uint8_t compY, void (*sense
   if (tick == 3628800) {                        //reset tick counter for gradient senses when it reaches the factorial of 10 (each gradient is 5)
     tick == 0;
   }
-
-  uint8_t distance = abs(wormX-compX) + abs(wormY - compY);     //diamond-like distance calculation
-
-  if (isFullRadius && distance < 50) {                          //for full radius gradients, activate sensory function within a radius of 50
-    distance = (distance / 5) + 1;                              //modify distance; 5 is the precision of the gradient, the step of the gradient
-    if (tick % distance == 0) senseFunction();
-  }
   
-  if (!isFullRadius && distance < 25) {                         //if smaller radius is desired, activate sensory function within radius of 25
-    distance = (distance / 2) + 1;                              //gradient step set to two as the diamon shape is smaller, a smaller radius
-    if (tick % distance == 0) senseFunction();
-  }
-  
-
-  /*if (isFullRadius) {
-    if (isStimulant) {
-      if (abs(wormX - compX) < 50 && abs(wormX - compY) < 50 && (sensoryNeuronCounter == 8)) {
-        senseFunction();
-        if (abs(wormX - compX) < 40 && abs(wormX - compY) < 40 && (sensoryNeuronCounter == 6 || sensoryNeuronCounter == 10)) {
-          senseFunction();
-          if (abs(wormX - compX) < 30 && abs(wormX - compY) < 30 && (sensoryNeuronCounter == 4 || sensoryNeuronCounter == 8 || sensoryNeuronCounter == 12)) {
-            senseFunction();
-            if (abs(wormX - compX) < 20 && abs(wormX - compY) < 20 && (sensoryNeuronCounter == 3 || sensoryNeuronCounter == 5 || sensoryNeuronCounter == 7 || sensoryNeuronCounter == 9 || sensoryNeuronCounter == 11 || sensoryNeuronCounter == 14)) {
-              senseFunction();
-              if (abs(wormX - compX) < 10 && abs(wormX - compY) < 10 && (sensoryNeuronCounter == 2 || sensoryNeuronCounter == 4 || sensoryNeuronCounter == 6 || sensoryNeuronCounter == 8 || sensoryNeuronCounter == 10 || sensoryNeuronCounter == 12 || sensoryNeuronCounter == 14)) {
-                senseFunction();
-                if (abs(wormX - compX) < 5 && abs(wormX - compY) < 5) {
-                  senseFunction();
-                }
-              }
-            }
-          }
-        }
+  if (onlyVertical) {                                               //if only vertical gradient (no x coordinate, only smaller 25 pixel distance/radius used)
+    uint8_t distance = abs(wormY - compY);                          //distance calculation
+    if (!isPhasic) {  //if tonic
+      if (distance < 25) {
+        tonic(true, distance, 2, senseFunction);
       }
+    } else {          //if phasic
+      phasic(true, distance, senseFunction);
     }
+  } else {                                                          //diamond-shaped gradient
+    uint8_t distance = abs(wormX-compX) + abs(wormY - compY);       //if diamond-shaped gradient (circle too computationally expensive)
+    if (!isPhasic) {  //if tonic
+      if (isFullRadius && distance < 50) {                          //for full radius gradients, activate sensory function within a radius of 50
+        tonic(true, distance, 5, senseFunction);
+      }
+      
+      if (!isFullRadius && distance < 25) {                         //if smaller radius is desired, activate sensory function within radius of 25
+        tonic(true, distance, 2, senseFunction);
+      }
+    } else {          //if phasic
+      phasic(true, distance, senseFunction);
+    }
+  }  
+}
+
+/**
+ * Function to calculate phasic activation of a neuron
+ */
+void phasic(bool useGradient, uint8_t mod, void (*senseFunction)()) {
+  if (useGradient) {
+    mod = round(mod / 10) * 10;                     //round the distance or the rate adjustment to the nearest tens
+    if (tick % (100 - mod) == 0) senseFunction();   //modulo the tick by the rounded distance/rate adjustment
   } else {
-  if (abs(wormX - compX) < 20 && abs(wormX - compY) < 20 && (sensoryNeuronCounter == 3 || sensoryNeuronCounter == 5 || sensoryNeuronCounter == 7 || sensoryNeuronCounter == 9 || sensoryNeuronCounter == 11 || sensoryNeuronCounter == 14)) {
-    senseFunction();
-      if (abs(wormX - compX) < 10 && abs(wormX - compY) < 10 && (sensoryNeuronCounter == 2 || sensoryNeuronCounter == 4 || sensoryNeuronCounter == 6 || sensoryNeuronCounter == 8 || sensoryNeuronCounter == 10 || sensoryNeuronCounter == 12 || sensoryNeuronCounter == 14)) {
-        senseFunction();
-        if (abs(wormX - compX) < 5 && abs(wormX - compY) < 5) {
-          senseFunction();
-        }
-      }
-    }
-  }*/
+    if (tick % mod == 0) senseFunction();
+  }
+}
+
+/**
+ * Function to calculate tonic activation of a neuron
+ */
+void tonic(bool useGradient, uint8_t mod, uint8_t gradientStep, void (*senseFunction)()) {
+  if (useGradient) {
+    mod = (mod / gradientStep) + 1;                 //modify distance or rate adjustment; 5 is the precision of the gradient, the step of the gradient
+    if (tick % mod == 0) senseFunction();
+  } else {
+    if (tick % mod == 0) senseFunction();
+  }
 }
 
 /**
  * Function to calculate the chemical gradients for the worm's senses
  */
 void calculateGradients() {
-//photosensation is phasic
-//oxygen sensation is either
-//noxious temp is phasic
-//cooling and heating is tonic
-//CO2 sensation is tonic
-  if (55 <= wormY && wormY <= 64) {           //temp frigid; oxygen too low
-    doNoxiousColdResponse();
-    doCO2Sensation();
-  } else if (45 <= wormY && wormY < 55) {          //temp cold; oxygen low
-    doCoolingResponse();             
-    doCO2Sensation();                             
-  } else if (35 <= wormY && wormY < 45) {        //temp ideal; oxygen ideal
-    doCO2Sensation();               
-  } else if (25 <= wormY && wormY < 35) {    //temp warm; oxygen high
-    doHeatingResponse();        
-    doOxygenSensation();        
-  } else if (wormY < 25) {                 //temp hot; oxygen too high
-    doNoxiousHeatResponse();  
-    doOxygenSensation();      
-  } else if (wormY < 20) {               //surface; light
-    doPhotosensation();
-  }
-
-  if (!isFood && !isRepel) {  //activate baseline ASER chemotaxis
-    outputList[40] = true;
-  } else {
-    outputList[40] = false;   //activates in response to increases in NaCl
-  }
-
   tick++;
-  makeGradients(false, cursorX, cursorY, sensePheromones, true);            //pheromone sense is tonic
-  makeGradients(false, foodX, foodY, doTextureSense, isFood);               //texture sense is tonic
-  makeGradients(true, foodX, foodY, doChemoattraction, isFood);             //chemoattraction is tonic  
-  makeGradients(true, repellentX, repellentY, doChemorepulsion, isRepel);   //chemorepulsion is phasic -->  
+
+  makeGradients(false, 64, 40, doBaseline, true, false, true);                            //baseline ASE activation is tonic; Y (to center); small radius
+  makeGradients(false, cursorX, cursorY, sensePheromones, true, false, false);            //pheromone sense is tonic; X/Y; small radius
+  makeGradients(false, foodX, foodY, doTextureSense, isFood, false, false);               //texture sense is unknown... will try tonic for now; X/Y; small radius
+  makeGradients(true, foodX, foodY, doChemoattraction, isFood, false, false);             //chemoattraction is tonic; X/Y; large radius
+  makeGradients(false, 64, 5, doOxygenSensation, true, false, true);                      //oxygen is tonic; Y; small radius
+  makeGradients(false, 64, 15, doHeatingResponse, true, false, true);                     //heating is tonic; Y; small radius
+  makeGradients(false, 64, 45, doCoolingResponse, true, false, true);                     //cooling sensation is tonic; Y; small radius
+  makeGradients(false, 64, 45, doCO2Sensation, true, false, true);                        //CO2 sensation is likely tonic???; Y; small radius
+  makeGradients(true, repellentX, repellentY, doChemorepulsion, isRepel, true, false);    //chemorepulsion is phasic- responding to gradient level changes; X/Y; large radius
+  makeGradients(false, 64, 5, doNoxiousHeatResponse, true, true, true);                   //noxious heat is phasic- responding to temp level changes; Y; small radius
+  makeGradients(false, 64, 55, doNoxiousColdResponse, true, true, true);                  //noxious cold is phasic- responding to temp level changes; Y; small radius
+  makeGradients(false, 64, 0, doPhotosensation, true, true, true);                        //phototaxis is phasic- responding to light level changes; Y; small radius
+
+  /*      NATURAL SIM GRADIENTS
+  0                               LIGHT
+          O2               HOT      |
+  10      |                 |       |
+          |       heat      |       |
+  20      |        |        |     LIGHT
+          O2       |       HOT
+  30               |
+                  heat
+  40          [GOLDILOCKS]
+               cool  CO2
+  50            |     |
+                |     |    COLD
+  60            |     |     |
+               cool  CO2    |
+  */
 }
 
 /**
@@ -723,7 +761,7 @@ void calculateGradients() {
  */
 void calculateCollisions() {
 //TODO: add collisions for other obstacles: 4 (leaf) and 5 (leaf)
-  //if worm hits obstacles 1 (rock), 2 (stick), or 3 (rock), activate harsh touch
+  //if worm hits obstacles 1 (rock), 2 (stick), or 3 (rock), activate touch
   if ((wormX == obstacleX1 && wormY == obstacleY1) || (wormX == obstacleX2 && wormY == obstacleY2) || (wormX == obstacleX3 && wormY == obstacleY3)) {
     //activate harsh touch
     doGentleNoseTouch();
@@ -744,15 +782,10 @@ void calculateCollisions() {
 //TODO: fix the number of pixels... should be four      
   //activate gustatory neurons if worm is touching food
   if ((wormX == foodX && wormY == foodY) || (wormX == foodX + 1 && wormY == foodY + 1)) {
-    //uint16_t foodSize = 5;                      //amount of food to spawn (measured in ticks till gone)
-
     doGustation();
-    //foodTouchCounter++;
-
-    //if (foodTouchCounter >= foodSize) {   //if worm has been eating long enough, food is gone
-      isFood = false;
-      Sprites::drawErase(foodX, foodY, food, 0);
-    //}
+    
+    isFood = false;
+    Sprites::drawErase(foodX, foodY, food, 0);
   } 
 }
 
