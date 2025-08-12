@@ -1,16 +1,33 @@
 /**
- *      Both Version TODOs
- *    BottleNeck: Waiting on K to finish
- *      Goal: Implement the hebbian long term potentiation and long term depression functions
- *            Saving the hebbian array to eeprom (saves every time user presses up to go to matrix screen? tell user this at titlescreen?)
- *            Using remaining space, add as many necessary gap junction synapses into neural ROM as possible
- *
- *      Matrix Version TODOs
- *    update code with generalized advancements from the simulation version
- *    implement save to eeprom
- *    implement output save over serial
- *    replace neuron IDs with their proper neuron names
- *    Quick scroll for diag and matrix screen lists?
+* For *both versions*, add gap junctions variants to neural rom sets 
+
+* For *both versions*, compress neural rom, add reader functions
+
+* For *both versions*, implement the hebbian functions and learning arrays
+
+* UPDATE matrix with stuff from the sim file
+
+* For *Matrix Ver.*, add quick scrolling for the matrix screen and diag screen neuron selections
+
+* For *Matrix Ver.*, initialize the direction the worm is in as "stationary" so it doesn't start in "forward"
+
+* For *Matrix Ver.*, make neuron IDs associated with their irl names so you can see them in diagnostic and not have to look at this huge github list lmao
+
+* For *Matrix Ver.*, make a more complex input screen-- scrolling list of senses, ability to choose tonic or phasic input type
+
+* For *Matrix Ver.*, if a synapse is a gap junction indicate this on the diag screen
+
+* For *Matrix Ver.*, add a worm movement indicator sprite 
+
+* For *Matrix Ver.*, add an actually accurate percpetron model in diag screen
+
+* For *Matrix Ver.*, add the cute worm expressions to the matrix screen
+
+* For *Matrix Ver.*, add indicators for X-Y position on side of matrix to show the selected current neuron
+
+* For *Matrix Ver.*, add an options screen by pressing down; options to save data, edit learning array, output save data over serial, output all data over serial, connect input over serial
+
+* For *Matrix Ver.*, For options screen serial output, add a pseudo-terminal that writes text to the arduboy as well
  */
 
 #include "sprites.h"              //import libraries

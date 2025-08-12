@@ -1,33 +1,19 @@
 /**
- *      SIM TODOs
- * Compress the learning neurons and neural rom                                      (using K's tool)
- *      uncomment ascii faces/title screen/drawWorm in simulation()
- * Implement hebbian LTP and LTD learning array                                      (using K's code)
- *      Implement learning array EEPROM save
- *      Implement learning array logic in the activation function
- *      Implement gap junction logic in the activation function
- * Collisions     
- *      Add collision sensory activation for all pixels in the entire sprite 
- *      Keep the worm from moving past frame in moveWorm()
- *
- *      ADDITIONS 
- * Leaf complexity
- *    falls from tree periodically
- *    blink after so long
- *    erase sprite and make food under surface
- * Petting
- *    activates ALM, AVM, PLM, PVM, CEP, PDE, ADE
- *    still causes a reversal, but activates dopamine circuits
- *    add CEP, ADE to the learning neurons list
- * Make worm movement more biologically accurate
- *    move away from tank drive and instead move to a proper sinusoid
- *    do proprioception when stretching from turns or sinusoids
- * Randomizers
- *    toxin position randomized between a few spawns
- *    randomly show a sun or a moon on boot
- *        if moon, deactivated phototaxis
- *        if moon, remove noxious heat on surface
- *        if moon, use noxious cold on surface
+* fix the compressed ROM memory issue
+* implement the learning array
+* add gap junctions to the neural rom (with mollys help!)
+* re-compress neural rom with gap junction code
+
+* remake doProprioception() to look at individual motor neurons in if-statements
+*     For turns: if more left side muscles are active than right, or right side muscles than left, doProprioception()
+*     For movement: if AVB and PVC or AVD, AVA, and AVE are active, then doProprioception()
+* add collision logic for the rest of the rocks, leaves, and stick sprites
+* implement "petting" when "bond" is good (check memory association between certain neurons in the learning array to make a "bond" variable)
+
+* add numbers to the simulation demarcations to show gas level and temperature readouts, indicate both goldilocks numbers and nociceptive numbers
+* create a cycle of where the leaves fall from the tree, blink after so many ticks, then disappear and drop food; when it is eaten the cycle repeats
+* make the worm's movement more biologically accurate (remove the "tank-drive" abstraction from current code), make doProprioception() more bio-accurate
+* create randomizers for toxin spawn position and sun/moon (if moon: black out some sun pixels, remove noxious surface heat and replace with cold, remove phototaxis)
 */
 
 /*
@@ -48,7 +34,6 @@ ALML, ALMR, AVM, PLML, PLMR, PVDL, PVDR, ASHL, ASHR, ADFL, ADFR, AIAL, AIAR,
 NSML, NSMR, AFDL, AFDR, AIZL, AIZR, AQR, PQR, URXL, URXR, AWBL, AWBR, AIBL, 
 AIBR, SMDDL, SMDDR, SMDVL, SMDVR, OLLL, OLLR, RICL, RICR
 
-
 -try to use the secondary, and the primary first...        total learning neurons: 96
 -potentially just sensory neurons and the primary list...  total learning neurons: 89
 -otherwise, if possible all three...                       total learning neurons: 125
@@ -66,6 +51,8 @@ sources for satiety circuit
 
 sources for definitional help
     https://www.biorxiv.org/content/10.1101/2025.07.21.665845v1.full
+
+Credit to Nategri for the motor neuron summation idea for tank drive
 */
 
 
@@ -79,6 +66,8 @@ Arduboy2 arduboy;                 //create arduboy object
 
 const uint8_t threshold = 1;      //threshold for activation function
 const uint16_t maxSynapse = 65;   //maximum number of synapses a neuron can have
+uint16_t tick = 0;                //connectome ticks
+uint16_t autosaveTimer = 1000;    //the number to modulo the tick by to activate autosave
 bool startFlag = true;            //interface flag for title screen to play
 float vaRatio = 0;                //muscle ratios for interface printout
 float vbRatio = 0;
@@ -103,9 +92,9 @@ uint8_t obstacleX4 = 114; //leaf
 uint8_t obstacleY4 = 11;  //leaf
 uint8_t obstacleX5 = 75;  //leaf
 uint8_t obstacleY5 = 11;  //leaf
-uint16_t tick = 0;        //connectome ticks
 uint8_t repellentX = 34;  //repellent
 uint8_t repellentY = 52;  //repellent
+uint8_t fullTick = 0;
 bool isRepel = true;      //if theres any repellents
 bool isFood = true;       //if theres any food
 bool isAsleep = false;    //if sleep state is active
@@ -115,7 +104,6 @@ bool sated = false;       //if the worm is not hungry
 //massive thanks to Dinokaiz2 for help with the bit array functionality!!!
 SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70);
 
-//uint8_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
 //BitArray<> learningArray;  //an array that, for each neuron that does hebbian learning, holds a form of simplified output history
 BitArray<302> outputList;     //list of neurons
 BitArray<302> nextOutputList; //buffer to solve conflicting time differentials in firing
@@ -140,7 +128,7 @@ void loop() {
     return;
   }
   
-  //doTitleScreen();
+  doTitleScreen();
 
   arduboy.pollButtons();        //get buttons pressed and send to function to process them
   doButtons();
@@ -159,6 +147,8 @@ void loop() {
  * function to query which buttons are pressed, setting up proper screen transitions
  */
 void doButtons() {
+  uint8_t address = EEPROM_STORAGE_SPACE_START;      //eeprom address for save function
+
   //if last screen was the simulation
     if (arduboy.justPressed(A_BUTTON)) {
       foodX = cursorX;
@@ -176,7 +166,10 @@ void doButtons() {
     if (!isAsleep && (arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON))) {
       activateSleep();
       isAsleep = true;
-//TODO: save data to eeprom here
+//TODO: uncomment when learningArray is implemented, fix address as well
+//      for (uint8_t i = 0; i < learningArraySize; i++) {
+//        EEPROM.update(address + i, learningArray[i]);
+//      }
     } else if (isAsleep && (arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON))) {
       isAsleep = false;
     }
@@ -212,6 +205,8 @@ void doButtons() {
  * Function that displays the main title screen
  */
 void doTitleScreen() {
+  uint16_t address = EEPROM_STORAGE_SPACE_START;
+
   if (startFlag) {
 
     //clear the screen then write app name
@@ -220,7 +215,12 @@ void doTitleScreen() {
     arduboy.print("-ArduNet Elegans-");
     arduboy.setCursor(10, 50);
     arduboy.display();
-    delay(5000);  
+//TODO: uncomment when learningArray is implemented, fix address as well
+//    for (uint8_t i = 0; i < learningArraySize; i++) {
+//      EEPROM.read(address + i, learningArray[i]);
+//    }
+
+    delay(3000);  
   }
 }
 
@@ -235,19 +235,8 @@ void simulation() {
     Sprites::drawOverwrite(repellentX, repellentY, toxin, 0);
   }
 
-  //logic to regulate hunger
-  uint8_t fullTick = 0;
-  if (foodEaten >= 5 && (tick % 100 == 0)) {                  //if the worm has eaten enough food, and given time to digest, then it is full
-    sated = true; 
-    fullTick = tick;
-  }     
-  if (sated) phasic(false, 20, doSatiety);                    //if the worm is full then activate the satiety neurons in a phasic pattern
-  if (!sated && (tick % 100 == 0)) isHungry();                //if the worm is hungry then activate neurons to inhibit satiety every little while
-  if (sated && (tick - fullTick >= 1000)) {                   //if the worm is full and it has been enough time to be hungry, then it is hungry again
-    sated = false;             
-    foodEaten = 0;
-  }
-//TESTING REQUIRED: unsure if params in this satiety code needs to be tuned
+  //figure out if worm is hungry or not
+  doAppetite();
 
   //draw stipling in the dirt to indicate depth
   bool offset = false;
@@ -321,10 +310,10 @@ void simulation() {
   //draw line showing surface and light exposure activation
   arduboy.drawLine(0, 20, 128, 20);
   
-  //calculateCollisions();
+  calculateCollisions();
   calculateGradients();
-  //drawFaces();
-  //drawWorm();
+  drawFaces();
+  drawWorm();
 
   //draw cursor centered on cursorX, cursorY 
   arduboy.drawPixel(cursorX, cursorY - 1);
@@ -336,7 +325,7 @@ void simulation() {
   arduboy.drawPixel(cursorX, cursorY + 1);
   arduboy.drawPixel(cursorX, cursorY + 2);
 
-  //wormMove();
+  wormMove();
 
   //draw border
   arduboy.drawRoundRect(0, 0, 128, 64, 3);
@@ -354,7 +343,7 @@ void simulation() {
   Sprites::drawOverwrite(122, 5, sub2, 0);
 
   if (isAsleep == true) {   //if asleep, keep the worm asleep until network is powered off
-//TESTING REQUIRED: unsure if this should be active every single step or a dispersed phasic firing pattern?
+    //TESTING REQUIRED: unsure if this should be active every single step or a dispersed phasic firing pattern?
     //maintainSleep();
     phasic(false, 90, maintainSleep);
 
@@ -369,6 +358,34 @@ void simulation() {
 }
 
 /***********************************SIM FUNCTIONS*************************************/
+/**
+ * Autosave the current learning array by using the 
+ * connectome's tick variable
+ */
+void autosave() {
+  if (tick % autosaveTimer == 0) {
+//TODO: save learning array to eeprom
+  }
+}
+
+/**
+ * Function to use the isHungry() and doSatiety() functions
+ * at the proper rate by using the tick variable
+ */
+void doAppetite() {
+  //logic to regulate hunger
+  if (foodEaten >= 5 && (tick % 100 == 0)) {                  //if the worm has eaten enough food, and given time to digest, then it is full
+    sated = true; 
+    fullTick = tick;
+  }     
+  if (sated) phasic(false, 20, doSatiety);                    //if the worm is full then activate the satiety neurons in a phasic pattern
+  if (!sated && (tick % 100 == 0)) isHungry();                //if the worm is hungry then activate neurons to inhibit satiety every little while
+  if (sated && (tick - fullTick >= 1000)) {                   //if the worm is full and it has been enough time to be hungry, then it is hungry again
+    sated = false;             
+    foodEaten = 0;
+  }
+  //TESTING REQUIRED: unsure if params in this satiety code needs to be tuned
+}
 /**
  * Function to do ASE neuron baseline chemotaxis
  */
@@ -531,50 +548,64 @@ void drawWorm() {
  * Function to calculate worm's movement based on its muscle outputs
  */
 void wormMove() {
-//TODO: add logic to make sure the worm cannot pass borders
-
   prevWormDir = wormFacing;                       //update previous worm direction
 
   if (vaRatio + daRatio > vbRatio + dbRatio) {    //worm is moving backward
-    if (wormFacing == 0 && wormY <= 64 && wormY >= 0) {
-      if (!(wormY-1 >= 44 && wormY-1 <= 62 && wormY-1 >= 38 && wormY-1 <= 54 && wormY-1 >= 38 && wormY-1 <= 57)) {
+    if (wormFacing == 0 && wormY <= 64 && wormY >= 0) {   
+      if (!(wormY-1 >= 49  && wormY-1 <= 64 
+         && wormY-1 >= 45  && wormY-1 <= 64)
+         && wormY   >   1  && wormY   <  63) {
         phasic(false, 90, doProprioception);
         wormY--;
       }
     } else if (wormFacing == 1 && wormX <= 128 && wormX >= 0) {
-      if (!(wormX-1 <= 8 && wormX-1 >= 23 && wormX-1 <= 57 && wormX-1 >= 75 && wormX-1 <= 104 && wormX-1 >= 122)) {
+      if (!(wormX-1 >= 5   && wormX-1 <= 23 
+         && wormX-1 >= 105 && wormX-1 <= 123) 
+         && wormX   >  1   && wormX   <  127) {
         phasic(false, 90, doProprioception);
         wormX--;
       }
     } else if (wormFacing == 2 && wormY <= 64 && wormY >= 0) {
-      if (!(wormY+1 >= 44 && wormY+5 <= 62 && wormY+1 >= 38 && wormY+5 <= 54 && wormY+1 >= 38 && wormY+5 <= 57)) {
+      if (!(wormY+1 >= 49  && wormY+1 <= 64 
+         && wormY+1 >= 45  && wormY+1 <= 64)
+         && wormY   >   1  && wormY   <  63) {
         phasic(false, 90, doProprioception);
         wormY++;
       }
     } else if (wormFacing == 3 && wormX <= 128 && wormX >= 0) {
-      if (!(wormX+1 <= 8 && wormX+1 >= 23 && wormX+1 <= 57 && wormX+1 >= 75 && wormX+1 <= 104 && wormX+1 >= 122)) {
+      if (!(wormX+1 >= 5   && wormX+1 <= 23 
+         && wormX+1 >= 105 && wormX+1 <= 123) 
+         && wormX   >  1   && wormX   <  127) {
         phasic(false, 90, doProprioception);
         wormX++;
       }
     }
   } else {                                        //worm is moving forward
     if (wormFacing == 0 && wormY <= 64 && wormY >= 0) {
-      if (!(wormY+1 >= 44 && wormY+1 <= 62 && wormY+1 >= 38 && wormY+1 <= 54 && wormY+1 >= 38 && wormY+1 <= 57)) {
+      if (!(wormY+1 >= 49  && wormY+1 <= 64 
+         && wormY+1 >= 45  && wormY+1 <= 64)
+         && wormY   >   1  && wormY   <  63) {
         phasic(false, 90, doProprioception);
         wormY++;
       }
     } else if (wormFacing == 1 && wormX <= 128 && wormX >= 0) {
-      if (!(wormX+1 <= 8 && wormX+1 >= 23 && wormX+1 <= 57 && wormX+1 >= 75 && wormX+1 <= 104 && wormX+1 >= 122)) {
+      if (!(wormX+1 >= 5   && wormX+1 <= 23 
+         && wormX+1 >= 105 && wormX+1 <= 123) 
+         && wormX   >  1   && wormX   <  127) {
         phasic(false, 90, doProprioception);
         wormX++;
       }
     } else if (wormFacing == 2 && wormY <= 64 && wormY >= 0) {
-      if (!(wormY-1 >= 44 && wormY-1 <= 62 && wormY-1 >= 38 && wormY-1 <= 54 && wormY-1 >= 38 && wormY-1 <= 57)) {
+      if (!(wormY-1 >= 49  && wormY-1 <= 64 
+         && wormY-1 >= 45  && wormY-1 <= 64)
+         && wormY   >   1  && wormY   <  63) {
         phasic(false, 90, doProprioception);
         wormY--;
       }
     } else if (wormFacing == 3 && wormX <= 128 && wormX >= 0) {
-      if (!(wormX-1 <= 8 && wormX-1 >= 23 && wormX-1 <= 57 && wormX-1 >= 75 && wormX-1 <= 104 && wormX-1 >= 122)) {
+      if (!(wormX-1 >= 5   && wormX-1 <= 23 
+         && wormX-1 >= 105 && wormX-1 <= 123) 
+         && wormX   >  1   && wormX   <  127) {
         phasic(false, 90, doProprioception);
         wormX--;
       }
@@ -786,10 +817,9 @@ void calculateCollisions() {
     //activate soft touch
     doGentleNoseTouch();
   }
-
-//TODO: fix the number of pixels... should be four      
   //activate gustatory neurons if worm is touching food
-  if ((wormX == foodX && wormY == foodY) || (wormX == foodX + 1 && wormY == foodY + 1)) {
+  if ((wormX == foodX     && wormY == foodY) || (wormX == foodX + 1 && wormY     == foodY + 1) 
+   || (wormX == foodX + 1 && wormY == foodY) || (wormX == foodX     && wormY + 1 == foodY)) {
     doGustation();
     
     isFood = false;
@@ -979,31 +1009,40 @@ void matrixToNeuron(uint16_t cellID) {
 void activationFunction() {  
   //calculate next output for all neurons using the current output list
   for (uint16_t i = 0; i < 302; i++) {
-    matrixToNeuron(i);                                  //fill the neuron struct with the information of the ith neuron
+    matrixToNeuron(i);                               //fill the neuron struct with the information of the ith neuron
     int32_t sum = 0;
     bool hebFlag = false;
-    uint16_t hebPos = 0;
+    uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
 
-    for (hebPos; hebPos < 66; hebPos++) {               //check to see if current ID is in the hebbian-capable neuron  list
-      if (HEBBIAN_NEURONS[hebPos] == i) {
-        //sum += learningArray[hebPos];
+    for (uint8_t j = 0; j < 66; j++) {               //check to see if current ID is in the hebbian-capable neuron  list
+      if (HEBBIAN_NEURONS[j] == i) {
+        //sum += learningArray[j];
         hebFlag = true;
       }
     }
 
-    for (uint8_t j = 0; j < n.inputLen; j++) {          //loop over every presynaptic neuron
-      sum += n.weights[j] * outputList[n.inputs[j]];    //do the summation calculation on the neuron
+    for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
+      if (n.weights[j] >= 90) {                                         //if the weight has a gap junction indicator (9_)
+        int8_t gapWeight = n.weights[j] - 90;                           //gap junctions are indicated by weights at 90-99
+        uint8_t gapOutput = 0;                                          //gap junctions presynapse outputs are adjusted, as they are not binary
+        if (outputList[n.inputs[j]]) gapOutput = (1 + offset);         //outputList value is adjusted for non-binary activation
+        if (!outputList[n.inputs[j]]) gapOutput = -(1 + offset);
+        sum += gapWeight * gapOutput;                                  //do the summation calculation for a gap junction synapse
+      } else {
+        sum += n.weights[j] * outputList[n.inputs[j]];                  //do the summation calculation on current synapse
+      }
     }
 
-    if (sum >= threshold) {                             //note it as being true or false
-      nextOutputList[i] = true;
+    if (sum >= threshold) {                                             //check if activation function outputs a true or false
+      nextOutputList[i] = true;                                         //store the output in a buffer
     } else {
       nextOutputList[i] = false;
     }
 
-    for (uint8_t j = 0; j < n.inputLen; j++) {                //loop over every presynaptic neuron
-      if (hebFlag) {                                          //if current neuron is in list
-        if (outputList[n.inputs[j]] && nextOutputList[i]) {            //if the pre and postsynaptic neuron both fire
+//TODO: add learning array calls here
+    for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
+      if (hebFlag) {                                                    //if current neuron is in list
+        if (outputList[n.inputs[j]] && nextOutputList[i]) {             //if the pre and postsynaptic neuron both fire
           //the specific synapse gets an increased hebbian value
         } else if (!outputList[n.inputs[j]] && !nextOutputList[i]) {    //if the pre and postsynaptic neuron both do NOT fire
           //the specific synapse gets a decreased hebbian value
