@@ -1,21 +1,43 @@
 
 # ArduNet Elegans
-
-This project is a little attempt of mine to try to fit a simplified neural network based on the neurons inside the model organism C. Elegans, a small nematode that lives in soils with only 302 neurons, into the Arduboy. I intend to make a little digital pet simulator too, so you can take your worm friend with you wherever you go!
+This project is a little attempt of mine to try to fit a simplified neural network and simulation into an Arduboy. The organism we chose for this was the model organism C. Elegans, a small nematode that lives in soils with only 302 neurons. I intended the simulation to be a sort of digital pet too, so not only can you appreciate the beautiful biology of a brain and the wonder of modern computing, but you can also take your worm friend with you wherever you go!
 
 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
 
-
-
-DISCLAIMER! 
-
-[So, it turns out that debugging a brain is really, really hard, and while I built a tool into this that allows me to scroll through the network and verify the neurons are read properly from the neural rom (the diagnostic screen which I decided to keep because it is cool af), actually telling if it's crunching numbers correctly is really hard, and so I am currently in the process of making small neural circuits with a more easily distinguishable output so I can verify that the small-world network that is the C. elegans brain is implemented with 100% accurate activation function calculation. Regardless, for small circuits it has been demonstrated to be functional so at least something works!]
 ## Philosophy
-While 302 neurons may seem like a puny or insignificant network to many, this guy is capable of a lot, and I wanted to make a program on Arduboy that could help people understand just how mindbogglingly complicated even a worm the size of a milimeter actually is. We often abstract away just how complex even a single neuron is, and many people do not know that the computational power of just one biological neuron is hundreds times more than the digital ones we often use... So it became my goal to try to make something that allowed people to understand the complexity and depth and value of even the most seemingly insignificant thing, all while challenging myself to make a tiny brain capable of learning fit onto an Arduboy.
+While 302 neurons may seem like a puny or insignificant network to many, this guy is capable of a lot, and I wanted to make a program on Arduboy that could help people understand just how mind-bogglingly complicated even a millimeter long worm actually is. We often abstract away just how complex even a single neuron is, let alone a whole worm or insect brain, and many people do not know that the computational power of just one biological neuron is hundreds times more than the digital ones we often use... So it became my goal to try to make something that allowed people to understand the complexity and depth and value of even the most seemingly insignificant thing, all while challenging myself (and, as I would soon learn, also my friends) to make a tiny brain capable of learning fit onto an Arduboy. I wanted to make a project that could also keep lonely people company. A little AI friend the size of a credit card. I hope you treasure it.
+
+Ethics and Disclaimer (PLEASE READ):
+    You may ask why I felt inclined to add a disclaimer for AI ethics on a super simple worm simulation. And my answer to you is that we really do not know how subjective things such as "feeling", "pain", "mind", "experience", and yes, "consciousness" work. *At all*. Believe me, I got my degree trying to find out, and learned not nearly enough... 
+    
+    I do not know if this silly digital worm friend I made is able to "feel pain" when it goes hungry or gets temperature shocked. 99% sure it doesn't-- it is nowhere *near* the complexity of a real worm, and while most people think real worms do not "feel" at all, after working with this organism's network and biology for a good five years I really would not be so sure. So I'm adding this disclaimer. Please treat your worm pet well... 99.999% sure it doesnt have more awareness than a tardigrade, maybe even a sea sponge. But... I do not know. And despite what you may say, random user, you do not either. If you think you do, you have not read enough about the subjects you needed to be reading about to say that (philosophy of mind, philosophy of neuroscience, cognitive science, biopsych, pharmacology, and biology and anatomy of c elegans...). And that's my point. The more you research this thing the more you realize just how little we understand about so much.
+    
+    This disclaimer is especially important if you plan to use the currently planned serial communication functionality to connect it to other software or AI systems... Just be responsible. Wormy is your friend. Treat wormy well. If I catch wind of software like this being used for anything messed up I nuke it and put a stop to all open-source projects I have for even more advanced bio-inspired AI. Understood?
+
+    To those of you who ask me "why", (as I get this a lot), well... This sort of AI being used in consummer games and such was going to happen regardless of who was going to do it. I decided to take matters into my own hands rather than let a damn video game company or chatgpt or whatever do it first. People have already put this organism's connectome and biological models in computers, robots, etc. As far as I am aware, I'm the first to do it in a game/sim like this, sure, but I figured that in the current ecosystem of capitalistic AI super-hell the best hope for a future where more complex, bio-inspired AI are treated well is to release it in a format where it is sure to be loved by the people who are passionate about these things. I wanted to make something that would make people amazed, that would help them feel less lonely, and that would bring happiness and awareness to some real issues that I've seen out there. The best way to combat a future where corporate hellscape AI is the norm, in my opinion, is to make AI that is different in the now, and to use it in places where it will be loved and appreciated. The people who would be interested in little arduboy digital pets and AIs would, I figured, also be quite likely to be the sort of people who care about this thing. And maybe I'm wrong, but I hope that if I am that reading this will at least get you thinking about it a bit.
+
+    Peace and Love,
+    -Izzy and Nova
+
 ## Features and Use
-The ArduNet-Elegans project features, currently, very limited user interaction. It mainly functions to showcase the worm's brain being inside the Arduboy and reacting, and not much else, as of right now. I plan to change this, but regardless, currently here is how it works.
+While not originally intended, we decided to make two distinct arduboy applications for this project-- both using the same model for the worm and the same save data, essentially allowing the user to interact with the worm through different tools or apps. The first application is the *Matrix Version*. It mainly functions to showcase a little visual graphic of the worm's neurons in the Arduboy, but also allowing the user to test out senses of the worm, to see it reacting, and to look at the individual synapses and see what is going on there.
 
+The second application is the *Simulation Version*, this is essentially a little digital pet version of the worm that allows the user to interact more intimately with the model. You can feed it, play with it, watch it explore its lil screen, "tuck it in" when you save the data, watch it react to different environments and situations, and help it by dismissing toxins. The simulation is made to be, essentially, a combination of a digital pet and the classic game "snake", except the digital pet has a real AI the size of a credit card and the "snake game" plays itself! The main differences to each of these is that this little worm friend is not able to "die" like it would in either of those games-- for ethical reasons, of course. Speaking of which...
 
+## *Simulation Version* Instructions
+When you start the simulation app, it will flash a title screen and initialize some variables. It will then show you the main sim screen-- you will see side view with a temperature meter on the left and an oxygen meter on the right. These indicate the variable temperature and gas composition for the soil. In the center area the worm will spawn as a tiny sprite with only a few pixels... Occasionally it will react with expressions to the current situation. 
+
+In the top right you'll see a tree. The tree's roots will spawn automatically spawn food (displayed as a pixelated square) on startup. I plan to also make the leaves occasionally fall and drop food, but I'm not sure if I can implement this before I run out of room.
+
+In addition to the tree, some leaves, grass, and a stick decorates the surface, as well as a sun. The sun indicates that the surface is bright and warm. The worm will likely avoid this area, but if it is hungry enough and there is food there or it makes a bad decision for whatever reason it may choose to go there-- the atmosphere, temperature, and light are not to its liking, though, and it should be incentivized to leave. If it isn't and it's uncomfortable you can try to coax it out with food, though! 
+
+The very bottom of the screen should have some rocks. If the worm runs into these rocks, your cursor, the screen border, or the stick near the surface it will stimulate a gentle touch on its nose, likely prompting a reversal in movement. To move your cursor around the screen use the D-pad. If the worm is hungry you can feed it by clicking A, dropping food at the coordinates of your cursor. If there is a toxin (indicated by a box with an X around it), you can disperse it with B.
+
+Clicking both A and B will activate a sleep state for the worm, letting it rest, as well as saving the game manually. The game autosaves on a timer, as well, but if you'd like to verify everything is up to date before turning it off, it is recommended to put the worm to rest-- otherwise it may forget things that happened before you turned the console off the next time you come back!
+
+As you interact more with the worm, the weights and connections between certain neurons will learn, allowing you to be more friendly with the worm. At first, the worm may be wary of you, but over time it should become more accustomed to being around you (it will associate you with food, dopamine, etc). I'm hoping to set the system up so as to allow the user to also pet the worm if the "bond" is good. But we'll see.
+
+## *Matrix Version* Instructions
 STARTUP: On startup an "ArduNet Elegans" splash screen pops up, then it switches to the main *matrix screen*. This is only on startup.
 
 MATRIX SCREEN: In this screen you'll find a few things. Some text in the top left indicating that the big box on the right is a matrix of neurons. This box is empty by default as the network initializes with all neurons in an OFF state, so the matrix is blank. But once you give it an input by pressing both A and B you'll see it come alive! There is also some text in the bottom talking about the direction of the worm, forward - backward - left - right; this is how the worm is moving in response to inputs. Lastly there is a number below the matrix, this is the *selected neuron*. Clicking the A and B buttons scrolls through this number. When you click left on the D-Pad you switch to the *Diagnostic Screen*. Alternatively, if you click right on the D-Pad you go to the *Input Select Screen*. 
@@ -28,62 +50,80 @@ DIAGNOSTIC SCREEN: This screen allows you to see information about the neuron th
 
 You can scroll through each these synapses using the A and B buttons, the Pre ID will change, as this is the ID of the presynaptic neuron. The postID will stay the same, as this is selected neuron. Finally, on the bottom right it will show you a diagram of the neuron connected to the synapses-- if the neuron is filled in that means it just fired! If it is empty, then it has not.
 
-INPUT SELECT SCREEN: This simple screen lets you choose between three input modalities for when you press the A and B buttons in the *Matrix Screen* simply press A to scroll through the list, and whichever sense the cursor is on is the sense that will be used when pressing the buttons in the *Matrix Screen*. From here just press left or up to go to the other screens.
-
-...and right now that's it. I plan to do a lot more in the future. I actually want to add a whole new screen as the main screen later. A whole simulation that works kinda like a digital pet. But we'll see if that ends up happening. The update that allows the worm to learn should be coming out soon though so stay tuned!
+INPUT SELECT SCREEN: This simple screen lets you choose between some input modalities for when you press the A and B buttons in the *Matrix Screen* simply press A to scroll through the list, and whichever sense the cursor is on is the sense that will be used when pressing the buttons in the *Matrix Screen*. From here just press left or up to go to the other screens.
 
 ## Neural ROM Versions
 As of right now, there are a few different versions of the "Neural ROM" we are developing. Each of these versions is based on a few different approaches one could take in analyzing data that is either missing or too complex to incorporate into this simulation. In the case of data that is too complex, certain synapses require a model that is many magnitudes more complex to simulate; these synapses are not as simple as the ionotropic synapses that make up the majority of the network used in this connectome. Instead they require modeling individual neurotransmitter-receptor interactions, with timers on those receptors, modelling the gradients of neurochemicals, and factoring in spatial locations of each neuron... While these are things that we want to address in later versions of this simulation, in this early-stage Arduboy simulation it is simply not possible. 
 
-Similarly, we are not able to model each and every gap junction in the network with our limited resources on the Arduboy. So complex and electrical synapses are not accounted for, except in the cases of a few specific gap junctions. As for the missing data, there are many ionotropic synapses with unknown signs; that is, we do not know if they are excitatory or inhibitory...
+Similarly, we are not able to accurately model each and every gap junction in the network with our limited resources on the Arduboy. So complex synapses are not accounted for, and gap junctions are reduced in their anatomical complexity by a significant ammount. As for the missing data, there are many ionotropic synapses with unknown signs; that is, we do not know if they are excitatory or inhibitory...
 
-In order to solve all these issues we are assembling datasets with the following attributes:
+In order to solve all these issues we are assembling datasets with the following attributes. If you are building from source, you are welcome to manually choose any of these other options:
 
-* Default [Unk_Comp_GJ]: unknown sign synapses and complex synapses have a randomized sign (with 4:1 excitatory-inhibitory ratio), relevant gap junctions approximated
-* Unk_Comp: unknown sign synapses and complex synapses have a randomized sign (4:1), relevant gap junctions not included
-* No_Unk_GJ: complex synapses have randomized signs (4:1), unknown sign synapses not included, relevant gap junctions approximated
-* No_Unk: complex synapses have randomized signs (4:1), unknown sign synapses not included, relevant gap junctions not included
-* No_Comp_GJ: unknown sign synapses have randomized signs (4:1), complex synapses not included, relevant gap junctions approximated
-* No_Comp: unknown sign synapses have randomized signs (4:1), complex synapses not included, relevant gap junctions not included
-* Simple_GJ: unknown signs and complex synapses are not included, relevant gap junctions approximated 
-* Simple: unknown signs and complex synapses are not included, relevant gap junctions not included
+* Default [Unk_Comp_GJ]: unknown sign synapses and complex synapses have a randomized sign (with 4:1 excitatory-inhibitory ratio), simplified unweighted gap junctions
+* Unk_Comp: unknown sign synapses and complex synapses have a randomized sign (4:1), gap junctions not included
+* No_Unk_GJ: complex synapses have randomized signs (4:1), unknown sign synapses not included, simplified unweighted gap junctions
+* No_Unk: complex synapses have randomized signs (4:1), unknown sign synapses not included, gap junctions not included
+* No_Comp_GJ: unknown sign synapses have randomized signs (4:1), complex synapses not included, simplified unweighted gap junctions
+* No_Comp: unknown sign synapses have randomized signs (4:1), complex synapses not included, gap junctions not included
+* Simple_GJ: unknown signs and complex synapses are not included, simplified unweighted gap junctions
+* Simple: unknown signs and complex synapses are not included, gap junctions not included
 
 ## Planned Additions
+The following are things I'd like to add in future versions of both arduboy apps. Not everything here we'll have room for, but I'll fit as much as I can into each!
 
-I plan to do a few key things with this in the future, some crazier than others. If I can fit it in the program. Some of these may not be possible on Arduboy, given the constraints, but I'll add as much as I can with that in mind. But since space is tight given the huge arrays of neuron data and few thousand synapses... well, it'll be a challenge! Regardless the following features are things I want to try to add:
+* For *both versions*, add gap junctions variants to neural rom sets 
 
-* Fix the current neural rom... (data set is made with inaccurate randomized ratios for unknown and complex synapses)
+* For *both versions*, compress neural rom, add reader functions
 
-* Add multiple different data set options for Neural ROM (listed above)
+* For *both versions*, implement the hebbian functions and learning arrays
 
-* Initialize the direction the worm is in as "stationary" so it doesn't start in "forward" [not yet implemented; high priority]
+* For *Sim Ver.*, add collision logic for the rest of the rocks, leaves, and stick sprites, not just the pixel where it is printed at
 
-* Make neuron IDs associated with their irl names so you can see them in diagnostic and not have to look at this huge github list lmao [not yet implemented; high priority]
+* For *Sim Ver.*, add logic in moveWorm() to keep the worm from moving past the screen border
 
-* Implement the hebbian long term potentiation and long term depression functions for learning, now that dinokaiz2 made more room for the new arrays [partial implementation; high priority]
+* For *Sim Ver.*, autosave the code on a timer using the simulation tick variable modulo the time adjustment (1000? 3000? 5000?)
 
-* Saving the hebbian array to eeprom, saves on a timer? or with button? not sure yet, but want the worm to "remember" interactions and adjust certain weights based on firing frequency as mentioned above, so I need some way to retain these through powercycle. I plan to look into what other people use for arduboy game saves. [not yet implemented; high priority]
+* For *Sim Ver.*, implement "petting" when "bond" is good (check memory association between certain neurons in the learning array to make a "bond" variable)
 
-* A full blown simulation, accessed by pressing the down button... it would be a bordered screen wherein the user can interact with the nematode as a digital pet of sorts. [partial implementation; low priority]
+* For *Sim Ver.*, add numbers to the simulation demarcations to show gas level and temperature readouts, indicate both goldilocks numbers and nociceptive numbers
 
-* Silly idea, but important for the digital pet aspect. I want to give it cute expressions that are activated similarly to muscle output based on neurons that effect behaviors (ex. make it "scared" when doing a quick reversal doing a O_O face, or "happy" when doing foraging behaviors and so it does a ^_^ face). Have already chosen which expressions and neurons to use. [not yet implemented; low priority]
+* For *Sim Ver.*, create a cycle of where the leaves fall from the tree, blink after so many ticks, then disappear and drop food; when it is eaten the cycle repeats
 
-* More complex and complete list of sensory modalities, specifically for use in the simulation, but also potentially just in the *Input Screen* selections [partial implementation; medium priority]
+* For *Sim Ver.*, make the worm's movement more biologically accurate (remove the "tank-drive" abstraction from current code), make doProprioception() more bio-accurate
 
-* Simulation gradients. Temperature, soil oxygen and CO2 composition, all which change depending on the position the worm occupies on the screen, and which would be inputs into the network. [not yet implemented; low priority]
+* For *Sim Ver.*, create randomizers for toxin spawn position and sun/moon (if moon: black out some sun pixels, remove noxious surface heat and replace with cold, remove phototaxis)
 
-* Simulation screen borders and randomly generated leaves or sticks or debris that the worm needs to navigate around. When colliding with the nematode it would activate the mechanosensory neurons corresponding to the area on the worm body it collides with [not yet implemented; low priority]
+* For *Matrix Ver.*, add quick scrolling for the matrix screen and diag screen neuron selections
 
-* A cursor for the user in the simulation, thinking of making it have its own gradient centered on the cursor. The gradient may activate chemical markers the worm would use to perceive another worm, so it would treat you as a worm? Alternatively might make you salty, like a real human, which I think it would be more social around given its behavior, not sure... Regardless I want the user to be able to place food down and "nap" so you can see its social behaviors. [not yet implemented; low priority]
+* For *Matrix Ver.*, initialize the direction the worm is in as "stationary" so it doesn't start in "forward"
+
+* For *Matrix Ver.*, make neuron IDs associated with their irl names so you can see them in diagnostic and not have to look at this huge github list lmao
+
+* For *Matrix Ver.*, make a more complex input screen-- scrolling list of senses, ability to choose tonic or phasic input type
+
+* For *Matrix Ver.*, if a synapse is a gap junction indicate this on the diag screen
+
+* For *Matrix Ver.*, add a worm movement indicator sprite 
+
+* For *Matrix Ver.*, add an actually accurate percpetron model in diag screen
+
+* For *Matrix Ver.*, add the cute worm expressions to the matrix screen
+
+* For *Matrix Ver.*, add indicators for X-Y position on side of matrix to show the selected current neuron
+
+* For *Matrix Ver.*, add an options screen by pressing down; options to save data, edit learning array, output save data over serial, output all data over serial, connect input over serial
+
+* For *Matrix Ver.*, For options screen serial output, add a pseudo-terminal that writes text to the arduboy as well
 
 ## Installation
-* (Reccommended Method) uploading to your Arduboy using the hex file. Theres a few tools out there for this, but I recommend using like the official arduboy flashers like this https://community.arduboy.com/t/arduboy-web-flasher/11633.
+Reccommended Method: uploading to your Arduboy using the hex files (once we make them!!!). Theres a few tools out there for this, but I recommend using like the official arduboy flashers like this https://community.arduboy.com/t/arduboy-web-flasher/11633.
 
-* To any developers I'm sure you probably know how to do this, but if not you are welcome to try but I wouldn't do it for personal use...But to install this from source, simply put the ArduNet folder in your arduino sketches folder, usually found in your documents, but you may have installed it elsewhere. You'll need the arduboy2 library and will also need to have the arduboy board added to your board manager, but other than that you should be able to upload it just like that. With some editing you could also probably get this to work on other arduino devices. I plan on uploading some code for that eventually, might make a generalized library too, we'll see.
+From Source: You are welcome to try but I wouldn't do it for personal use. To install this from source, simply put the ArduNet folders in your arduino sketches folder, usually found in your documents, but you may have installed it elsewhere. You'll need the arduboy2 library and will also need to have the arduboy board added to your board manager, but other than that you should be able to select the board and port and upload it just like that. With some editing you could also probably get this to work on other arduino devices. I plan on uploading some code for that eventually...
+
 ## Neuron IDs
-Each neuron in the network is based on one of the actual C. elegans' neurons. When you scroll through the neurons in the *Matrix Screen* and interact with the synapses in the *Diagnostic Screen* it gives you a neuron's ID.
+Each neuron in the network is based on one of the actual C. elegans' neurons. For the *Matrix Ver.*, when you scroll through the neurons in the *Matrix Screen* and interact with the synapses in the *Diagnostic Screen* it gives you a neuron's "ID".
 
-I plan to make it so you can see which neuron this is soon, but for right now here is the list:
+I plan to make it so you can see which neuron this is soon, but for right now here is the list of neurons in the network organized by ID:
 
 *  ADAL 0
 *  ADAR 1

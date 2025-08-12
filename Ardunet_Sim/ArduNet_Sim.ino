@@ -1,6 +1,5 @@
 /**
  *      SIM TODOs
- * Reduce the number of necessary learning neurons in learning array                 (manually; via research)
  * Compress the learning neurons and neural rom                                      (using K's tool)
  *      uncomment ascii faces/title screen/drawWorm in simulation()
  * Implement hebbian LTP and LTD learning array                                      (using K's code)
@@ -61,6 +60,12 @@ Sources for Memory Neurons:
     https://www.eneuro.org/content/6/4/ENEURO.0014-19.2019
     https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006019
     https://www.eneuro.org/content/9/4/ENEURO.0084-22.2022
+
+sources for satiety circuit
+    https://pmc.ncbi.nlm.nih.gov/articles/PMC3726252/
+
+sources for definitional help
+    https://www.biorxiv.org/content/10.1101/2025.07.21.665845v1.full
 */
 
 
