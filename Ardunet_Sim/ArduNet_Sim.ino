@@ -64,9 +64,10 @@ Sources for Memory Neurons:
 */
 
 
-#include "neuralROM.h"            //import libraries
-#include "sprites.h"
+#include "sprites.h"              //import libraries
+#include "neuralROM.h"
 #include "bit_array.h"
+#include "sized_int_array_reader.h"
 #include <Arduboy2.h>
 
 Arduboy2 arduboy;                 //create arduboy object
@@ -107,6 +108,8 @@ bool sated = false;       //if the worm is not hungry
 //uint16_t foodTouchCounter = 0;  //how long the food has been eaten for
 
 //massive thanks to Dinokaiz2 for help with the bit array functionality!!!
+SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70);
+
 //uint8_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
 //BitArray<> learningArray;  //an array that, for each neuron that does hebbian learning, holds a form of simplified output history
 BitArray<302> outputList;     //list of neurons
@@ -946,21 +949,21 @@ void matrixToNeuron(uint16_t cellID) {
 
   // Skip to the correct neuron's data
   for (uint16_t i = 0; i < cellID; i++) {
-    int16_t skipLen = pgm_read_word(&NEURAL_ROM[index]);     //read the value of the first neuron's input Len
+    int16_t skipLen = NEURAL_ROM[index];     //read the value of the first neuron's input Len
     index += 1 + skipLen + skipLen;       //add double that value plus one, to skip the entire neuron entry
   }
 
-  n.inputLen = pgm_read_word(&NEURAL_ROM[index]);
+  n.inputLen = NEURAL_ROM[index];
   index++;
 
   // Read neuron inputs
   for (uint8_t i = 0; i < n.inputLen; i++) {
-    n.inputs[i] = pgm_read_word(&NEURAL_ROM[index++]);
+    n.inputs[i] = NEURAL_ROM[index++];
   }
 
   // Read neuron weights
   for (uint8_t i = 0; i < n.inputLen; i++) {
-    n.weights[i] = pgm_read_word(&NEURAL_ROM[index++]);
+    n.weights[i] = NEURAL_ROM[index++];
   }
 }
 
