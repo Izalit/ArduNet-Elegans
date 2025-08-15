@@ -1,20 +1,28 @@
 /**
-* fix the compressed ROM memory issue
-* implement the learning array
-* add gap junctions to the neural rom (with mollys help!)
-* re-compress neural rom with gap junction code
-
-* remake doProprioception() to look at individual motor neurons in if-statements
-*     For turns: if more left side muscles are active than right, or right side muscles than left, doProprioception()
-*     For movement: if AVB and PVC or AVD, AVA, and AVE are active, then doProprioception()
-* add collision logic for the rest of the rocks, leaves, and stick sprites
-* implement "petting" when "bond" is good (check memory association between certain neurons in the learning array to make a "bond" variable)
-
-* add numbers to the simulation demarcations to show gas level and temperature readouts, indicate both goldilocks numbers and nociceptive numbers
-* create a cycle of where the leaves fall from the tree, blink after so many ticks, then disappear and drop food; when it is eaten the cycle repeats
-* make the worm's movement more biologically accurate (remove the "tank-drive" abstraction from current code), make doProprioception() more bio-accurate
-* create randomizers for toxin spawn position and sun/moon (if moon: black out some sun pixels, remove noxious surface heat and replace with cold, remove phototaxis)
-*/
+ * VITAL
+ *    bitpack the learning array (use all 125 learning neurons, if possible)
+ *    implement eeprom saving functionality (simply call the learning array function, iterate over its contents, save into eeprom)
+ *    add gap junctions to the neural rom (with mollys help!)
+ *    re-compress neural rom with gap junction code
+ *
+ * NEXT STEPS
+ *    add collision logic for the rest of the rock1/rock3/leaf/stick sprites
+ *    implement "petting" when "bond" is good (check memory association between certain neurons in the learning array to make a "bond" variable - only read it at startup and sleep!)
+ *    make screen prettier... remove stipling? make larger tree sprite with more intricate roots? change to small rocks only?
+ *
+ * PLAN B
+ * if gap junctions do not fix worm movement then...
+ * make the worm's movement more biologically accurate (remove the "tank-drive" abstraction from current code), make doProprioception() more bio-accurate
+ * remake doProprioception() to look at individual motor neurons in if-statements
+ *     For turns: if more left side muscles are active than right, or right side muscles than left, doProprioception()
+ *     For movement: if AVB and PVC or AVD, AVA, and AVE are active, then doProprioception()
+ *
+ * NOT IMPORTANT
+ * add numbers to the simulation demarcations to show gas level and temperature readouts, indicate both goldilocks numbers and nociceptive numbers
+ * create a cycle of where the leaves fall from the tree, blink after so many ticks, then disappear and drop food; when it is eaten the cycle repeats
+ * create randomizers for toxin spawn position and sun/moon (if moon: black out some sun pixels, remove noxious surface heat and replace with cold, remove phototaxis)
+ * add multiple "screens" (first screen has mostly sticks and a toxin, second has sticks and leaves, third has sticks, leaves, and a tree); make sensory gradients larger
+ */
 
 /*
     secondary list 1: sensory neurons                     (29)
@@ -99,7 +107,7 @@ bool isRepel = true;      //if theres any repellents
 bool isFood = true;       //if theres any food
 bool isAsleep = false;    //if sleep state is active
 bool sated = false;       //if the worm is not hungry
-//uint16_t foodTouchCounter = 0;  //how long the food has been eaten for
+uint16_t id = 0;
 
 //massive thanks to Dinokaiz2 for help with the bit array functionality!!!
 SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70, true);
@@ -130,16 +138,12 @@ void loop() {
   
   doTitleScreen();
 
+  activationFunction();         //do the main calculation of the connectome
   arduboy.pollButtons();        //get buttons pressed and send to function to process them
   doButtons();
-
-  activationFunction();         //do the main calculation of the connectome
-  delay(50);
-
   simulation();
-
   arduboy.display();
-  
+
   startFlag = false;            //set the flag off; only do the title screen once
 }
 
@@ -976,46 +980,34 @@ void doProprioception() { //phasic, unless held then it becomes tonic
 
 /*************************************CONNECTOME FUNCTIONS***************************************/
 /**
- * The function that reads in the neural rom into a format that is able to be read 
- * by the activation function and rest of the program
- */
-void matrixToNeuron(uint16_t cellID) {
-  uint16_t index = 0;
-
-  // Skip to the correct neuron's data
-  for (uint16_t i = 0; i < cellID; i++) {
-    int16_t skipLen = NEURAL_ROM[index];     //read the value of the first neuron's input Len
-    index += 1 + skipLen + skipLen;       //add double that value plus one, to skip the entire neuron entry
-  }
-
-  n.inputLen = NEURAL_ROM[index];
-  index++;
-
-  // Read neuron inputs
-  for (uint8_t i = 0; i < n.inputLen; i++) {
-    n.inputs[i] = NEURAL_ROM[index++];
-  }
-
-  // Read neuron weights
-  for (uint8_t i = 0; i < n.inputLen; i++) {
-    n.weights[i] = NEURAL_ROM[index++];
-  }
-}
-
-/**
  *The activation function is the main simulation, it calculates all the next ticks of the connectome
  * and then sets the next tick to the current one when each has been individually calculated
  */
 void activationFunction() {  
+  uint16_t index = 0;
+
   //calculate next output for all neurons using the current output list
-  for (uint16_t i = 0; i < 302; i++) {
-    matrixToNeuron(i);                               //fill the neuron struct with the information of the ith neuron
+  for (id; id < 302; id++) {
+    n.inputLen = NEURAL_ROM[index];
+    index++;
+
+    // Read neuron inputs
+    for (uint8_t i = 0; i < n.inputLen; i++) {
+      n.inputs[i] = NEURAL_ROM[index++];
+    }
+
+    // Read neuron weights
+    for (uint8_t i = 0; i < n.inputLen; i++) {
+      n.weights[i] = NEURAL_ROM[index++];
+    }
+    
+    //matrixToNeuron(id);                               //fill the neuron struct with the information of the ith neuron
     int32_t sum = 0;
     bool hebFlag = false;
     uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
 
     for (uint8_t j = 0; j < 66; j++) {               //check to see if current ID is in the hebbian-capable neuron  list
-      if (HEBBIAN_NEURONS[j] == i) {
+      if (HEBBIAN_NEURONS[j] == id) {
         //sum += learningArray[j];
         hebFlag = true;
       }
@@ -1034,25 +1026,37 @@ void activationFunction() {
     }
 
     if (sum >= threshold) {                                             //check if activation function outputs a true or false
-      nextOutputList[i] = true;                                         //store the output in a buffer
+      nextOutputList[id] = true;                                         //store the output in a buffer
     } else {
-      nextOutputList[i] = false;
+      nextOutputList[id] = false;
     }
 
 //TODO: add learning array calls here
     for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
       if (hebFlag) {                                                    //if current neuron is in list
-        if (outputList[n.inputs[j]] && nextOutputList[i]) {             //if the pre and postsynaptic neuron both fire
+        if (outputList[n.inputs[j]] && nextOutputList[id]) {             //if the pre and postsynaptic neuron both fire
           //the specific synapse gets an increased hebbian value
-        } else if (!outputList[n.inputs[j]] && !nextOutputList[i]) {    //if the pre and postsynaptic neuron both do NOT fire
+        } else if (!outputList[n.inputs[j]] && !nextOutputList[id]) {    //if the pre and postsynaptic neuron both do NOT fire
           //the specific synapse gets a decreased hebbian value
         }
       }
     }
   }
 
+  /*if (id == 301) {
+    //flush the buffer
+    for (int16_t i = 0; i < 302; i++) {
+      outputList[i] = nextOutputList[i];
+    }
+    id = 0;
+    return true;
+  } else {
+    return false;
+  }*/
+
   //flush the buffer
-  for (int16_t i = 0; i < 302; i++) {
-    outputList[i] = nextOutputList[i];
-  }
+    for (int16_t i = 0; i < 302; i++) {
+      outputList[i] = nextOutputList[i];
+      id = 0;
+    }
 }

@@ -56,7 +56,7 @@ float vbRatio = 0;
 float daRatio = 0;
 float dbRatio = 0;
 uint8_t counter = 0;
-
+uint16_t id = 0;
 
 SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70, true);
 
@@ -475,82 +475,85 @@ void doCO2Sensation() {
 
 /*************************************SIMULATION FUNCTIONS***************************************/
 /**
- * The function that reads in the neural rom into a format that is able to be read 
- * by the activation function and rest of the program
- */
-void matrixToNeuron(uint16_t cellID) {
-  uint16_t index = 0;
-
-  // Skip to the correct neuron's data
-  for (uint16_t i = 0; i < cellID; i++) {
-    int16_t skipLen = NEURAL_ROM[index];     //read the value of the first neuron's input Len
-    index += 1 + skipLen + skipLen;       //add double that value plus one, to skip the entire neuron entry
-  }
-
-  n.inputLen = NEURAL_ROM[index];
-  index++;
-
-  // Read neuron inputs
-  for (uint8_t i = 0; i < n.inputLen; i++) {
-    n.inputs[i] = NEURAL_ROM[index++];
-  }
-
-  // Read neuron weights
-  for (uint8_t i = 0; i < n.inputLen; i++) {
-    n.weights[i] = NEURAL_ROM[index++];
-  }
-}
-
-/**
  *The activation function is the main simulation, it calculates all the next ticks of the connectome
  * and then sets the next tick to the current one when each has been individually calculated
  */
 void activationFunction() {  
-  //calculate next output for all neurons using the current output list
-  for (uint16_t i = 0; i < 302; i++) {
-    matrixToNeuron(i);      //fill the neuron struct with the information of the ith neuron
-    int32_t sum = 0;
+  uint16_t index = 0;
 
-    for (uint8_t j = 0; j < n.inputLen; j++) {        //loop over every presynaptic neuron
-      if (i == currentID) {
-        numSynapses = n.inputLen;   //store some more info about these synapses
-        preSynapticNeuronList[j] = n.inputs[j];
-        
-        if (n.inputs[j] == preID) {
-          synWeight = n.weights[j];
+  //calculate next output for all neurons using the current output list
+  for (id; id < 302; id++) {
+    n.inputLen = NEURAL_ROM[index];
+    index++;
+
+    // Read neuron inputs
+    for (uint8_t i = 0; i < n.inputLen; i++) {
+      n.inputs[i] = NEURAL_ROM[index++];
+    }
+
+    // Read neuron weights
+    for (uint8_t i = 0; i < n.inputLen; i++) {
+      n.weights[i] = NEURAL_ROM[index++];
+    }
+    
+    //matrixToNeuron(id);                               //fill the neuron struct with the information of the ith neuron
+    int32_t sum = 0;
+    bool hebFlag = false;
+    uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
+
+    for (uint8_t j = 0; j < 66; j++) {               //check to see if current ID is in the hebbian-capable neuron  list
+      if (HEBBIAN_NEURONS[j] == id) {
+        //sum += learningArray[j];
+        hebFlag = true;
+      }
+    }
+
+    for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
+      if (n.weights[j] >= 90) {                                         //if the weight has a gap junction indicator (9_)
+        int8_t gapWeight = n.weights[j] - 90;                           //gap junctions are indicated by weights at 90-99
+        uint8_t gapOutput = 0;                                          //gap junctions presynapse outputs are adjusted, as they are not binary
+        if (outputList[n.inputs[j]]) gapOutput = (1 + offset);         //outputList value is adjusted for non-binary activation
+        if (!outputList[n.inputs[j]]) gapOutput = -(1 + offset);
+        sum += gapWeight * gapOutput;                                  //do the summation calculation for a gap junction synapse
+      } else {
+        sum += n.weights[j] * outputList[n.inputs[j]];                  //do the summation calculation on current synapse
+      }
+    }
+
+    if (sum >= threshold) {                                             //check if activation function outputs a true or false
+      nextOutputList[id] = true;                                         //store the output in a buffer
+    } else {
+      nextOutputList[id] = false;
+    }
+
+//TODO: add learning array calls here
+    for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
+      if (hebFlag) {                                                    //if current neuron is in list
+        if (outputList[n.inputs[j]] && nextOutputList[id]) {             //if the pre and postsynaptic neuron both fire
+          //the specific synapse gets an increased hebbian value
+        } else if (!outputList[n.inputs[j]] && !nextOutputList[id]) {    //if the pre and postsynaptic neuron both do NOT fire
+          //the specific synapse gets a decreased hebbian value
         }
       }
-
-      sum += n.weights[j] * outputList[n.inputs[j]];  //do the summation calculation on the neuron
-      //sum += learningArray[i][j];                     //add hebbian learning and LTD
-    }
-
-    if (sum >= threshold) {                           //note it as being true or false
-      nextOutputList[i] = true;
-
-/*      for (uint8_t j = 0; j < n.inputLen; j++) {
-        if (learningArray[i][j] < 0) {                //hebbian learning
-          learningArray[i][j] = 0;
-        } else if (learningArray[i][j] < 10) {
-          learningArray[i][j]++;
-        }
-      }*/
-    } else {
-      nextOutputList[i] = false;
-      
-/*      for (uint8_t j = 0; j < n.inputLen; j++) {
-        if (learningArray[i][j] > 0) {                //hebbian learning
-          learningArray[i][j] = 0;
-        } else if (learningArray[i][j] > -10) {
-          learningArray[i][j]--;
-        }
-      }*/
     }
   }
 
-  for (int16_t i = 0; i < 302; i++) {         //flush buffer
-    outputList[i] = nextOutputList[i];
-  }
+  /*if (id == 301) {
+    //flush the buffer
+    for (int16_t i = 0; i < 302; i++) {
+      outputList[i] = nextOutputList[i];
+    }
+    id = 0;
+    return true;
+  } else {
+    return false;
+  }*/
+
+  //flush the buffer
+    for (int16_t i = 0; i < 302; i++) {
+      outputList[i] = nextOutputList[i];
+      id = 0;
+    }
 }
 
 /*************************************HELPER FUNCTIONS***************************************/
