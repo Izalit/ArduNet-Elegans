@@ -24,10 +24,11 @@ class SizedIntArrayReader {
     const uint8_t* array;
     uint16_t length;
     int64_t offset = 0;
+    bool progmem;
 
     public:
-    SizedIntArrayReader(const uint8_t* array, uint16_t length, int64_t offset=0) :
-        array(array), length(length), offset(offset) {}
+    SizedIntArrayReader(const uint8_t* array, uint16_t length, int64_t offset=0, bool progmem=false) :
+        array(array), length(length), offset(offset), progmem(progmem) {}
 
     /**
      * Returns a proxy for the element at idx that remembers its bit width and
@@ -38,15 +39,18 @@ class SizedIntArrayReader {
      * @return a proxy for the element
      */
     int64_t operator[](uint16_t idx) {
-        const uint8_t* start_byte = array + (idx * bit_width / 8);
-        uint8_t lsb_idx = static_cast<uint8_t>(idx * bit_width % 8);
-        uint64_t value = *start_byte >> lsb_idx; // Push off bits before LSB
+        const uint8_t* low_byte = array + ((idx + 1) * static_cast<uint32_t>(bit_width) - 1) / 8;
+        uint8_t msb_idx = 7 - ((idx * bit_width) % 8);
+        uint8_t lsb_idx = 7 - (((idx + 1) * bit_width - 1) % 8);
+        uint64_t value = progmem ? pgm_read_byte(low_byte) : *low_byte;
+        value >>= lsb_idx; // Push off bits before LSB
         // Add bytes that follow
-        for (uint8_t i = 1; i < (bit_width + lsb_idx + 7) / 8; i++) {
-            value += static_cast<uint64_t>(*(start_byte + i)) << (i * 8 - lsb_idx); // TODO make bitshift not + for speed
+        for (uint8_t i = 1; i < (bit_width + msb_idx + 7) / 8; i++) {
+            uint64_t addend = progmem ? pgm_read_byte(low_byte - i) : *(low_byte - i);
+            value += addend << (i * 8 - lsb_idx); // TODO make bitshift not + for speed
         }
-        value &= ((1UL << bit_width) - 1); // Mask away bits after MSB
-        return value - offset;
+        value &= (1UL << bit_width) - 1; // Mask away bits after MSB
+        return value + offset;
     }
 
 };
