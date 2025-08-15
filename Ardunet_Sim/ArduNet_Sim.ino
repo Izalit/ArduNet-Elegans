@@ -102,7 +102,7 @@ bool sated = false;       //if the worm is not hungry
 //uint16_t foodTouchCounter = 0;  //how long the food has been eaten for
 
 //massive thanks to Dinokaiz2 for help with the bit array functionality!!!
-SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70);
+SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70, true);
 
 //BitArray<> learningArray;  //an array that, for each neuron that does hebbian learning, holds a form of simplified output history
 BitArray<302> outputList;     //list of neurons

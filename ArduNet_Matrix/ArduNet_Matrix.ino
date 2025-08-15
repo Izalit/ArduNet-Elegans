@@ -58,7 +58,7 @@ float dbRatio = 0;
 uint8_t counter = 0;
 
 
-SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70);
+SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70, true);
 
 uint16_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
 //BitArray<302> <maxSynapse> learningArray;    //an array that, for each neuron, holds its firing history
