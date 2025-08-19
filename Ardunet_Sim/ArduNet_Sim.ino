@@ -1,23 +1,18 @@
 /**
- * VITAL
- *    bitpack the learning array (use all 125 learning neurons, if possible)
- *    implement eeprom saving functionality (simply call the learning array function, iterate over its contents, save into eeprom)
- *    add gap junctions to the neural rom (with mollys help!)
- *    re-compress neural rom with gap junction code
+ * TODO: add collision logic for rock1, rock3, leaves, and sticks... make hitboxes?
+ * TODO: implement petting when bond is good (check weights of relevant synapses)
+ * TODO: implement EEPROM/saving learningArray[] functionality
+ * TODO: add gap junctions to the neural rom
  *
- * NEXT STEPS
- *    add collision logic for the rest of the rock1/rock3/leaf/stick sprites
- *    implement "petting" when "bond" is good (check memory association between certain neurons in the learning array to make a "bond" variable - only read it at startup and sleep!)
- *    make screen prettier... remove stipling? make larger tree sprite with more intricate roots? change to small rocks only?
- *
- * PLAN B
+ *    PLAN B
  * if gap junctions do not fix worm movement then...
  * make the worm's movement more biologically accurate (remove the "tank-drive" abstraction from current code), make doProprioception() more bio-accurate
  * remake doProprioception() to look at individual motor neurons in if-statements
  *     For turns: if more left side muscles are active than right, or right side muscles than left, doProprioception()
  *     For movement: if AVB and PVC or AVD, AVA, and AVE are active, then doProprioception()
  *
- * NOT IMPORTANT
+ *    MISC. IDEAS
+ * make screen prettier?... remove stipling? make larger tree sprite with more intricate roots? change to small rocks only?
  * add numbers to the simulation demarcations to show gas level and temperature readouts, indicate both goldilocks numbers and nociceptive numbers
  * create a cycle of where the leaves fall from the tree, blink after so many ticks, then disappear and drop food; when it is eaten the cycle repeats
  * create randomizers for toxin spawn position and sun/moon (if moon: black out some sun pixels, remove noxious surface heat and replace with cold, remove phototaxis)
