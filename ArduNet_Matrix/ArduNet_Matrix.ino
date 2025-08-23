@@ -16,6 +16,7 @@
 #include "sprites.h"              //import libraries
 #include "neuralROM.h"
 #include "bit_array.h"
+#include "sized_int_array.h"
 #include "sized_int_array_reader.h"
 #include <Arduboy2.h>
 
@@ -56,7 +57,7 @@ uint8_t currentExp = 0;           //value representing the current facial expres
 SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70, true);
 int8_t learningArray[] = {20, 25, 60, 70, 1};
 uint16_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
-//BitArray<302> <maxSynapse> learningArray;    //an array that, for each neuron, holds its firing history
+SizedIntArray<4, 1102, true> learningArray;    //an array that, for each neuron, holds its firing history
 BitArray<302> outputList;                    //list of neurons
 BitArray<302> nextOutputList;                //buffer to solve conflicting time differentials in firing
 
