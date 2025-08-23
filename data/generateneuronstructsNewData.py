@@ -9,24 +9,32 @@ import os
 path = os.path.dirname(__file__)
 neuronDataFilePath = (path+"/./inputdata/neuronlist.csv") #made by us from worm database
 synapseDataFilePath = (path+"/./inputdata/nt+rdataset.csv") #from elegansign
-outputFilePath = (path+"/./datasets/test.txt") #default is Unk_Comp.txt
+gapjunctionFilePath = (path+"/./inputdata/gapjunctionlist.csv")
+outputFilePath = (path+"/./datasets/No_Comp_GJ.txt") #default is Unk_Comp.txt
 
 
 neuronData = pd.read_csv(neuronDataFilePath)
 synapseData = pd.read_csv(synapseDataFilePath)
+gjunctData = pd.read_csv(gapjunctionFilePath)
 synapsedf = pd.DataFrame(synapseData, columns=['Source','Target','Sign','Edge Weight'])
 neurondf = pd.DataFrame(neuronData, columns=['neuron'])
+gjunctdf = pd.DataFrame(gjunctData, columns=['source', 'target','synapses'])
 neurons = neurondf['neuron'].tolist()
 source = synapsedf['Source'].tolist()
 target = synapsedf['Target'].tolist()
 sign = synapsedf['Sign'].tolist()
 weight = synapsedf['Edge Weight'].tolist()
+gjsource = gjunctdf['source'].tolist()
+gjtarget = gjunctdf['target'].tolist()
+gjweight = gjunctdf['synapses'].tolist()
 
 
 threshold = 1
 #rand = [1, 1, 1, 1, -1] # 4:1 postive to negative ratio
 #noPredRand = random.sample(range(1415), 212)
 weightadj = 1
+
+
 
 #desired ratios: 1203 of no pred to be postive, 212 to be negative
 #        377 of complex to be postive, 94 to be negative
@@ -35,7 +43,7 @@ weightadj = 1
 sys.stdout = open(outputFilePath, 'w')
 
 def printData(inputIDs, neuron, weight): #prints are formatted for neuralROM in ardunet currently  
-    #print(neuron)
+    print(neuron)
     #print(neurons.index(neuron)) #cellID is index of neurons listed in neuronswithzero.csv
     #print(threshold) #threshold
     
@@ -67,24 +75,47 @@ def generateStructs():
                 sourceSynapseElement = source[tidx] #stores the source neuron for target neuron
                 synapseSign = sign[tidx] #stores sign
                 synapseWeight = weight[tidx] #stores weight of synapse
-                if sourceSynapseElement in neurons: #compares source neurons in newdataset.csv to list of neurons in neuronswithzero.csv and trims any that arent a part of that list
+                if sourceSynapseElement in neurons: #compares source neurons in nt+rdataset.csv to list of neurons in neuronlist.csv and trims any that arent a part of that list
                     cellID = neurons.index(sourceSynapseElement) 
+                    #name = sourceSynapseElement
                     inputIDs.append(cellID) #adds source neuron cellID to inputs list
-
+                    #inputIDs.append(name)
+                    
                     if synapseSign == '-': # adds synapse sign to weight values
                         synapseWeight = synapseWeight * -1
                         weightList.append(synapseWeight)
                         
                     elif synapseSign == 'no pred':
-                        synapseWeight = synapseWeight * weightedChoice(1203,1,212,-1) # * 0 if not included
+                        synapseWeight = synapseWeight * weightedChoice(1203,1,212,-1) #* 0 #if not included
                         weightList.append(synapseWeight)
                         
                     elif synapseSign == 'complex':
-                        synapseWeight = synapseWeight * weightedChoice(377,1,94,-1) # * 0 if not included
+                        synapseWeight = synapseWeight * weightedChoice(377,1,94,-1)  * 0 #if not included
                         weightList.append(synapseWeight)
                         
                     else: 
                         weightList.append(synapseWeight)           
+        
+        #mark the gap junctions with 9 in the tens (90-99)
+        #0-9 in the ones place indicates its weight (the number of synapses is the weight)
+        #if a gap junctions weight is greater than 9 just set it to 9 anyways (that’s our max)
+        for gidx, g in enumerate(gjtarget):
+            if neuron == g:
+                sourcegjElement = gjsource[gidx]
+                gjWeight = gjweight[gidx]
+                if sourcegjElement in neurons:
+                    gjcellID = neurons.index(sourcegjElement)
+                    #names = sourcegjElement + 'GJ'
+                    inputIDs.append(gjcellID)
+                    #inputIDs.append(names)
+
+                    if gjWeight < 10:
+                        gjWeight += 90
+                        weightList.append(gjWeight)
+                    else:
+                        gjWeight = 99
+                        weightList.append(gjWeight)
+
         
         printData(inputIDs, neuron, weightList)
         
@@ -129,4 +160,4 @@ def weightedChoice(odds1, outcome1, odds2, outcome2): #unused odds functions
 
 #checkRatios()
 generateStructs() #unpacking tuple into three variables
-#print(noPredRand)
+#print(gjsource,gjtarget,gjweight)
