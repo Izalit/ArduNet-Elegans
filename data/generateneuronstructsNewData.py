@@ -10,8 +10,11 @@ path = os.path.dirname(__file__)
 neuronDataFilePath = (path+"/./inputdata/neuronlist.csv") #made by us from worm database
 synapseDataFilePath = (path+"/./inputdata/nt+rdataset.csv") #from elegansign
 gapjunctionFilePath = (path+"/./inputdata/gapjunctionlist.csv")
-outputFilePath = (path+"/./datasets/No_Comp_GJ.txt") #default is Unk_Comp.txt
-
+#outputFilePath = (path+"/./datasets/Unk_Comp_GJ.txt") #default is Unk_Comp_GJ.txt
+#outputFilePath = (path+"/./datasets/No_Unk_GJ.txt")
+#outputFilePath = (path+"/./datasets/No_Comp_GJ.txt")
+#outputFilePath = (path+"/./datasets/Simple_GJ.txt")
+outputFilePath = (path+"/./datasets/test.txt")
 
 neuronData = pd.read_csv(neuronDataFilePath)
 synapseData = pd.read_csv(synapseDataFilePath)
@@ -28,24 +31,14 @@ gjsource = gjunctdf['source'].tolist()
 gjtarget = gjunctdf['target'].tolist()
 gjweight = gjunctdf['synapses'].tolist()
 
-
-threshold = 1
-#rand = [1, 1, 1, 1, -1] # 4:1 postive to negative ratio
-#noPredRand = random.sample(range(1415), 212)
-weightadj = 1
-
-
-
-#desired ratios: 1203 of no pred to be postive, 212 to be negative
-#        377 of complex to be postive, 94 to be negative
-
 # uncomment this when you want to write to file
 sys.stdout = open(outputFilePath, 'w')
 
+weightadj = 1
+
 def printData(inputIDs, neuron, weight): #prints are formatted for neuralROM in ardunet currently  
-    print(neuron)
+    #print(neuron)
     #print(neurons.index(neuron)) #cellID is index of neurons listed in neuronswithzero.csv
-    #print(threshold) #threshold
     
     print(str(len(inputIDs)) + ', ', end = '') # input length
                 
@@ -61,8 +54,6 @@ def printData(inputIDs, neuron, weight): #prints are formatted for neuralROM in 
         else:
             print(str(adjustedWeight) + ',', end = '\n')
 
-    #print(checkRatios)
-    #print(0) #output value
 
 def generateStructs():
     #totalSynapses = 0 # for determining weight ratios
@@ -77,8 +68,8 @@ def generateStructs():
                 synapseWeight = weight[tidx] #stores weight of synapse
                 if sourceSynapseElement in neurons: #compares source neurons in nt+rdataset.csv to list of neurons in neuronlist.csv and trims any that arent a part of that list
                     cellID = neurons.index(sourceSynapseElement) 
-                    #name = sourceSynapseElement
                     inputIDs.append(cellID) #adds source neuron cellID to inputs list
+                    #name = sourceSynapseElement
                     #inputIDs.append(name)
                     
                     if synapseSign == '-': # adds synapse sign to weight values
@@ -90,7 +81,7 @@ def generateStructs():
                         weightList.append(synapseWeight)
                         
                     elif synapseSign == 'complex':
-                        synapseWeight = synapseWeight * weightedChoice(377,1,94,-1)  * 0 #if not included
+                        synapseWeight = synapseWeight * weightedChoice(377,1,94,-1) * 0 #if not included
                         weightList.append(synapseWeight)
                         
                     else: 
@@ -105,8 +96,8 @@ def generateStructs():
                 gjWeight = gjweight[gidx]
                 if sourcegjElement in neurons:
                     gjcellID = neurons.index(sourcegjElement)
-                    #names = sourcegjElement + 'GJ'
                     inputIDs.append(gjcellID)
+                    #names = sourcegjElement + 'gj'
                     #inputIDs.append(names)
 
                     if gjWeight < 10:
@@ -115,8 +106,7 @@ def generateStructs():
                     else:
                         gjWeight = 99
                         weightList.append(gjWeight)
-
-        
+                        
         printData(inputIDs, neuron, weightList)
         
     
@@ -125,12 +115,10 @@ def generateStructs():
 # Negative: 425
 # No Pred: 1415
 # Complex: 471
-
+# Desired ratios: 1203 of no pred to be postive, 212 to be negative
+#        377 of complex to be postive, 94 to be negative
 def checkRatios(): 
-    numPos = 0
-    numNeg = 0
-    numNoPred = 0
-    numCom = 0
+    numPos, numNeg, numNoPred, numCom = 0,0,0,0
     signIteration = [] # list to add to check sign ratios
     
     for s in sign: 
@@ -146,9 +134,7 @@ def checkRatios():
     signIteration.append(numNeg)
     signIteration.append(numNoPred)
     signIteration.append(numCom)
-    print(signIteration)
-
-    #return signIteration    
+    print(signIteration)  
 
 #function by @dinoceros
 def weightedChoice(odds1, outcome1, odds2, outcome2): #unused odds functions
@@ -157,7 +143,5 @@ def weightedChoice(odds1, outcome1, odds2, outcome2): #unused odds functions
         else:
            return outcome2
         
-
 #checkRatios()
-generateStructs() #unpacking tuple into three variables
-#print(gjsource,gjtarget,gjweight)
+generateStructs() 
