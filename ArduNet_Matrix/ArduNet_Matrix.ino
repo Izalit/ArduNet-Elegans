@@ -1,57 +1,16 @@
-/**
- *    VITAL
- * Make it easier to exit host subscreen
- * Add "T Menu" indicator sprites:
- *      Matrix     
-               D<--M-->I
-                   |
-                   V
-                   O
- *      Diag       
-                M-->-->I        
-                   |
-                   O
- *      Inputs    
-               D<--<--M
-                   |
-                   O
- *      Options
-               D<--^-->I
-                   |
-                   M
- * change screens to better match sprites
- *      Matrix: 
-              left to diag, right to inputs, down to options
-              A decrements by 1, B increments by 1
-              UP - increments by 10
-              A+B activates sense
- *      Diag: 
-              Right to matrix
-              (LEFT - unused???)
-              Down decreases by 1, Up increases by 1
-              A also increases by 1? B also decreases by 1?
- *      Inputs: 
-              up and down scroll the list, right toggles the phase 
-              left brings to matrix screen
-              A also scrolls left? B also scrolls right?
- *      Options: 
-              down scrolls down; up to matrix screen
-              A/B selects the option
-              left scrolls up, right also scrolls down
-
+/**    
+ * TODO: Fix off by one error in diag screen-- currently displaying an extra pre-id synapse
+ * TODO: optimize any repetetive code to make room for EEPROM/saving
+ * TODO: implement EEPROM/saving learningArray[] functionality
+ * TODO: add gap junctions to neural ROM
  *
- *    BOTTLENECKS
- * add gap junctions variants to neural rom sets 
- * implement the compressed learning arrays and eeprom saving
- *
- *    LESS IMPORTANT
- * add sprites for the Different options?
- * use neuron names instead of IDs?
- * quick scrolling in menus?
- *
- *    STRETCH
- * add a worm movement indicator sprite to the matrix screen (left of the mood indicator)
+ *    MISC. IDEAS 
  * add an actually accurate perceptron model in diag screen
+ * use neuron names instead of IDs?
+ * for diag screen, do not display any pre-Ids unless user has entered input to initialize
+ * add T menu sprites for the other screens?
+ * add sprites for the Different options?
+ * quick scrolling in menus?
  */
 
 #include "sprites.h"              //import libraries
@@ -64,11 +23,11 @@ Arduboy2 arduboy;                 //create arduboy object
 
 const uint8_t threshold = 1;      //threshold for activation function
 const uint16_t maxSynapse = 65;   //max synapses a neuron can have as inputs
-const uint8_t expressionX = 50;   //X position to draw the expression
-const uint8_t expressionY = 25;   //Y position to draw the expression
+const uint8_t expressionX = 40;   //X position to draw the expression
+const uint8_t expressionY = 35;   //Y position to draw the expression
 uint16_t currentID = 0;           //interface variable to indicate which neuron is being analyzed
 uint16_t numSynapses = 0;         //interface variable to indicate number of synapses connected
-uint16_t preID = 0;               //interface variable to indicate which neuron is being analyzed
+uint16_t preID = 999;             //interface variable to indicate which neuron is being analyzed
 uint8_t sense = 0;                //interface variable to indicate which sense is activated
 uint8_t option = 0;               //interface variable to indicate which option is selected
 uint8_t posCount = 0;             //interface variable to indicate which sense is being looked at
@@ -89,7 +48,7 @@ bool isEating = false;            //indicates if worm is eating
 bool isAsleep = false;            //indicates if worm is sleeping
 bool isTonic = false;             //indicates if an input is tonic (or phasic)
 bool isChemotaxis = false;        //indicates if the worm is experiencing some kind of chemotaxis
-uint8_t learningArraySize = 125;    //number of neurons in learning array
+uint8_t learningArraySize = 125;  //number of neurons in learning array
 uint8_t maxLearningVal = 71;      //maximum possible value of learning array elements
 uint8_t selectedOption = 0;       //for if an options screen is selected
 uint8_t currentExp = 0;           //value representing the current facial expression
@@ -125,9 +84,7 @@ void loop() {
 
   activationFunction();         //do the main calculation of the connectome
   arduboy.pollButtons();        //get buttons pressed and send to function to process them
-  doButtons();
-
-  //delay(50);
+  
   if (tick == 3628800) {                        //reset tick Counter for gradient senses when it reaches the factorial of 10 (each gradient is 5)
     tick == 0;
   } else {
@@ -135,10 +92,10 @@ void loop() {
   }
   
   //go to the proper screens based on the direction button last clicked
-  if (arduboy.justPressed(UP_BUTTON) || startFlag) doMatrixScreen();
-  if (arduboy.justPressed(LEFT_BUTTON)) doDiagnosticScreen();
-  if (arduboy.justPressed(RIGHT_BUTTON)) doInputScreen();
-  if (arduboy.justPressed(DOWN_BUTTON)) doOptions();
+  if (startFlag || lastScreen == 1) doMatrixScreen();
+  if (lastScreen == 2) doOptions();
+  if (lastScreen == 3) doDiagnosticScreen();
+  if (lastScreen == 4) doInputScreen();
 
   //do options screens if selected
   if (selectedOption == 1) doSaveScreen();
@@ -146,8 +103,9 @@ void loop() {
   if (selectedOption == 3) doSerialHostScreen();
   if (selectedOption == 4) doSaveEditorScreen();
 
-  arduboy.drawRoundRect(0, 0, 128, 64, 3);      //draw a border around the screen
+  doButtons();
 
+  arduboy.drawRoundRect(0, 0, 128, 64, 3);      //draw a border around the screen
   arduboy.display();
   
   startFlag = false;            //set the flag off; only do the title screen once
@@ -160,7 +118,6 @@ void loop() {
 void doDiagnosticScreen() {
   lastScreen = 3;
 
-//TODO: replace currentID with the actual cell name???
   arduboy.clear();
   arduboy.setCursor(10, 10);
   arduboy.print(currentID);
@@ -183,9 +140,8 @@ void doDiagnosticScreen() {
   arduboy.print("postID: ");
   arduboy.print(currentID);
 
-//TODO: make the perceptron sprites actually show real number of synapses???
-  if (outputList[currentID]) Sprites::drawOverwrite(85, 30, perceptronON, 0);
-  if (!outputList[currentID]) Sprites::drawOverwrite(85, 30, perceptronOFF, 0);
+  if (outputList[currentID]) Sprites::drawOverwrite(85, 10, perceptronON, 0);
+  if (!outputList[currentID]) Sprites::drawOverwrite(85, 10, perceptronOFF, 0);
 
   arduboy.display();
 }
@@ -243,12 +199,10 @@ void doInputScreen() {
  * function to query which buttons are pressed, setting up proper screen transitions
  */
 void doButtons() {
-  //matrix screen
+  //MATRIX SCREEN
   if (lastScreen == 1) {
-    if (arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON)) {
+    if (arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON)) {     //activate sense with A+B
       startInputFlag = true;
-
-//TEST: test these to make sure the values for tonic and phasic frequencies are good
       if (sense == 0) {
         if (isTonic) {
           tonic(false, 1, 0, doGentleNoseTouch);    //sense gentle nose touch
@@ -356,40 +310,63 @@ void doButtons() {
       }
     }
 
-//TODO: implement quick scrolling for A???
-    if (arduboy.justPressed(A_BUTTON) && !arduboy.justPressed(B_BUTTON)) {
-      if (currentID < 302 - 1) {
-        currentID++;
+    if (arduboy.justPressed(A_BUTTON) && !arduboy.justPressed(B_BUTTON)) {    //just A decrements by 1
+      if (currentID == 0) {
+        currentID = 301;
       } else {
-        currentID = 0;
+        currentID--;
       }
     }
 
-//TODO: implement decrement for B???
-    if (arduboy.justPressed(B_BUTTON) && !arduboy.justPressed(A_BUTTON)) {
-      if (currentID < 302 - 1) {
-        if (currentID + 10 > 302 - 1) {
+    if (arduboy.justPressed(B_BUTTON) && !arduboy.justPressed(A_BUTTON)) {    //just B increments by 1
+      if (currentID == 301) {
+          currentID = 0;
+      } else {
+        currentID++;
+      }
+    }
+
+    if (arduboy.justPressed(UP_BUTTON)) {                                     //UP increments by 20 instead of 1
+      if (currentID < 301) {
+        if (currentID + 20 > 301) {
           currentID = 301;
         } else {
-          currentID += 10;
+          currentID += 20;
         }
       } else {
         currentID = 0;
       }
+    } else if (arduboy.justPressed(DOWN_BUTTON)) {
+      lastScreen == 2;
+      doOptions();
+    } else if (arduboy.justPressed(LEFT_BUTTON)) {
+      lastScreen == 3;
+      doDiagnosticScreen();
+    } else if (arduboy.justPressed(RIGHT_BUTTON)) {
+      lastScreen == 4;
+      doInputScreen();
     }
-
-    doMatrixScreen();
   }
 
-  //options screen
+  //OPTIONS SCREEN
   if (lastScreen == 2) {
-    if (arduboy.justPressed(A_BUTTON)) {    //scroll through options
-      option++;
-      if (option > 3) option = 0;
-      doOptions();
+    if (arduboy.justPressed(UP_BUTTON)) {    //go to matrix screen
+      doMatrixScreen();
+    } else if (arduboy.justPressed(RIGHT_BUTTON)) {              //scroll through options
+      if (option == 3) {
+        option = 0;
+      } else {
+        option++;
+      }
+    } else if (arduboy.justPressed(LEFT_BUTTON)) {
+      if (option == 0) {
+        option = 3;
+      } else {
+        option--;
+      }
     }
     
-    if (arduboy.justPressed(B_BUTTON)) {               //select an option
+    if (arduboy.justPressed(B_BUTTON)) {         //select an option
       if (option == 0) {                                  //save current learning array data ("SAVE")
         selectedOption = 1;
       } else if (option == 1) {                           //print current learning array data over serial ("PRINT SAVE") 
@@ -399,119 +376,54 @@ void doButtons() {
       } else if (option == 3) {                           //edit learning array data ("SAVE EDIT")
         selectedOption = 4;
       }
-    } else {
-      doOptions();
     }
-  }
+  }//no DOWN or A BUTTONS???
 
-  //diagnostic screen
+  //DIAGNOSTIC SCREEN
   if (lastScreen == 3) {
-    if (arduboy.justPressed(A_BUTTON)) {
-      if (synCounter < numSynapses - 1) {
-        synCounter++;
-      } else {
+    if (arduboy.justPressed(RIGHT_BUTTON)) {                                             //right to matrix
+      doMatrixScreen();
+      preID = preSynapticNeuronList[synCounter];
+    } else if (arduboy.justPressed(UP_BUTTON) || arduboy.justPressed(B_BUTTON)) {        //UP and B increases by one
+      if (synCounter == numSynapses) {
         synCounter = 0;
-      }
-      //synWeight = 0;
-      preID = preSynapticNeuronList[synCounter];
-    }
-
-    if (arduboy.justPressed(B_BUTTON)) {
-      if (synCounter > 0) {
-        synCounter--;   
       } else {
-        synCounter = n.inputLen;
+        synCounter++;
       }
-      //synWeight = 0;
+      preID = preSynapticNeuronList[synCounter];
+    } else if (arduboy.justPressed(DOWN_BUTTON) || arduboy.justPressed(A_BUTTON)) {      //DOWN and A decreases by one
+      if (synCounter == 0) {
+        synCounter = numSynapses;
+      } else {
+        synCounter--;   
+      }
       preID = preSynapticNeuronList[synCounter];
     }
-
-    doDiagnosticScreen();
-  }
+  }// LEFT unused???
   
-  //input select screen
+  //INPUT SELECT SCREEN
   if (lastScreen == 4) {
-    if (arduboy.justPressed(B_BUTTON)) {
+    if (arduboy.justPressed(RIGHT_BUTTON)) {                                           //RIGHT button toggles phase type
       isTonic = !isTonic;
-    }
-    if (arduboy.justPressed(A_BUTTON)) {
-       posCount++;
-       if (posCount > 12) posCount = 0;
-       if (posCount >= 0 && posCount <= 3) scroll = 0;
-       if (posCount >= 4 && posCount <= 7) scroll = 1;
-       if (posCount >= 8 && posCount <= 11) scroll = 2;
-       if (posCount == 12) scroll = 3;
-  
-       if (posCount == 0) {
-        isAsleep = false;
-        sense = 0;
-       }
-            
-       if (posCount == 1) {
-        isChemotaxis = true;
-        isAsleep = false;
-        sense = 1;
-       }
-          
-       if (posCount == 2) {
-        isChemotaxis = true;
-        isAsleep = false;
-        sense = 2;
-       }  
-
-       if (posCount == 3) {
-        isAsleep = false;
-        sense = 3;
-       }         
-
-       if (posCount == 4) {
-        isAsleep = false;
-        sense = 4;
-       }
-            
-       if (posCount == 5) {
-        isAsleep = false;
-        sense = 5;
-       }
-          
-       if (posCount == 6) {
-        isAsleep = false;
-        sense = 6;
-       }  
-
-       if (posCount == 7) {
-        isChemotaxis = true;
-        isAsleep = false;
-        sense = 7;
-       }         
-
-       if (posCount == 8) {
-        sense = 8;
-       }
-            
-       if (posCount == 9) {
-        isAsleep = false;
-        sense = 9;
-       }
-          
-       if (posCount == 10) {
-        isAsleep = false;
-        sense = 10;
-       }  
-
-       if (posCount == 11) {
-        isChemotaxis = true;
-        isAsleep = false;
-        sense = 11;
-       }         
-
-       if (posCount == 12) {
-        isAsleep = true;
-        sense = 12;
-       }
+    } else if (arduboy.justPressed(B_BUTTON) || arduboy.justPressed(DOWN_BUTTON)) {      //B and DOWN incrementally scroll
+      if (posCount == 12) {
+        posCount = 0;
+      } else {
+        posCount++;
+      }
+      doPos();
+    } else if (arduboy.justPressed(A_BUTTON) || arduboy.justPressed(UP_BUTTON)) {        //A and UP decrementally scroll
+      if (posCount == 0) {
+        posCount = 12;
+      } else {
+        posCount--;
+      }
+      doPos();
+    } else if (arduboy.justPressed(LEFT_BUTTON)) {         //left goes to matrix screen
+      doMatrixScreen();
     }
 
-    doInputScreen();
+    //doInputScreen();
   }  
 
   arduboy.display();
@@ -552,10 +464,9 @@ void doMatrixScreen() {
   arduboy.setCursor(5, 5);
   arduboy.print("NEURAL GRID: ");
 
-  arduboy.setCursor(25, 20);
+  arduboy.setCursor(45, 20);
   arduboy.print("Mood: ");
 
-//TODO: print the actual cell name instead of ID???
   arduboy.setCursor(5, 45);
   arduboy.print("CURRENT CELL ID: ");
   arduboy.print(currentID);
@@ -568,6 +479,7 @@ void doMatrixScreen() {
   }
 
   drawFaces();
+  Sprites::drawOverwrite(5, 20, tMatrix, 0);
 
   uint8_t gridWidth = 17;
   uint8_t gridHeight = 18;
@@ -617,50 +529,51 @@ void doMatrixScreen() {
  * export the eeprom save data
  */
 void doOptions() {
-//TODO: add sprites for the options on the right side of screen
   lastScreen = 2;
   arduboy.clear();
 
-  //print out the options
+  //arduboy.drawLine(63, 22, 63, 43);
+  //arduboy.drawLine(2, 33, 124, 33);
+  arduboy.drawRect(2, 22, 124, 23);
   arduboy.setCursor(38, 3);
-  arduboy.print("-OPTIONS-");
-  arduboy.setCursor(10, 18);
+  arduboy.print("-OPTIONS-");     //print out the options
+  arduboy.setCursor(5, 25);
   arduboy.print("SAVE DATA");
-  arduboy.setCursor(10, 28);
-  arduboy.print("PRINT SAVE");
-  arduboy.setCursor(10, 38);
+  arduboy.setCursor(5, 35);
   arduboy.print("HOST ANN");
-  arduboy.setCursor(10, 48);
+  arduboy.setCursor(64, 25);
+  arduboy.print("PRINT SAVE");
+  arduboy.setCursor(70, 35);
   arduboy.print("EDIT SAVE");
 
-  //draw the selector pixels for the current option
-  if (option == 0) {          
-    arduboy.drawPixel(4, 21, WHITE);
-    arduboy.drawPixel(5, 21, WHITE);
-    arduboy.drawPixel(6, 21, WHITE);
-    arduboy.drawPixel(5, 20, WHITE);
-    arduboy.drawPixel(5, 22, WHITE);
+  if (option == 0) {
+    arduboy.drawPixel(30, 19);
+    arduboy.drawPixel(31, 19);
+    arduboy.drawPixel(32, 19);
+    arduboy.drawPixel(31, 18);
+    arduboy.drawPixel(31, 20);
     arduboy.display();
   } else if (option == 1) {
-    arduboy.drawPixel(4, 31, WHITE);
-    arduboy.drawPixel(5, 31, WHITE);
-    arduboy.drawPixel(6, 31, WHITE);
-    arduboy.drawPixel(5, 30, WHITE);
-    arduboy.drawPixel(5, 32, WHITE);
+    arduboy.drawPixel(96, 19);
+    arduboy.drawPixel(97, 19);
+    arduboy.drawPixel(98, 19);
+    arduboy.drawPixel(97, 18);
+    arduboy.drawPixel(97, 20);
     arduboy.display();
   } else if (option == 2) {
-    arduboy.drawPixel(4, 41, WHITE);
-    arduboy.drawPixel(5, 41, WHITE);
-    arduboy.drawPixel(6, 41, WHITE);
-    arduboy.drawPixel(5, 40, WHITE);
-    arduboy.drawPixel(5, 42, WHITE);
+    arduboy.drawPixel(30, 47);
+    arduboy.drawPixel(31, 47);
+    arduboy.drawPixel(32, 47);
+    arduboy.drawPixel(31, 46);
+    arduboy.drawPixel(31, 48);
     arduboy.display();
   } else if (option == 3) {
-    arduboy.drawPixel(4, 51, WHITE);
-    arduboy.drawPixel(5, 51, WHITE);
-    arduboy.drawPixel(6, 51, WHITE);
-    arduboy.drawPixel(5, 50, WHITE);
-    arduboy.drawPixel(5, 52, WHITE);
+    arduboy.drawPixel(96, 47);
+    arduboy.drawPixel(97, 47);
+    arduboy.drawPixel(98, 47);
+    arduboy.drawPixel(97, 46);
+    arduboy.drawPixel(97, 48);
+
     arduboy.display();
   }
 }
@@ -670,17 +583,17 @@ void doOptions() {
  */
 void doSaveScreen() {
   arduboy.clear();
-  arduboy.drawRect(10, 30, learningArraySize + 1, 5);  //draw a status bar
+  arduboy.drawRect(2, 30, learningArraySize, 5);  //draw a status bar
 
   arduboy.setCursor(5, 5);
   arduboy.print("Saving Data...");
 
-  for (uint8_t i = 0; i < learningArraySize; i++) {  //save each element of the learning array save data
+  for (uint8_t i = 0; i < learningArraySize + 1; i++) {  //save each element of the learning array save data
 //TODO: add learning array here
     //EEPROM.write(address + i, learningArray[i]);
-    arduboy.drawPixel(11 + i, 31, WHITE);  //top bar pixel
-    arduboy.drawPixel(11 + i, 32, WHITE);  //middle bar pixel
-    arduboy.drawPixel(11 + i, 33, WHITE);  //bottom bar pixel
+    arduboy.drawPixel(3 + i, 31, WHITE);  //top bar pixel
+    arduboy.drawPixel(3 + i, 32, WHITE);  //middle bar pixel
+    arduboy.drawPixel(3 + i, 33, WHITE);  //bottom bar pixel
 
     arduboy.display();
     delay(100);  //delay to give time to update
@@ -704,17 +617,17 @@ void doSerialPrintScreen() {
   arduboy.clear();
   arduboy.setCursor(2, 5);
   arduboy.print("Print: Save -> Serial");   //print out a screen title
-  arduboy.drawRect(10, 30, learningArraySize + 1, 5);  //draw a status bar
+  arduboy.drawRect(2, 30, learningArraySize, 5);  //draw a status bar
 
-  for (uint8_t i = 0; i < learningArraySize; i++) {  //print each element of the learning array save data
+  for (uint8_t i = 0; i < learningArraySize + 1; i++) {  //print each element of the learning array save data
 //TODO: add learning array here
     Serial.begin(9600);
     //Serial.print(EEPROM.read(address + i));
     Serial.end();
 
-    arduboy.drawPixel(11 + i, 31, WHITE);  //top bar pixel
-    arduboy.drawPixel(11 + i, 32, WHITE);  //middle bar pixel
-    arduboy.drawPixel(11 + i, 33, WHITE);  //bottom bar pixel
+    arduboy.drawPixel(3 + i, 31, WHITE);  //top bar pixel
+    arduboy.drawPixel(3 + i, 32, WHITE);  //middle bar pixel
+    arduboy.drawPixel(3 + i, 33, WHITE);  //bottom bar pixel
     arduboy.display();
     delay(100);  //delay to give time to update
   }
@@ -737,6 +650,8 @@ void doSerialHostScreen() {
   arduboy.clear();
   arduboy.setCursor(5, 5);
   arduboy.print("Hosting: Serial Sim");            //print out screen title
+  arduboy.setCursor(5, 15);
+  arduboy.print("(Restart to Quit!)");
   arduboy.display();
 
   while (!arduboy.justPressed(A_BUTTON) || !arduboy.justPressed(B_BUTTON)) {  //continue over serial as long as A/B are not pressed
@@ -763,7 +678,6 @@ void doSerialHostScreen() {
     Serial.print("EXP:"); Serial.println(currentExp);
     Serial.end();                                     //end comms for outputs
 
-//TEST: adjust serial protocols as needed
     // Input: {BAS0/1, HGR-0/1, GUS-0/1, ASL-0/1, MSL-0/1, GNT-0/1, HNT-0/1, TEX-0/1, ATR-0/1, REP-0/1, COL-0/1, HEA-0/1, HOT-0/1, CLD-0/1, PHO-0/1, OXY-0/1, CO2-0/1, SLT-0/1, PHE-0/1, PRO-0/1}
     for (uint8_t i = 0; i < 20; i++) {
       char serInput[4];
@@ -899,7 +813,6 @@ void doSaveEditorScreen() {
 
     arduboy.display();
 
-//TODO: add fast scrolling to the learning array save data editor???
     if (arduboy.justPressed(RIGHT_BUTTON)) {        //if R press; move to next position in array
       if (savePos != learningArraySize) {
         savePos++;
@@ -937,9 +850,11 @@ void doSaveEditorScreen() {
       arduboy.setCursor(5, 5);
       arduboy.print("EDITS SAVED!");
       arduboy.display();
+      arduboy.pollButtons();
       delay(3000);
 
       selectedOption = 0;
+      doOptions();
 
       return;
     }
@@ -948,9 +863,11 @@ void doSaveEditorScreen() {
   arduboy.clear();  //exit subscreen, do not print any message
   arduboy.drawRoundRect(0, 0, 128, 64, 3);
   arduboy.display();
+  arduboy.pollButtons();
   delay(100);
   
   selectedOption = 0;
+  doOptions();
 }
 
 /***********************************SIM FUNCTIONS*************************************/
@@ -1220,7 +1137,7 @@ void activationFunction() {
       n.weights[i] = NEURAL_ROM[index++];
     }
     
-    //matrixToNeuron(id);                               //fill the neuron struct with the information of the ith neuron
+    //matrixToNeuron(id);                            //fill the neuron struct with the information of the ith neuron
     int32_t sum = 0;
     bool hebFlag = false;
     uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
@@ -1233,7 +1150,7 @@ void activationFunction() {
     }
 
     for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
-      if (id == currentID) {                                             //if the current neuron is the one selected in matrix screen
+      if (id == currentID) {                                            //if the current neuron is the one selected in matrix screen
         numSynapses = n.inputLen;                                       //get the input length
         preSynapticNeuronList[j] = n.inputs[j];                         //get the pre-synaptic neuron (inputs) list
         if (n.inputs[j] == preID) synWeight = n.weights[j];             //if the current pre-synaptic neuron (input) is the one selected in matrix screen, get its weight
@@ -1377,6 +1294,83 @@ bool outputBool(uint16_t cellID) {
   return outputList[cellID];
 }
 
+/**
+ * Helper function to figure out which position the marker is on the input screen
+ */
+void doPos() {
+  if (posCount >= 0 && posCount <= 3) scroll = 0;
+  if (posCount >= 4 && posCount <= 7) scroll = 1;
+  if (posCount >= 8 && posCount <= 11) scroll = 2;
+  if (posCount >= 12) scroll = 3;
+
+  if (posCount == 0) {
+    isAsleep = false;
+    sense = 0;
+  }
+
+  if (posCount == 1) {
+    isChemotaxis = true;
+    isAsleep = false;
+    sense = 1;
+  }
+
+  if (posCount == 2) {
+    isChemotaxis = true;
+    isAsleep = false;
+    sense = 2;
+  }
+
+  if (posCount == 3) {
+    isAsleep = false;
+    sense = 3;
+  }
+
+  if (posCount == 4) {
+    isAsleep = false;
+    sense = 4;
+  }
+
+  if (posCount == 5) {
+    isAsleep = false;
+    sense = 5;
+  }
+
+  if (posCount == 6) {
+    isAsleep = false;
+    sense = 6;
+  }
+
+  if (posCount == 7) {
+    isChemotaxis = true;
+    isAsleep = false;
+    sense = 7;
+  }
+
+  if (posCount == 8) {
+    sense = 8;
+  }
+
+  if (posCount == 9) {
+    isAsleep = false;
+    sense = 9;
+  }
+
+  if (posCount == 10) {
+    isAsleep = false;
+    sense = 10;
+  }
+
+  if (posCount == 11) {
+    isChemotaxis = true;
+    isAsleep = false;
+    sense = 11;
+  }
+
+  if (posCount == 12) {
+    isAsleep = true;
+    sense = 12;
+  }
+}
 /**
  * A small function to draw out the muscle ratio information to the screen.
  * Used by the UI to make information more readable for the user.
