@@ -62,6 +62,7 @@ Credit to Nategri for the motor neuron summation idea for tank drive
 #include "sprites.h"              //import libraries
 #include "neuralROM.h"
 #include "bit_array.h"
+#include "sized_int_array.h"
 #include "sized_int_array_reader.h"
 #include <Arduboy2.h>
 
@@ -107,7 +108,7 @@ uint16_t id = 0;
 //massive thanks to Dinokaiz2 for help with the bit array functionality!!!
 SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70, true);
 
-//BitArray<> learningArray;  //an array that, for each neuron that does hebbian learning, holds a form of simplified output history
+SizedIntArray<4, 1513, true> learningArray;  //an array that, for each neuron that does hebbian learning, holds a form of simplified output history
 BitArray<302> outputList;     //list of neurons
 BitArray<302> nextOutputList; //buffer to solve conflicting time differentials in firing
 
@@ -166,8 +167,8 @@ void doButtons() {
       activateSleep();
       isAsleep = true;
 //TODO: uncomment when learningArray is implemented, fix address as well
-//      for (uint8_t i = 0; i < learningArraySize; i++) {
-//        EEPROM.update(address + i, learningArray[i]);
+//      for (uint8_t i = 0; i < learningArray.size; i++) {
+//        EEPROM.update(address + i, learningArray.compressed[i]);
 //      }
     } else if (isAsleep && (arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON))) {
       isAsleep = false;
