@@ -48,12 +48,14 @@ def printData(inputIDs, neuron, weight): #prints are formatted for neuralROM in 
     #print(len(weight)) # weight length 
                 
     for widx, w in enumerate(weight):
-        adjustedWeight = int(w/weightadj) # convert double to int ONLY while weight adjust equals 1
-        if widx < len(weight) - 1: #kinda dumb way to trim space off last line
-            print(str(adjustedWeight) + ', ', end = '') #each iteration of loop has a comma then space for readability
-        else:
-            print(str(adjustedWeight) + ',', end = '\n')
-
+        print(str(w) + ', ', end ='')
+        
+        #adjustedWeight = int(weightadj) # convert double to int ONLY while weight adjust equals 1
+        #if widx < len(weight) - 1: #kinda dumb way to trim space off last line
+        #    print(str(adjustedWeight) + ', ', end = '') #each iteration of loop has a comma then space for readability
+        #else:
+        #    print(str(adjustedWeight) + ',', end = '\n')
+    print()
 
 def generateStructs():
     #totalSynapses = 0 # for determining weight ratios
@@ -106,7 +108,7 @@ def generateStructs():
                     else:
                         gjWeight = 99
                         weightList.append(gjWeight)
-                        
+
         printData(inputIDs, neuron, weightList)
         
     
