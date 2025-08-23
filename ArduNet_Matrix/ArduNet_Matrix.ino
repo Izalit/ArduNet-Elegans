@@ -55,9 +55,8 @@ uint8_t selectedOption = 0;       //for if an options screen is selected
 uint8_t currentExp = 0;           //value representing the current facial expression
 
 SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70, true);
-int8_t learningArray[] = {20, 25, 60, 70, 1};
 uint16_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
-SizedIntArray<4, 1102, true> learningArray;    //an array that, for each neuron, holds its firing history
+SizedIntArray<4, 1513, true> learningArray;    //an array that, for each neuron, holds its firing history
 BitArray<302> outputList;                    //list of neurons
 BitArray<302> nextOutputList;                //buffer to solve conflicting time differentials in firing
 
@@ -444,8 +443,8 @@ void doTitleScreen() {
     arduboy.setCursor(10, 50);
     arduboy.display();
 //TODO: uncomment when learningArray is implemented, fix address as well
-/*    for (uint8_t i = 0; i < learningArraySize; i++) {
-      EEPROM.read(address + i, learningArray[i]);
+/*    for (uint8_t i = 0; i < learningArray.size; i++) {
+      EEPROM.read(address + i, learningArray.compressed[i]);
     }*/
 
     delay(3000);  
@@ -589,9 +588,9 @@ void doSaveScreen() {
   arduboy.setCursor(5, 5);
   arduboy.print("Saving Data...");
 
-  for (uint8_t i = 0; i < learningArraySize + 1; i++) {  //save each element of the learning array save data
+  for (uint8_t i = 0; i < learningArray.size; i++) {  //save each element of the learning array save data
 //TODO: add learning array here
-    //EEPROM.write(address + i, learningArray[i]);
+    //EEPROM.write(address + i, learningArray.compressed[i]);
     arduboy.drawPixel(3 + i, 31, WHITE);  //top bar pixel
     arduboy.drawPixel(3 + i, 32, WHITE);  //middle bar pixel
     arduboy.drawPixel(3 + i, 33, WHITE);  //bottom bar pixel
@@ -623,7 +622,7 @@ void doSerialPrintScreen() {
   for (uint8_t i = 0; i < learningArraySize + 1; i++) {  //print each element of the learning array save data
 //TODO: add learning array here
     Serial.begin(9600);
-    //Serial.print(EEPROM.read(address + i));
+    //Serial.print(learningArray[i]);
     Serial.end();
 
     arduboy.drawPixel(3 + i, 31, WHITE);  //top bar pixel
@@ -842,8 +841,10 @@ void doSaveEditorScreen() {
 
 
     if (arduboy.justPressed(B_BUTTON)) {            //if B press, flush buffer
-      for (uint8_t i = 0; i < learningArraySize; i++) {
+      for (uint8_t i = 0; i < learningArray.size; i++) {
         learningArray[i] = tempArray[i];
+        //EEPROM.write(address + i, learningArray.compressed[i]);
+//TODO uncomment, probably don't need temp array in this function
       }
 
       arduboy.clear();  //print out success message
