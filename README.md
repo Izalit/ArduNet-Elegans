@@ -23,14 +23,16 @@ Peace and Love,
 -Izzy and Nova
 
 ## Features and Use
-While not originally intended, we decided to make two distinct arduboy applications for this project-- both using the same model for the worm and the same save data, essentially allowing the user to interact with the worm through different tools or apps. The first application is the *Matrix Version*. It mainly functions to showcase a little visual graphic of the worm's neurons in the Arduboy, but also allowing the user to test out senses of the worm, to see it reacting, and to look at the individual synapses and see what is going on there.
+While not originally intended, we decided to make two distinct arduboy applications for this project. This soon became three, as we wanted to expand the tool suite even further-- all of these use the same model for the worm and the same save data. This allows the user to interact with the worm through a list of different tools or apps. The first application is the *Matrix App*. It mainly functions to showcase a little visual graphic of the worm's neurons in the Arduboy, but also allowing the user to test out senses of the worm, to see it reacting, and to look at the individual synapses and see what is going on there-- it's handy for debugging brains.
 
-The second application is the *Simulation Version*, this is essentially a little digital pet version of the worm that allows the user to interact more intimately with the model. You can feed it, play with it, watch it explore its lil screen, "tuck it in" when you save the data, watch it react to different environments and situations, and help it by dismissing toxins. The simulation is made to be, essentially, a combination of a digital pet and the classic game "snake", except the digital pet has a real AI the size of a credit card and the "snake game" plays itself! The main differences to each of these is that this little worm friend is not able to "die" like it would in either of those games-- for ethical reasons, of course.
+The second application is the *Simulation App*, this is a little digital pet version of the worm that allows the user to interact more intimately with the model. You can feed it, play with it, watch it explore its lil screen, "tuck it in" when you save the data, watch it react to different environments and situations, and help it by dismissing toxins. The simulation is made to be, essentially, a combination of a digital pet and the classic game "snake", except the digital pet has a real AI the size of a credit card and the "snake game" plays itself! The main differences to each of these is that this little worm friend is not able to "die" like it would in either of those games-- for ethical reasons, of course.
 
-## *Simulation Version* Instructions
+The final and newest application in the suite is the *Options App*. This app has a couple complex settings the user can select for very specific situations like editing the save data directly or hosting a simulation over serial allowing the arduboy to function as a master device.
+
+## *Simulation App* Instructions
 When you start the simulation app, it will flash a title screen and initialize some variables. It will then show you the main sim screen-- you will see side view with a temperature meter on the left and an oxygen meter on the right. These indicate the variable temperature and gas composition for the soil. In the center area the worm will spawn as a tiny sprite with only a few pixels... Occasionally it will react with expressions to the current situation. 
 
-In the top right you'll see a tree. The tree's roots will spawn automatically spawn food (displayed as a pixelated square) on startup. I plan to also make the leaves occasionally fall and drop food, but I'm not sure if I can implement this before I run out of room.
+In the top right you'll see a tree. The tree's roots will spawn automatically spawn food (displayed as a pixelated square) on startup. I plan to also make the leaves occasionally fall and drop food, but I'm not sure if I can implement this before I run out of room. (Editors note-- I ran out of room.)
 
 In addition to the tree, some leaves, grass, and a stick decorates the surface, as well as a sun. The sun indicates that the surface is bright and warm. The worm will likely avoid this area, but if it is hungry enough and there is food there or it makes a bad decision for whatever reason it may choose to go there-- the atmosphere, temperature, and light are not to its liking, though, and it should be incentivized to leave. If it isn't and it's uncomfortable you can try to coax it out with food, though! 
 
@@ -40,14 +42,14 @@ Clicking both A and B will activate a sleep state for the worm, letting it rest,
 
 As you interact more with the worm, the weights and connections between certain neurons will learn, allowing you to be more friendly with the worm. At first, the worm may be wary of you, but over time it should become more accustomed to being around you (it will associate you with food, dopamine, etc). I'm hoping to set the system up so as to allow the user to also pet the worm if the "bond" is good. But we'll see.
 
-## *Matrix Version* Instructions
-STARTUP: On startup an "ArduNet Elegans" splash screen pops up, then it switches to the main *matrix screen*. This is only on startup.
+## *Matrix App* Instructions
+STARTUP: On startup an "ArduNet Elegans" splash screen pops up, load the save, and then switch to the main *matrix screen*. This is only on startup.
 
-MATRIX SCREEN: In this screen you'll find a few things. Some text in the top left indicating that the big box on the right is a matrix of neurons. A little diagram in the middle-right that shows the screen-layout. A box with a small emoji labeled "mood"-- this displays an abstraction of some of the main circuits involved in worm states, like some kind of proto-mood. The big box is the matrix, with small tick marks that move to indicate the currently selected neuron. Pressing up increases the selected neuron by 10. Otherwise A/B increment and decrement that number. Press both A and B and you'll see the matrix come alive! This activates whatever sense is currently selected. There is also some text in the bottom talking about the direction of the worm, on start-up it writes stationary, but after that it will write out forward - backward - left - right; this is how the worm is moving in response to inputs. Lastly there is a number below the matrix, this is the *selected neuron* mentioned before. Lastly, you can use the D-Pad to move to other screens (except for up)-- when you click left on the D-Pad you switch to the *Diagnostic Screen*, pressing down brings you to the settings, and lastly if you click right on the D-Pad you go to the *Input Select Screen*. 
+MATRIX SCREEN: In this screen you'll find a few things. Some text in the top left indicating that the big box on the right is a matrix of neurons. A little diagram in the middle-right that shows the screen-layout. A box with a small emoji labeled "mood"-- this displays an abstraction of some of the main circuits involved in worm states, like some kind of proto-mood-- I tried to use circuits and neurochemistry that were orthologs to those involved in human emotions and their neurochemistry, but it is many many magnitudes simplified, of course. (Afterall, what even an emotion or mood is, well, that is quite debatable.) The big box is the matrix, with small tick marks that move to indicate the currently selected neuron. Pressing up increases the selected neuron by 10. Otherwise A/B increment and decrement that number. Press both A and B and you'll see the matrix come alive! This activates whatever sense is currently selected. There is also some text in the bottom talking about the direction of the worm, on start-up it writes stationary, but after that it will write out forward - backward - left - right; this is how the worm is moving in response to inputs. Below the matrix sits a number, that's the *selected neuron* mentioned before. And lastly, you can use the D-Pad to move to other screens (except for up which increments the selected neuron by 20)-- when you click left on the D-Pad you switch to the *Diagnostic Screen*, pressing down brings you to the settings, and lastly if you click right on the D-Pad you go to the *Input Select Screen*. 
 
-As mentioned before, clicking both A and B simultaneously allows the user to interact with the network, activating a sense, and turning some neurons on, starting a chain reactionof neurons firing. The matrix shows the neurons in the network in order of their ID's in the program. I will list these below; later I intend to actually print out the neurons name (usually four letters, read more about these here: https://www.wormatlas.org/neurons/Individual%20Neurons/Neuronframeset.html), but I am unsure if I'll have room!
+As mentioned before, clicking both A and B simultaneously allows the user to interact with the network, activating a sense, and turning some neurons on, starting a chain reactionof neurons firing. The matrix shows the neurons in the network in order of their ID's in the program. I will list these below; later I intend to actually print out the neurons name (usually four letters, read more about these here: https://www.wormatlas.org/neurons/Individual%20Neurons/Neuronframeset.html), but I am unsure if I'll have room (Editor's note: I do not)!
 
-What's really cool is that if you look at the matrix you can see some neurons firing in a pattern, and if you select different input senses from the *Input Select Screen* you can see some of these changing. As of right now, you can only see two main outputs--the direction the worm is moving and the "mood". I've done some math with muscle ratios so you can roughly tell how the worm is currently moving--forward, backward, left, and right; and the mood associates a few key neuron circuit states with a facial expression. That's it right now, but it is interesting to see the worm change in response to you!
+What's really cool is that if you look at the matrix you can see some neurons firing in a pattern, and if you select different input senses from the *Input Select Screen* you can see some of these changing. As of right now, you can only see two main outputs--the direction the worm is moving and the "mood". I've done some math with muscle ratios (credit to Nategri for this idea and some of its implementation on an Arduino) so you can roughly tell how the worm is currently moving--forward, backward, left, and right; and the mood associates a few key neuron circuit states with a facial expression. That's it right now, but it is interesting to see the worm change in response to you!
 
 DIAGNOSTIC SCREEN: This screen allows you to see information about the neuron that was selected in the matrix screen. Up on top it will tell you the selected neuron and the number of synapses connected to it. For each of these synapses the selected neuron is the "post-synaptic cell", and each connected neuron is the "pre-synaptic cell". Listed under the number of presynaptic cells you will see the weight of the connection. This number was calculated based on the real worm's data. You can think of it kind of like how much oomf the pre-synaptic cell is giving to the post-synaptic cell, how much it is trying to make it fire, or, on the other hand, how much it is trying to keep it from firing! If the number is positive then the cell connected to the selected neuron is trying to get it to fire, it's an "excitatory connection. If the number is negative it's trying to keep it from firing; what we call an "inhibitory connection". 
 
@@ -55,9 +57,14 @@ You can scroll through each these synapses using the A and B buttons, the Pre ID
 
 INPUT SELECT SCREEN: This simple screen lets you choose between some input modalities for when you press the A and B buttons in the *Matrix Screen* simply press up or down (or A and B) to scroll through the list, and whichever sense the cursor is on is the sense that will be used when pressing the buttons in the *Matrix Screen*. You can also set the input type to tonic (a steady and constant activation) or phasic (a sudden and single activations) inputs to the neuron by clicking right and togging between the P and T indicators (P is marked by a tick mark on top of the "*" selector, T is marked by a horizontal tick). From here just press left to go to the matrix once more.
 
-SETTINGS: The last screen is the settings screen. Use the L/R buttons on the D-Pad to move the selector cursor left and right. Clicking A goes to the appropriate sub-menu for the option selected. The "SAVE" option saves whatever learned changes have been made while doing the inputs using the input screen, and when it is selected it uses a status bar to indicate progress. The "HOST ANN" hosts a neural network over serial that you can connect another device to. Format for this is TBD, but essentially it should allow the user to give inputs to the network from external devices and then it will send the outputs the network responds with. PLEASE NOTE: you have to power cycle or reset the device to turn this setting off, as it disables the buttons... 
+SETTINGS: The last screen is the settings screen. Use the L/R buttons on the D-Pad to move the selector cursor left and right. Clicking A goes to the appropriate sub-menu for the option selected. The "SAVE" option saves whatever learned changes have been made while doing the inputs using the input screen, and when it is selected it uses a status bar to indicate progress. The "PRINT SAVE" setting prints the save data array over serial to be used with other devices. A loading bar shows progress of sent information. Pretty simple. Lastly there is a credits option that pops up a little box with the main programming team for the project. 
 
-Next up, the "PRINT SAVE" setting prints the save data array over serial to be used with other devices. A loading bar shows progress of sent information. Pretty simple. Lastly, the "EDIT SAVE" option-- this one brings up a sub-screen where the user can use the D-Pad to move between each value in the save data array. Clicking up increments the value, down decrements; left goes to the previous element, right to the next. If you reach a minimum or maximum it will loop back over. Clicking the A button will just exit without saving changes and return to the main settings screen. And lastly, clicking B will exit and save any changes made to the array!
+Advanced Settings are also accessible, but only via the *Options App*.
+
+## *Options App* Instructions
+This app allows the user to access more advanced settings. The "HOST ANN", for example, hosts a neural network over serial that you can connect another device to, effectively using the Arduboy as a Master device that controls whatever device it is connected to (NOTE: this does not come with software for the "slave" device, as this will need to be made per-implementation). Essentially this should allow the user to give inputs to the network from external devices and then it will send the outputs the network responds with. To start the simulation up send a '\[' character over serial. Then send any of the multiple different codes to execute a function or get a readout from the arduboy's network. Each code should be delimited by a comma without spaces. Ending a simulation is done by either pressing and holding both A and B buttons or by sending a ']' character over serial. 
+
+In addition to that, there is also an "EDIT SAVE" option-- this one brings up a sub-screen where the user can use the D-Pad to move between each value in the save data array. Clicking up increments the value, down decrements it. Moving beyond a maximum or minimum wraps the value around in either direction. Moving left goes to the previous element, right to the next. Clicking the A button will just exit without saving changes and return to the main settings screen. And lastly, clicking B will exit and save any changes made to the array.
 
 ## Neural ROM Versions
 As of right now, there are a few different versions of the "Neural ROM" we are developing. Each of these versions is based on a few different approaches one could take in analyzing data that is either missing or too complex to incorporate into this simulation. In the case of data that is too complex, certain synapses require a model that is many magnitudes more complex to simulate; these synapses are not as simple as the ionotropic synapses that make up the majority of the network used in this connectome. Instead they require modeling individual neurotransmitter-receptor interactions, with timers on those receptors, modelling the gradients of neurochemicals, and factoring in spatial locations of each neuron... While these are things that we want to address in later versions of this simulation, in this early-stage Arduboy simulation it is simply not possible. 
@@ -66,8 +73,8 @@ Similarly, we are not able to accurately model each and every gap junction in th
 
 In order to solve all these issues we are assembling datasets with the following attributes. If you are building from source, you are welcome to manually choose any of these other options:
 
-* Default [Unk_Comp_GJ]: unknown sign synapses and complex synapses have a randomized sign (with 4:1 excitatory-inhibitory ratio), simplified unweighted gap junctions
-* Unk_Comp: unknown sign synapses and complex synapses have a randomized sign (4:1), gap junctions not included
+* Unk_Comp_GJ: unknown sign synapses and complex synapses have a randomized sign (with 4:1 excitatory-inhibitory ratio), simplified unweighted gap junctions
+* [CURRENT DEFAULT] Unk_Comp: unknown sign synapses and complex synapses have a randomized sign (4:1), gap junctions not included
 * No_Unk_GJ: complex synapses have randomized signs (4:1), unknown sign synapses not included, simplified unweighted gap junctions
 * No_Unk: complex synapses have randomized signs (4:1), unknown sign synapses not included, gap junctions not included
 * No_Comp_GJ: unknown sign synapses have randomized signs (4:1), complex synapses not included, simplified unweighted gap junctions
@@ -76,34 +83,51 @@ In order to solve all these issues we are assembling datasets with the following
 * Simple: unknown signs and complex synapses are not included, gap junctions not included
 
 ## Planned Additions
-The following are things I'd like to add in future versions of both arduboy apps. Not everything here we'll have room for, but I'll fit as much as I can into each!
+These are additions and changes I'd like to make to each app in order of importance ('!!' marks necessary TO-DOs). 
+Not everything here we'll have room for, but I'll fit as much as I can into each application.
 
-* For *both versions*, add gap junctions variants to neural rom sets 
+General:
+* !! - Fix the broken gap junction version implementations
 
-* For *both versions*, implement the hebbian functions and learning arrays
+* !! - Worm movement seems to currently be non-functional (maybe because of missing gap junctions?)
 
-* For *Sim Ver.*, add collision logic for the rest of the rocks, leaves, and stick sprites, not just the pixel where it is printed at
+Simulation:
+* !! - Add collision logic for the rest of the rocks, leaves, and stick sprites, not just the pixel where it is printed at
 
-* For *Sim Ver.*, implement "petting" when "bond" is good (check memory association between certain neurons in the learning array to make a "bond" variable)
+* Add numbers to the simulation demarcations to show gas level and temperature readouts, indicate both goldilocks numbers and nociceptive numbers
 
-* For *Sim Ver.*, add numbers to the simulation demarcations to show gas level and temperature readouts, indicate both goldilocks numbers and nociceptive numbers
+* Create a cycle of where the leaves fall from the tree, blink after so many ticks, then disappear and drop food; when it is eaten the cycle repeats
 
-* For *Sim Ver.*, create a cycle of where the leaves fall from the tree, blink after so many ticks, then disappear and drop food; when it is eaten the cycle repeats
+* Create randomizers for toxin spawn position and sun/moon (if moon: black out some sun pixels, remove noxious surface heat and replace with cold, remove phototaxis)
 
-* For *Sim Ver.*, make the worm's movement more biologically accurate (remove the "tank-drive" abstraction from current code), make doProprioception() more bio-accurate
+* Make the worm's movement more biologically accurate (remove the "tank-drive" abstraction from current code), make doProprioception() more bio-accurate
 
-* For *Sim Ver.*, create randomizers for toxin spawn position and sun/moon (if moon: black out some sun pixels, remove noxious surface heat and replace with cold, remove phototaxis)
+Matrix:
+* !! - Diag screen seems to have an error where it prints a random negative value in the weights list sometimes? Memory error of some kind? Off by one?
 
-* For *Matrix Ver.*, add quick scrolling for large menus
+* !! - Change or remove implementation of the tonic activation option in the input screen; could have it persist after it is activated or while buttons are held
 
-* For *Matrix Ver.*, make neuron IDs associated with their irl names so you can see them in diagnostic and not have to look at this huge github list lmao
+* Add quick scrolling for the currently selected neuron
 
-* For *Matrix Ver.*, add a worm movement indicator sprite 
+* Print out neuron IDs as irl names in the diag screen and the matrix screen
 
 * For *Matrix Ver.*, add an actually accurate percpetron model in diag screen
 
+Options:
+* !! - Remove the serial printout option (it is redundant)
+
+* !! - Add an option to wipe the entire eeprom/save data
+
+* !! - in the save editor add a number showing what neuron the center neuron is (print its position in the learning array to the middle of screen)
+
+* Add sprites for each option
+
+* Make it possible to do tonic activation over serial in the host function
+
+* in the save editor add quick scrolling
+
 ## Installation
-Reccommended Method: uploading to your Arduboy using the hex files (once we make them!!!). Theres a few tools out there for this, but I recommend using like the official arduboy flashers like this https://community.arduboy.com/t/arduboy-web-flasher/11633.
+Reccommended Method: uploading to your Arduboy using the hex files (TBD). Theres a few tools out there for this, but I recommend using like the official arduboy flashers like this https://community.arduboy.com/t/arduboy-web-flasher/11633.
 
 From Source: You are welcome to try but I wouldn't do it for personal use. To install this from source, simply put the ArduNet folders in your arduino sketches folder, usually found in your documents, but you may have installed it elsewhere. You'll need the arduboy2 library and will also need to have the arduboy board added to your board manager, but other than that you should be able to select the board and port and upload it just like that. With some editing you could also probably get this to work on other arduino devices. I plan on uploading some code for that eventually...
 
@@ -416,23 +440,39 @@ I plan to make it so you can see which neuron this is soon, but for right now he
 *  VD9 301
 :D
 ## Credits
+ArduNet Team
+Izalit: (https://github.com/Izalit/) Lead programmer, designer, researcher, and project coordinator. Various iterations of this project have been my passion since my first year of college. I'm glad to finally have something to say for all the hard work. It was not possible without the help of everyone listed here. My hope is to use this as a platform to jump to more generalized AI projects later~!
 
-https://github.com/Dinokaiz2/: Dinokaiz2, who made edits to make the code more efficient and functional, as well as for their assistance when I consulted them in logic and debugging the activation function. They've been an incredible friend and support while I've worked on this project over the years and I really cannot thank them enough.
+Dinokaiz2: (https://github.com/Dinokaiz2/) My friend K, who made the compression tool and the reader for the neural ROM and the learning array, as well as for their assistance when I consulted them in logic and debugging particularly difficult issues. They've been an incredible friend and support while I've worked on this project over the years and I really cannot thank them enough for the incredible work they've done to make this possible.
 
 Gwyndoll: (https://github.com/gwyndoll) My partner, Molly, who I would like to personally thank for all her help with debugging, building datasets, formatting large data files, and generally just keeping me sane while working on this. You're an incredible partner, parent, and programmer. Love ya molls.
 
+Nova: Inspiration and consulation for this project and its goals. You'll likely hear more from them in the future.
+
+Referenced Works
+B. Nikhil: as their work on wormweb (http://wormweb.org/neuralnet#c=BAG&m=1) was used for finding connections between neurons and for debugging. I love their webtool it is amazingly rad.
+
+B. Tahereh et al.: Their paper "Mechanisms of plasticity in a Caenorhabditis elegans mechanosensory circuit" helped identify the plastic neurons in the mechanosensory circuit to add to our hebbian learning array (https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2013.00088/full)
+
+C. Taegon et al.: Their paper "Optimization of connectome weights for a neural network model generating both forward and backward locomotion in C. elegans" helped give us a benchmark for existing biological simulations of C. elegans (https://www.biorxiv.org/content/10.1101/2025.07.21.665845v1.full)
+
 EleganSign: A webtool by Fenyves et al. that allows the user to choose from multiple different data sets (https://elegansign.linkgroup.hu/#!Overview). We used their NT+R dataset, which used expression of neurotransmitters and receptors to predict synaptic weights. This was extremely useful, and alongside the other tools here was used to generate a list of data for our neural rom. Their datasets were an invaluable contribution!
+
+G. Thomas et al.: Their paper "ASI Regulates Satiety Quiescence in C. elegans" was used to help better understand how satiety functions in C. elegans and, thus, how to implement it (https://pmc.ncbi.nlm.nih.gov/articles/PMC3726252/)
 
 K. Oshio et al.: who made another great tool for looking at wiring, CCEP-Tool (http://ims.dse.ibaraki.ac.jp/ccep-tool/) which served useful as well during this project.
 
-https://github.com/nategri/nematoduino: The neural rom design and idea of putting C. Elegans was hugely inspired by nategri's nematoduino, so thank you for the cool project, it served as massive inspiration for putting a brain on arduboy!
+Nategri: (https://github.com/nategri/nematoduino) Creator of nematoduino, a project I played with a lot! The design of their neural ROM, the extrapolation of a tank-drive from sinusoidal muscle movements, and the general idea of putting C. Elegans into an Arduboy was hugely inspired by their arduino C. elegans project. It served as massive inspiration to see someone else using this brain for something cool!
 
-Nikhil Bhatla: as their work on wormweb (http://wormweb.org/neuralnet#c=BAG&m=1) was used for finding connections between neurons and for debugging. I love their webtool it is amazingly rad.
+Open Worm Project: Thanks goes to the people at open worm project, who make these curated data sets (https://openworm.org/ConnectomeToolbox/Witvliet_2021/) availabe and open source so a random bio nerd and hobby programmer like me could make this.
 
-Open Worm Project: Thanks goes to the people at open worm project, who make these curated data sets (https://openworm.org/ConnectomeToolbox/Witvliet_2021/) availabe and open source so a random programmer like me could make this.
+S. Attila et al.: Their paper "Neuron-Specific Regulation of Associative Learning and Memory by MAGI-1 in C. elegans" helped me understand how the MAGI-1 protein is used in learning which, in turn, helped identify more neurons for our hebbian array (https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006019)
 
-Worm Atlas: who has a wonderful website (https://www.wormatlas.org/index.html) with tons of references for each individual neuron! I love all that they've done, and highly reccomend checking it out.
+T. Jamine Hooi-Min et al.: Their paper "Behavioral Forgetting of Olfactory Learning Is Mediated by Interneuron-Regulated Network Plasticity in Caenorhabditis elegans" helped identify plastic neurons in the olfactory circuit to add to the hebbian learning array (https://www.eneuro.org/content/9/4/ENEURO.0084-22.2022)
+
+Worm Atlas: who has a wonderful website (https://www.wormatlas.org/index.html) with tons of references for each individual neuron! Very useful for identifying which neurons to use in the hebbian array. I love all that they've done, and highly reccomend checking it out.
+
 
 . . .
 
-Lastly, to my friends Molly, Kaiz, and Nova, all of you, thanks so much for your help with this crazy ambitious project, with debugging and discussing the logic and talking it out. Simply just being rubber ducky was immensely helpful, but so has all that you've done for me while I've been struggling with my illness these past few years. Your friendship and your wonderful brains are more valuable than gold!
+Lastly, to my friends Molly, Kaiz, and Nova, all of you, thanks so much for your help with this crazy ambitious project, with debugging and discussing the logic and talking it out. Simply just being rubber ducky was immensely helpful, but so has all that you've done for me while I've been struggling with the pain and mental toll of my illness these past few years. Your friendship and your wonderful brains are more valuable than gold!
