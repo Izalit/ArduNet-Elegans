@@ -1,8 +1,9 @@
 /**    
+ * TODO: figure out why gap junction versions of the data set all break... (did K not account for it with generator?)
+ * TODO: fix worm movement... does not seem to work...
+ *
+ * NOTE: drawFaces() neurons may need to be adjustedy
  * TODO: Fix off by one error in diag screen-- currently displaying an extra pre-id synapse
- * TODO: optimize any repetetive code to make room for EEPROM/saving
- * TODO: implement EEPROM/saving learningArray[] functionality
- * TODO: add gap junctions to neural ROM
  *
  *    MISC. IDEAS 
  * add an actually accurate perceptron model in diag screen
@@ -22,8 +23,22 @@
 
 Arduboy2 arduboy;                 //create arduboy object
 
-const uint8_t threshold = 1;      //threshold for activation function
+/*
+  Optimal Thresholds:
+    Simple - 5
+    Simple GJ - breaks?
+    No Comp GJ - breaks?
+    No Comp - 7
+    No Unk GJ - breaks?
+    No Unk - 15
+    Unk Comp GJ - breaks?
+   *Unk Comp - 15
+*/
+
+const uint16_t totalNeurons = 302;
+const uint8_t threshold = 15;      //threshold for activation function
 const uint16_t maxSynapse = 65;   //max synapses a neuron can have as inputs
+const uint16_t synapseCount = 8526;
 const uint8_t expressionX = 40;   //X position to draw the expression
 const uint8_t expressionY = 35;   //Y position to draw the expression
 uint16_t currentID = 0;           //interface variable to indicate which neuron is being analyzed
@@ -49,16 +64,23 @@ bool isEating = false;            //indicates if worm is eating
 bool isAsleep = false;            //indicates if worm is sleeping
 bool isTonic = false;             //indicates if an input is tonic (or phasic)
 bool isChemotaxis = false;        //indicates if the worm is experiencing some kind of chemotaxis
-uint8_t learningArraySize = 125;  //number of neurons in learning array
-uint8_t maxLearningVal = 71;      //maximum possible value of learning array elements
+uint8_t maxLearningVal = 7;       //maximum possible value of learning array elements (max: 7, min: -8)
+const uint8_t minLearningVal = -8;
 uint8_t selectedOption = 0;       //for if an options screen is selected
 uint8_t currentExp = 0;           //value representing the current facial expression
+const uint32_t maxTick = 3628800;
+const uint16_t saveSizeMod = 10;
+const uint8_t screenWidth = 128;
+const uint8_t screenHeight = 64; 
+const uint16_t learnValMax = 963;
+const uint16_t totalLearningNeurons = 50;
+const uint8_t gapJuncMinVal = 90;
 
-SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 7578, -70, true);
+SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, synapseCount, -70, true);
 uint16_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
-SizedIntArray<4, 1513, true> learningArray;    //an array that, for each neuron, holds its firing history
-BitArray<302> outputList;                    //list of neurons
-BitArray<302> nextOutputList;                //buffer to solve conflicting time differentials in firing
+SizedIntArray<4, learnValMax, true> learningArray;  //an array that, for each neuron, holds its firing history
+BitArray<totalNeurons> outputList;                    //list of neurons
+BitArray<totalNeurons> nextOutputList;                //buffer to solve conflicting time differentials in firing
 
 struct Neuron {
   int16_t cellID;
@@ -85,7 +107,7 @@ void loop() {
   activationFunction();         //do the main calculation of the connectome
   arduboy.pollButtons();        //get buttons pressed and send to function to process them
   
-  if (tick == 3628800) {                        //reset tick Counter for gradient senses when it reaches the factorial of 10 (each gradient is 5)
+  if (tick == maxTick) {                        //reset tick Counter for gradient senses when it reaches the factorial of 10 (each gradient is 5)
     tick == 0;
   } else {
     tick++;
@@ -100,12 +122,11 @@ void loop() {
   //do options screens if selected
   if (selectedOption == 1) doSaveScreen();
   if (selectedOption == 2) doSerialPrintScreen();
-  if (selectedOption == 3) doSerialHostScreen();
-  if (selectedOption == 4) doSaveEditorScreen();
+  if (selectedOption == 3) doCreditsScreen();
 
   doButtons();
 
-  arduboy.drawRoundRect(0, 0, 128, 64, 3);      //draw a border around the screen
+  arduboy.drawRoundRect(0, 0, screenWidth, screenHeight, 3);      //draw a border around the screen
   arduboy.display();
   
   startFlag = false;            //set the flag off; only do the title screen once
@@ -121,27 +142,27 @@ void doDiagnosticScreen() {
   arduboy.clear();
   arduboy.setCursor(10, 10);
   arduboy.print(currentID);
-  arduboy.print(" Syn: ");
+  arduboy.print(F(" Syn: "));
   arduboy.print(numSynapses);
   arduboy.setCursor(10, 20);
-  arduboy.print("Weight: ");
+  arduboy.print(F("Weight: "));
 
-  if (synWeight >= 90) {
-    arduboy.print("GAP-");
-    arduboy.print(synWeight - 90);
+  if (synWeight >= gapJuncMinVal) {
+    arduboy.print(F("GAP-"));
+    arduboy.print(synWeight - gapJuncMinVal);
   } else {
     arduboy.print(synWeight);
   }
 
   arduboy.setCursor(10, 30);
-  arduboy.print("Pre ID: ");
+  arduboy.print(F("Pre ID: "));
   arduboy.print(preID);
   arduboy.setCursor(10, 40);
-  arduboy.print("postID: ");
+  arduboy.print(F("postID: "));
   arduboy.print(currentID);
 
-  if (outputList[currentID]) Sprites::drawOverwrite(85, 10, perceptronON, 0);
-  if (!outputList[currentID]) Sprites::drawOverwrite(85, 10, perceptronOFF, 0);
+  if (outputList[currentID]) Sprites::drawOverwrite(85, 30, perceptronON, 0);
+  if (!outputList[currentID]) Sprites::drawOverwrite(85, 30, perceptronOFF, 0);
 
   arduboy.display();
 }
@@ -199,127 +220,129 @@ void doInputScreen() {
  * function to query which buttons are pressed, setting up proper screen transitions
  */
 void doButtons() {
+  const uint8_t longSkip = 20;
+
   //MATRIX SCREEN
   if (lastScreen == 1) {
     if (arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON)) {     //activate sense with A+B
       startInputFlag = true;
       if (sense == 0) {
         if (isTonic) {
-          tonic(false, 1, 0, doGentleNoseTouch);    //sense gentle nose touch
+          tonic(false, 5, 0, doGentleNoseTouch);    //sense gentle nose touch
         } else {
-          phasic(false, 90, doGentleNoseTouch);
+          phasic(false, 0, doGentleNoseTouch);
         }
       }
       if (sense == 1) {
         isChemotaxis = true;
         if (isTonic) {
-          tonic(false, 1, 0, doChemoattraction);    //sense attractant chemicals
+          tonic(false, 5, 0, doChemoattraction);    //sense attractant chemicals
         } else {
-          phasic(false, 90, doChemoattraction);
+          phasic(false, 0, doChemoattraction);
         }
       }
       if (sense == 2) {
         isChemotaxis = true;
         if (isTonic) {
-          tonic(false, 1, 0, doChemorepulsion);     //sense avoidant chemicals
+          tonic(false, 5, 0, doChemorepulsion);     //sense avoidant chemicals
         } else {
-          phasic(false, 90, doChemoattraction);
+          phasic(false, 0, doChemoattraction);
         }
       }
       if (sense == 3) {
         if (isTonic) {
-          tonic(false, 1, 0, doCoolingResponse);            //sense cooling
+          tonic(false, 5, 0, doCoolingResponse);            //sense cooling
         } else {
-          phasic(false, 90, doCoolingResponse);
+          phasic(false, 0, doCoolingResponse);
         }
       }
       if (sense == 4) {
         if (isTonic) {
-          tonic(false, 1, 0, doHeatingResponse);            //sense warmth
+          tonic(false, 5, 0, doHeatingResponse);            //sense warmth
         } else {
-          phasic(false, 90, doHeatingResponse);
+          phasic(false, 0, doHeatingResponse);
         }
       }
       if (sense == 5) {
         if (isTonic) {
-          tonic(false, 1, 0, doPhotosensation);     //sense light
+          tonic(false, 5, 0, doPhotosensation);     //sense light
         } else {
-          phasic(false, 90, doPhotosensation);
+          phasic(false, 0, doPhotosensation);
         }
       }
       if (sense == 6) {
         if (isTonic) {
-          tonic(false, 1, 0, doOxygenSensation);    //sense oxygen
+          tonic(false, 5, 0, doOxygenSensation);    //sense oxygen
         } else {
-          phasic(false, 90, doPhotosensation);
+          phasic(false, 0, doPhotosensation);
         }
       }
       if (sense == 7) {
         isChemotaxis = true;
         if (isTonic) {
-          tonic(false, 1, 0, sensePheromones);      //sense pheromones
+          tonic(false, 5, 0, sensePheromones);      //sense pheromones
         } else {
-          phasic(false, 90, sensePheromones);
+          phasic(false, 0, sensePheromones);
         }
       }
       if (sense == 8) {
         isChemotaxis = false;
         if (isTonic) {
-          tonic(false, 1, 0, doBaseline);     //activtate baseline state
+          tonic(false, 5, 0, doBaseline);     //activtate baseline state
         } else {
-          phasic(false, 90, doBaseline);
+          phasic(false, 0, doBaseline);
         }
       }
       if (sense == 9) {                 //toggle fullness state
         sated = false;
         if (isTonic) {
-          tonic(false, 1, 0, isHungry);
+          tonic(false, 5, 0, isHungry);
         } else {
-          phasic(false, 90, isHungry);
+          phasic(false, 0, isHungry);
         }
       }
       if (sense == 10) {                //toggle fullness state
         sated = true;
         if (isTonic) {
-          tonic(false, 1, 0, doSatiety);
+          tonic(false, 5, 0, doSatiety);
         } else {
-          phasic(false, 90, doSatiety);
+          phasic(false, 0, doSatiety);
         }
       }
       if (sense == 11 && !sated) {                //toggle eating state
         isChemotaxis = true;
         isEating = true;
         if (isTonic) {
-          tonic(false, 1, 0, doGustation);
+          tonic(false, 5, 0, doGustation);
         } else {
-          phasic(false, 90, doGustation);
+          phasic(false, 0, doGustation);
         }
       } else if (sense == 11 && sated) {
         isChemotaxis = true;
         isEating = false;
         arduboy.setCursor(70,40);
-        arduboy.print("(SATED)");
+        arduboy.print(F("(SATED)"));
         delay(50);
       }
       if (sense == 12 && isAsleep) {    //toggle sleep state
-        tonic(false, 1, 0, maintainSleep);
+        tonic(false, 5, 0, maintainSleep);
       } else if (sense == 12 && !isAsleep) {
         isAsleep = true;
-        phasic(false, 90, activateSleep);
-        tonic(false, 1, 0, maintainSleep);
+        phasic(false, 0, activateSleep);
+        tonic(false, 5, 0, maintainSleep);
       }
     }
 
     if (arduboy.justPressed(A_BUTTON) && !arduboy.justPressed(B_BUTTON)) {    //just A decrements by 1
       if (currentID == 0) {
-        currentID = 301;
+        currentID = totalNeurons - 1;
       } else {
         currentID--;
       }
     }
 
     if (arduboy.justPressed(B_BUTTON) && !arduboy.justPressed(A_BUTTON)) {    //just B increments by 1
-      if (currentID == 301) {
+      if (currentID == totalNeurons - 1) {
           currentID = 0;
       } else {
         currentID++;
@@ -327,11 +350,11 @@ void doButtons() {
     }
 
     if (arduboy.justPressed(UP_BUTTON)) {                                     //UP increments by 20 instead of 1
-      if (currentID < 301) {
-        if (currentID + 20 > 301) {
-          currentID = 301;
+      if (currentID < totalNeurons - 1) {
+        if (currentID + longSkip > totalNeurons - 1) {
+          currentID = totalNeurons - 1;
         } else {
-          currentID += 20;
+          currentID += longSkip;
         }
       } else {
         currentID = 0;
@@ -353,14 +376,14 @@ void doButtons() {
     if (arduboy.justPressed(UP_BUTTON)) {    //go to matrix screen
       doMatrixScreen();
     } else if (arduboy.justPressed(RIGHT_BUTTON)) {              //scroll through options
-      if (option == 3) {
+      if (option == 2) {
         option = 0;
       } else {
         option++;
       }
     } else if (arduboy.justPressed(LEFT_BUTTON)) {
       if (option == 0) {
-        option = 3;
+        option = 2;
       } else {
         option--;
       }
@@ -371,13 +394,11 @@ void doButtons() {
         selectedOption = 1;
       } else if (option == 1) {                           //print current learning array data over serial ("PRINT SAVE") 
         selectedOption = 2;
-      } else if (option == 2) {                           //host a simulation over serial (receive inputs, send output info) ("HOST")
+      } else if (option == 2) {                           //show the credits ("CREDITS")
         selectedOption = 3;
-      } else if (option == 3) {                           //edit learning array data ("SAVE EDIT")
-        selectedOption = 4;
       }
     }
-  }//no DOWN or A BUTTONS???
+  }//DOWN and A BUTTON unused
 
   //DIAGNOSTIC SCREEN
   if (lastScreen == 3) {
@@ -399,7 +420,7 @@ void doButtons() {
       }
       preID = preSynapticNeuronList[synCounter];
     }
-  }// LEFT unused???
+  }// LEFT unused
   
   //INPUT SELECT SCREEN
   if (lastScreen == 4) {
@@ -434,18 +455,18 @@ void doButtons() {
  */
 void doTitleScreen() {
   if (startFlag) {
-    uint16_t address = EEPROM_STORAGE_SPACE_START;
 
     //clear the screen then write app name
     arduboy.clear();
     arduboy.setCursor(15, 10);
     arduboy.print(F("-ArduNet Elegans-"));
     arduboy.setCursor(10, 50);
+    arduboy.print(F("APP: MATRIX"));
     arduboy.display();
-//TODO: uncomment when learningArray is implemented, fix address as well
-/*    for (uint8_t i = 0; i < learningArray.size; i++) {
-      EEPROM.read(address + i, learningArray.compressed[i]);
-    }*/
+
+    for (uint16_t i = 0; i < learningArray.size; i++) {
+      EEPROM.get(EEPROM_STORAGE_SPACE_START + i, learningArray.compressed[i]);
+    }
 
     delay(3000);  
   }
@@ -462,18 +483,18 @@ void doMatrixScreen() {
 
   arduboy.clear();
   arduboy.setCursor(5, 5);
-  arduboy.print("NEURAL GRID: ");
+  arduboy.print(F("NEURAL GRID: "));
 
   arduboy.setCursor(45, 20);
-  arduboy.print("Mood: ");
+  arduboy.print(F("Mood: "));
 
   arduboy.setCursor(5, 45);
-  arduboy.print("CURRENT CELL ID: ");
+  arduboy.print(F("CURRENT CELL ID: "));
   arduboy.print(currentID);
 
   if (!startInputFlag) {
     arduboy.setCursor(5, 55);
-    arduboy.print("STATIONARY");
+    arduboy.print(F("STATIONARY"));
   } else {
     printMovementDir(5, 55);
   }
@@ -495,7 +516,7 @@ void doMatrixScreen() {
   for (uint16_t x = 1; x <= (gridWidth*2); x++) {
     for (uint16_t y = 1; y <= (gridHeight*2); y++) {
       //for each neuron get the output state and draw a pixel accordingly               
-      if (neuronCounter < 302) {
+      if (neuronCounter < totalNeurons) {
         if (outputList[neuronCounter]) {
           arduboy.drawPixel(x + xPos, y + yPos, WHITE);
           arduboy.drawPixel(x + xPos + 1, y + yPos, WHITE);
@@ -532,48 +553,35 @@ void doOptions() {
   lastScreen = 2;
   arduboy.clear();
 
-  //arduboy.drawLine(63, 22, 63, 43);
-  //arduboy.drawLine(2, 33, 124, 33);
-  arduboy.drawRect(2, 22, 124, 23);
-  arduboy.setCursor(38, 3);
-  arduboy.print("-OPTIONS-");     //print out the options
-  arduboy.setCursor(5, 25);
-  arduboy.print("SAVE DATA");
-  arduboy.setCursor(5, 35);
-  arduboy.print("HOST ANN");
-  arduboy.setCursor(64, 25);
-  arduboy.print("PRINT SAVE");
-  arduboy.setCursor(70, 35);
-  arduboy.print("EDIT SAVE");
+  arduboy.setCursor(38, 5);
+  arduboy.print(F("-OPTIONS-"));     //print out the options
+  arduboy.setCursor(10, 20);
+  arduboy.print(F("SAVE DATA"));
+  arduboy.setCursor(10, 35);
+  arduboy.print(F("PRINT SAVE"));
+  arduboy.setCursor(10, 50);
+  arduboy.print(F("CREDITS"));
 
   if (option == 0) {
-    arduboy.drawPixel(30, 19);
-    arduboy.drawPixel(31, 19);
-    arduboy.drawPixel(32, 19);
-    arduboy.drawPixel(31, 18);
-    arduboy.drawPixel(31, 20);
+    arduboy.drawPixel(4, 23);
+    arduboy.drawPixel(5, 23);
+    arduboy.drawPixel(6, 23);
+    arduboy.drawPixel(5, 22);
+    arduboy.drawPixel(5, 24);
     arduboy.display();
   } else if (option == 1) {
-    arduboy.drawPixel(96, 19);
-    arduboy.drawPixel(97, 19);
-    arduboy.drawPixel(98, 19);
-    arduboy.drawPixel(97, 18);
-    arduboy.drawPixel(97, 20);
+    arduboy.drawPixel(4, 38);
+    arduboy.drawPixel(5, 38);
+    arduboy.drawPixel(6, 38);
+    arduboy.drawPixel(5, 37);
+    arduboy.drawPixel(5, 39);
     arduboy.display();
   } else if (option == 2) {
-    arduboy.drawPixel(30, 47);
-    arduboy.drawPixel(31, 47);
-    arduboy.drawPixel(32, 47);
-    arduboy.drawPixel(31, 46);
-    arduboy.drawPixel(31, 48);
-    arduboy.display();
-  } else if (option == 3) {
-    arduboy.drawPixel(96, 47);
-    arduboy.drawPixel(97, 47);
-    arduboy.drawPixel(98, 47);
-    arduboy.drawPixel(97, 46);
-    arduboy.drawPixel(97, 48);
-
+    arduboy.drawPixel(4, 53);
+    arduboy.drawPixel(5, 53);
+    arduboy.drawPixel(6, 53);
+    arduboy.drawPixel(5, 52);
+    arduboy.drawPixel(5, 54);
     arduboy.display();
   }
 }
@@ -582,27 +590,30 @@ void doOptions() {
  * Function to do logic for the options save subscreen
  */
 void doSaveScreen() {
+  const uint16_t saveSizeMod = 10;
+
   arduboy.clear();
-  arduboy.drawRect(2, 30, learningArraySize, 5);  //draw a status bar
-
+  arduboy.drawRect(2, 30, (learningArray.size/saveSizeMod) + 1, 5);  //draw a status bar
   arduboy.setCursor(5, 5);
-  arduboy.print("Saving Data...");
+  arduboy.print(F("Saving Data..."));
 
-  for (uint8_t i = 0; i < learningArray.size; i++) {  //save each element of the learning array save data
-//TODO: add learning array here
-    //EEPROM.write(address + i, learningArray.compressed[i]);
-    arduboy.drawPixel(3 + i, 31, WHITE);  //top bar pixel
-    arduboy.drawPixel(3 + i, 32, WHITE);  //middle bar pixel
-    arduboy.drawPixel(3 + i, 33, WHITE);  //bottom bar pixel
+  for (uint16_t i = 0; i < learningArray.size; i++) {  //save each element of the learning array save data
+    EEPROM.write(EEPROM_STORAGE_SPACE_START + i, learningArray.compressed[i]);
 
-    arduboy.display();
-    delay(100);  //delay to give time to update
+    if (i % saveSizeMod == 0) {
+      arduboy.drawPixel(3 + i, 31, WHITE);  //top bar pixel
+      arduboy.drawPixel(3 + i, 32, WHITE);  //middle bar pixel
+      arduboy.drawPixel(3 + i, 33, WHITE);  //bottom bar pixel
+      arduboy.display();
+    }
+
+    delay(10);  //delay to give time to update
   }
 
   arduboy.clear();  //print out success message
-  arduboy.drawRoundRect(0, 0, 128, 64, 3);
+  arduboy.drawRoundRect(0, 0, screenWidth, screenHeight, 3);
   arduboy.setCursor(5, 5);
-  arduboy.print("DATA SAVED!");
+  arduboy.print(F("DATA SAVED!"));
   arduboy.display();
   delay(3000);  //delay before going to normal screen again
 
@@ -614,28 +625,35 @@ void doSaveScreen() {
  * Function to do logic for the options serial print subscreen
  */
 void doSerialPrintScreen() {
+  const uint16_t saveSizeMod = 10;
+
   arduboy.clear();
   arduboy.setCursor(2, 5);
-  arduboy.print("Print: Save -> Serial");   //print out a screen title
-  arduboy.drawRect(2, 30, learningArraySize, 5);  //draw a status bar
+  arduboy.print(F("Print: Save -> Serial"));   //print out a screen title
+  uint16_t arraySize = learningArray.count;
+  arduboy.drawRect(2, 30, (arraySize/saveSizeMod) + 1, 5);  //draw a status bar
+    
+  Serial.begin(9600);
 
-  for (uint8_t i = 0; i < learningArraySize + 1; i++) {  //print each element of the learning array save data
-//TODO: add learning array here
-    Serial.begin(9600);
-    //Serial.print(learningArray[i]);
-    Serial.end();
+  for (uint16_t i = 0; i < arraySize; i++) {  //print each element of the learning array save data
+    int8_t val = learningArray[i];
+    Serial.println(val);
 
-    arduboy.drawPixel(3 + i, 31, WHITE);  //top bar pixel
-    arduboy.drawPixel(3 + i, 32, WHITE);  //middle bar pixel
-    arduboy.drawPixel(3 + i, 33, WHITE);  //bottom bar pixel
-    arduboy.display();
-    delay(100);  //delay to give time to update
+    if (i % saveSizeMod == 0) {
+      arduboy.drawPixel(3 + (i / saveSizeMod), 31, WHITE);  //top bar pixel
+      arduboy.drawPixel(3 + (i / saveSizeMod), 32, WHITE);  //middle bar pixel
+      arduboy.drawPixel(3 + (i / saveSizeMod), 33, WHITE);  //bottom bar pixel
+      arduboy.display();
+    }
+    delay(10);  //delay to give time to update
   }
 
+  Serial.end();
+
   arduboy.clear();  //print out success message
-  arduboy.drawRoundRect(0, 0, 128, 64, 3);
+  arduboy.drawRoundRect(0, 0, screenWidth, screenHeight, 3);
   arduboy.setCursor(5, 5);
-  arduboy.print("SERIAL DATA SENT!");
+  arduboy.print(F("SERIAL DATA SENT!"));
   arduboy.display();
   delay(3000);  //delay before going to normal screen again
 
@@ -644,230 +662,32 @@ void doSerialPrintScreen() {
 }
 
 /**
- * Function to do logic for the options serial host subscreen
+ * Function to do logic for and print out the credits screen
  */
-void doSerialHostScreen() {
+void doCreditsScreen() {
   arduboy.clear();
-  arduboy.setCursor(5, 5);
-  arduboy.print("Hosting: Serial Sim");            //print out screen title
-  arduboy.setCursor(5, 15);
-  arduboy.print("(Restart to Quit!)");
+ 
+  arduboy.setCursor(35, 5);
+  arduboy.print(F("-CREDITS-"));
+  arduboy.setCursor(3, 20);
+  arduboy.print(F("Bio/Program:"));
+  arduboy.setCursor(80, 20);
+  arduboy.print(F("Izalith"));
+  arduboy.setCursor(3, 30);
+  arduboy.print(F("C Comp Prog:"));
+  arduboy.setCursor(80, 30);
+  arduboy.print(F("K Akhtar"));
+  arduboy.setCursor(3, 40);
+  arduboy.print(F("Python Prog:"));
+  arduboy.setCursor(80, 40);
+  arduboy.print(F("Molly C"));
+  arduboy.setCursor(2, 50);
+  arduboy.print(F("Inspiration:"));    
+  arduboy.setCursor(80, 50);
+  arduboy.print(F("Nova"));
   arduboy.display();
-
-  while (!arduboy.justPressed(A_BUTTON) || !arduboy.justPressed(B_BUTTON)) {  //continue over serial as long as A/B are not pressed
-    arduboy.pollButtons();
-    delay(100);
-
-    /*arduboy.setCursor(5, 20);                         //print output readouts to arduboy
-    arduboy.print("VA: "); arduboy.print(vaRatio);
-    arduboy.setCursor(65, 20);
-    arduboy.print("VB: "); arduboy.print(vbRatio);
-    arduboy.setCursor(5, 30);
-    arduboy.print("DA: "); arduboy.print(daRatio);
-    arduboy.setCursor(65, 30);
-    arduboy.print("DB: "); arduboy.print(dbRatio);
-    arduboy.setCursor(5, 40);
-    arduboy.print("EXP: "); arduboy.print(currentExp);
-    arduboy.display();*/
-
-    Serial.begin(9600);                               //start comms for outputs
-    Serial.print("VA:"); Serial.println(vaRatio);     //print output info over serial, delimited by new lines
-    Serial.print("VB:"); Serial.println(vbRatio);
-    Serial.print("DA:"); Serial.println(daRatio);
-    Serial.print("DB:"); Serial.println(dbRatio);
-    Serial.print("EXP:"); Serial.println(currentExp);
-    Serial.end();                                     //end comms for outputs
-
-    // Input: {BAS0/1, HGR-0/1, GUS-0/1, ASL-0/1, MSL-0/1, GNT-0/1, HNT-0/1, TEX-0/1, ATR-0/1, REP-0/1, COL-0/1, HEA-0/1, HOT-0/1, CLD-0/1, PHO-0/1, OXY-0/1, CO2-0/1, SLT-0/1, PHE-0/1, PRO-0/1}
-    for (uint8_t i = 0; i < 20; i++) {
-      char serInput[4];
-      for(uint8_t j = 0; serInput[j] = ','; j++) {
-        serInput[j] = Serial.read();
-      }
-
-      if (serInput[0] == 'B' && serInput[1] == 'A' && serInput[2] == 'S' && serInput[3] == 1) doBaseline();
-      if (serInput[0] == 'S' && serInput[1] == 'A' && serInput[2] == 'T' && serInput[3] == 1) doSatiety();
-      if (serInput[0] == 'H' && serInput[1] == 'G' && serInput[2] == 'R' && serInput[3] == 1) isHungry();
-      if (serInput[0] == 'G' && serInput[1] == 'U' && serInput[2] == 'S' && serInput[3] == 1) doGustation();
-      if (serInput[0] == 'A' && serInput[1] == 'S' && serInput[2] == 'L' && serInput[3] == 1) activateSleep();
-      if (serInput[0] == 'M' && serInput[1] == 'S' && serInput[2] == 'L' && serInput[3] == 1) maintainSleep();
-      if (serInput[0] == 'G' && serInput[1] == 'N' && serInput[2] == 'T' && serInput[3] == 1) doGentleNoseTouch();
-      if (serInput[0] == 'H' && serInput[1] == 'N' && serInput[2] == 'T' && serInput[3] == 1) doHarshNoseTouch();
-      if (serInput[0] == 'T' && serInput[1] == 'E' && serInput[2] == 'X' && serInput[3] == 1) doTextureSense();
-      if (serInput[0] == 'A' && serInput[1] == 'T' && serInput[2] == 'R' && serInput[3] == 1) doChemoattraction();
-      if (serInput[0] == 'R' && serInput[1] == 'E' && serInput[2] == 'P' && serInput[3] == 1) doChemorepulsion();
-      if (serInput[0] == 'C' && serInput[1] == 'O' && serInput[2] == 'L' && serInput[3] == 1) doCoolingResponse();
-      if (serInput[0] == 'H' && serInput[1] == 'E' && serInput[2] == 'A' && serInput[3] == 1) doHeatingResponse();
-      if (serInput[0] == 'H' && serInput[1] == 'O' && serInput[2] == 'T' && serInput[3] == 1) doNoxiousHeatResponse();
-      if (serInput[0] == 'C' && serInput[1] == 'L' && serInput[2] == 'D' && serInput[3] == 1) doNoxiousColdResponse();
-      if (serInput[0] == 'P' && serInput[1] == 'H' && serInput[2] == 'O' && serInput[3] == 1) doPhotosensation();
-      if (serInput[0] == 'O' && serInput[1] == 'X' && serInput[2] == 'Y' && serInput[3] == 1) doOxygenSensation();
-      if (serInput[0] == 'C' && serInput[1] == 'O' && serInput[2] == '2' && serInput[3] == 1) doCO2Sensation();
-      if (serInput[0] == 'S' && serInput[1] == 'L' && serInput[2] == 'T' && serInput[3] == 1) doSaltSensation();
-      if (serInput[0] == 'P' && serInput[1] == 'H' && serInput[2] == 'E' && serInput[3] == 1) sensePheromones();
-      if (serInput[0] == 'P' && serInput[1] == 'R' && serInput[2] == 'O' && serInput[3] == 1) doProprioception();
-
-    }
-  }
-
-  arduboy.clear();  //print out simulation end message
-  arduboy.drawRoundRect(0, 0, 128, 64, 3);
-  arduboy.setCursor(5, 5);
-  arduboy.print("SIMULATION ENDED!");
-  arduboy.display();
-  delay(3000);
-
-  selectedOption = 0;
-  doOptions();
-}
-
-/**
- * Function to do logic for the options save editor subscreen
- */
-void doSaveEditorScreen() {
-  uint16_t savePos = 0;
-  int8_t tempArray[learningArraySize];
-
-  for (uint8_t i = 0; i < learningArraySize; i++) {
-    tempArray[i] = learningArray[i];
-  }
-
-  while (!arduboy.justPressed(A_BUTTON)) {  //if A press; exit without saving
-    arduboy.clear();
-    arduboy.setCursor(27, 5);
-    arduboy.print("-Save Editor-");         //print out screen title
-    arduboy.setCursor(8, 45);
-    arduboy.print("(B)-----------SAVE");
-    arduboy.setCursor(8, 55);
-    arduboy.print("(A)--EXIT (NO SAVE)");  //print out instructions for save data editor
-    arduboy.pollButtons();
-    arduboy.display();
-
-//TODO: add learning arrays here
-    //print previous element (if not first)
-    if (savePos != 0) {
-      //draw LEFT arrow
-      arduboy.drawPixel(9, 27);
-      arduboy.drawPixel(8, 28); 
-      arduboy.drawPixel(9, 28); 
-      arduboy.drawPixel(10, 28); 
-      arduboy.drawPixel(11, 28);
-      arduboy.drawPixel(9, 29);
-
-      arduboy.setCursor(13, 25);
-      arduboy.print("[");
-      arduboy.print(tempArray[savePos-1]);  //arduboy.print(EEPROM.read(address + savePos - 1);
-      arduboy.setCursor(36, 25);
-      arduboy.print("]");
-      arduboy.setCursor(43, 25);
-      arduboy.print("-");
-    } else {
-      arduboy.setCursor(43, 25);
-      arduboy.print(">");
-    }
-
-    //draw MIDDLE TOP arrow
-    arduboy.drawPixel(64, 19);
-    arduboy.drawPixel(64, 20);
-    arduboy.drawPixel(64, 21);
-    arduboy.drawPixel(64, 22);
-    arduboy.drawPixel(63, 21);
-    arduboy.drawPixel(65, 21);
-
-    //print current element
-    arduboy.setCursor(49, 25);
-    arduboy.print("[");
-    arduboy.print(tempArray[savePos]); //arduboy.print(EEPROM.read(address + savePos);
-    arduboy.setCursor(72, 25);
-    arduboy.print("]");
-
-    //draw MIDDLE BOTTOM arrow
-    arduboy.drawPixel(64, 34);
-    arduboy.drawPixel(64, 35);
-    arduboy.drawPixel(64, 36);
-    arduboy.drawPixel(64, 37);
-    arduboy.drawPixel(63, 35);
-    arduboy.drawPixel(65, 35);
-
-    //print next element (if not last)
-    if (savePos < learningArraySize) {
-      arduboy.setCursor(79, 25);
-      arduboy.print("-");
-      arduboy.setCursor(85, 25);
-      arduboy.print("[");
-      arduboy.print(tempArray[savePos+1]); //arduboy.print(EEPROM.read(address + savePos + 1));
-      arduboy.setCursor(108, 25);
-      arduboy.print("]");
-
-      //draw RIGHT arrow
-      arduboy.drawPixel(117, 27);
-      arduboy.drawPixel(115, 28);
-      arduboy.drawPixel(116, 28);
-      arduboy.drawPixel(117, 28);
-      arduboy.drawPixel(118, 28);
-      arduboy.drawPixel(117, 29);
-    } else {
-      arduboy.setCursor(78, 25);
-      arduboy.print("<");
-    }
-
-    arduboy.display();
-
-    if (arduboy.justPressed(RIGHT_BUTTON)) {        //if R press; move to next position in array
-      if (savePos != learningArraySize) {
-        savePos++;
-      } else {
-        savePos = 0;
-      }
-    } else if (arduboy.justPressed(LEFT_BUTTON)) {  //if L press; move to prev position in array
-      if (savePos != 0) {
-        savePos--;
-      } else {
-        savePos = learningArraySize;
-      }      
-    } else if (arduboy.justPressed(UP_BUTTON)) {    //if Up press; change value in current position
-      if (tempArray[savePos] > maxLearningVal) {
-        tempArray[savePos] = -70;       //EEPROM.write(address + i, 0);                     //set to zero if past the max val
-      } else {
-        tempArray[savePos]++;           //EEPROM.write(address + i, learningArray[i] + 1);  //increment value
-      }
-    } else if (arduboy.justPressed(DOWN_BUTTON)) {
-      if (tempArray[savePos] < -70) {
-        tempArray[savePos] = maxLearningVal;         //EEPROM.write(address + i, 0);        //set to max if past the min val
-      } else {
-        tempArray[savePos]--;           //EEPROM.write(address + i, learningArray[i] + 1);  //increment value
-      }
-    }
-
-
-    if (arduboy.justPressed(B_BUTTON)) {            //if B press, flush buffer
-      for (uint8_t i = 0; i < learningArray.size; i++) {
-        learningArray[i] = tempArray[i];
-        //EEPROM.write(address + i, learningArray.compressed[i]);
-//TODO uncomment, probably don't need temp array in this function
-      }
-
-      arduboy.clear();  //print out success message
-      arduboy.drawRoundRect(0, 0, 128, 64, 3);
-      arduboy.setCursor(5, 5);
-      arduboy.print("EDITS SAVED!");
-      arduboy.display();
-      arduboy.pollButtons();
-      delay(3000);
-
-      selectedOption = 0;
-      doOptions();
-
-      return;
-    }
-  }
-
-  arduboy.clear();  //exit subscreen, do not print any message
-  arduboy.drawRoundRect(0, 0, 128, 64, 3);
-  arduboy.display();
-  arduboy.pollButtons();
-  delay(100);
   
+  delay(2000);
   selectedOption = 0;
   doOptions();
 }
@@ -929,50 +749,45 @@ void maintainSleep() { //tonic
 /**
  * Function to draw the worms facial expressions
  */
-void drawFaces() {
-  if (outputList[39] && !outputList[40]) { //attractive chemotaxis; contented
-    currentExp = 0;
-    Sprites::drawOverwrite(expressionX + 9, expressionY - 4, content, 0);           //^-^
-    arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);  
-  } //ASEL is on and ASER is off indicates attractive chemotaxis
-        
-  for (uint16_t i = 0; i < 302; i++) {
+void drawFaces() {        
+  for (uint16_t i = 0; i < totalNeurons; i++) {
     if (outputList[i]) {
       if (i == 53 || i == 54 || i == 57 || i == 58 || i == 59 || i == 60) {  //escape behavior; fear
-        currentExp = 1;
+        currentExp = 1;           //AVA, AVD, AVE; command interneurons for reversals
+        arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
         Sprites::drawOverwrite(expressionX + 9, expressionY - 4, fear, 0);          //O_O
         arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);
-      } //AVA, AVD, AVE
-
-      if (i == 149 || i == 150 || (i == 167 || i == 147)) { //foraging behavior; happy
-        currentExp = 2;
+      } else if (i == 149 || i == 150 || (i == 167 || i == 147)) { //foraging behavior; happy
+        currentExp = 2;           //NSM, MC; activates during gustation and satiety
+        arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
         Sprites::drawOverwrite(expressionX + 8, expressionY - 4, happy, 0);         //^v^
         arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);
-      } //NSM, MC
-
-      if (i == 43 && i == 44 && (i == 6 || i == 6 || i == 49 || i == 50)) {  //repulsive chemotaxis; disgust
-        currentExp = 3;
+      } else if (i == 43 && i == 44 && (i == 6 || i == 6 || i == 49 || i == 50)) {  //repulsive chemotaxis; disgust
+        currentExp = 3;           //ASH, ADL, ASK; repulsive chemosensors
+        arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
         Sprites::drawOverwrite(expressionX + 9, expressionY - 4, disgust, 0);       //>n<
-        arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);              
-      } //ASH, ADL, ASK
-
-      if (i == 174 || i == 175 || (i == 8 || i == 9 || i == 113 || i == 114 || i == 165 || i == 166)) { //hot or cold; discomfort
-        currentExp = 4;
+        arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);   
+      } else if (i == 174 || i == 175 || i == 8 || i == 9 || i == 113 || i == 114 || i == 165 || i == 166) { //hot or cold; discomfort
+        currentExp = 4;           //PVD, AFD, FLP, PHC; thermosensors for cold (PVD) and hot (the rest) 
+        arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
         Sprites::drawOverwrite(expressionX + 9, expressionY - 4, discomfort, 0);    //@_@
         arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);
-      } //PVD, AFD, FLP, PHC
-
-      if (i == 199 || i == 200) {   //sleep
-        currentExp = 5;
+      } else if (i == 204) {   //sleep
+        currentExp = 5;           //RIS; sleep state neuron 
+        arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
         Sprites::drawOverwrite(expressionX + 7, expressionY - 4, sleepy, 0);        //UwU
         arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);
-      } //RIM
-
-      if (i == 43 || i == 44) { //generalized nociception; pain
-        currentExp = 6;
+      } else if (i == 43 || i == 44) { //generalized nociception; pain
+        currentExp = 6;           //ASH
+        arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
         Sprites::drawOverwrite(expressionX + 8, expressionY - 4, pain, 0);          //;_;
         arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);         
-      } //ASH
+      } else if (outputList[39] && !outputList[40]) { //attractive chemotaxis; contented
+        currentExp = 0;           //ASEL is on and ASER is off indicates attractive chemotaxis
+        arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
+        Sprites::drawOverwrite(expressionX + 9, expressionY - 4, content, 0);       //^-^
+        arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);  
+      }
     }
   }
 }
@@ -985,7 +800,7 @@ void phasic(bool useGradient, uint8_t mod, void (*senseFunction)()) {
     mod = round(mod / 10) * 10;                     //round the distance or the rate adjustment to the nearest tens
     if (tick % (100 - mod) == 0) senseFunction();   //modulo the tick by the rounded distance/rate adjustment
   } else {
-    if (tick % mod == 0) senseFunction();
+    senseFunction();
   }
 }
 
@@ -1123,31 +938,40 @@ void doProprioception() { //phasic, unless held then it becomes tonic
  */
 void activationFunction() {  
   uint16_t index = 0;
+  const float hebbianVariable = 0.2;               //constant representing the amount the learning array affects a given synapse
 
   //calculate next output for all neurons using the current output list
-  for (id; id < 302; id++) {
-    n.inputLen = NEURAL_ROM[index];
+  for (id; id < totalNeurons; id++) {
+    // Read input length (Number of synapses) from ROM
+    n.inputLen = NEURAL_ROM[index]; 
     index++;
 
-    // Read neuron inputs
+    // Read neuron inputs from ROM
     for (uint8_t i = 0; i < n.inputLen; i++) {
       n.inputs[i] = NEURAL_ROM[index++];
     }
 
-    // Read neuron weights
+    // Read neuron weights from ROM
     for (uint8_t i = 0; i < n.inputLen; i++) {
       n.weights[i] = NEURAL_ROM[index++];
     }
     
-    //matrixToNeuron(id);                            //fill the neuron struct with the information of the ith neuron
-    int32_t sum = 0;
-    bool hebFlag = false;
+    static uint16_t learningPos = 0;                 //static variable for the position in the learning array; (functions as "global" var) 
+    int32_t sum = 0;                                 //variable to store a running sum for the neuron
+    bool hebFlag = false;                            //boolean flag that indicates hebbian learning done at the current neuron
     uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
 
-    for (uint8_t j = 0; j < 66; j++) {               //check to see if current ID is in the hebbian-capable neuron  list
-      if (HEBBIAN_NEURONS[j] == id) {
-        //sum += learningArray[j];
-        hebFlag = true;
+    for (uint8_t hebIndex = 0; hebIndex < totalLearningNeurons; hebIndex++) {             //check to see if current ID is in the hebbian-capable neuron  list
+      if (HEBBIAN_NEURONS[hebIndex] == id) {                            //if the current neuron being read in is in the hebbian neuron array
+        for (uint8_t hebInput = 0; hebInput < n.inputLen; hebInput++) {             //for every presynapse to the current neuron
+          n.weights[hebInput] += hebbianVariable * learningArray[learningPos + hebInput];            //adjust its weight based on the learning array
+
+          if (learningPos >= learnValMax) {                                     //unless its at the end
+            learningPos = 0;                                            //then reset the counter to zero
+          }
+        }
+
+        hebFlag = true;                                                 //flag to mark the neuron's synapse as doing hebbian learning
       }
     }
 
@@ -1158,8 +982,8 @@ void activationFunction() {
         if (n.inputs[j] == preID) synWeight = n.weights[j];             //if the current pre-synaptic neuron (input) is the one selected in matrix screen, get its weight
       }
 
-      if (n.weights[j] >= 90) {                                         //if the weight has a gap junction indicator (9_)
-        int8_t gapWeight = n.weights[j] - 90;                           //gap junctions are indicated by weights at 90-99
+      if (n.weights[j] >= gapJuncMinVal) {                                         //if the weight has a gap junction indicator (9_)
+        int8_t gapWeight = n.weights[j] - gapJuncMinVal;                           //gap junctions are indicated by weights at 90-99
         uint8_t gapOutput = 0;                                          //gap junctions presynapse outputs are adjusted, as they are not binary
         if (outputList[n.inputs[j]]) gapOutput = (1 + offset);          //outputList value is adjusted for non-binary activation
         if (!outputList[n.inputs[j]]) gapOutput = -(1 + offset);
@@ -1175,20 +999,23 @@ void activationFunction() {
       nextOutputList[id] = false;
     }
 
-//TODO: add learning array calls here
     for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
       if (hebFlag) {                                                    //if current neuron is in list
         if (outputList[n.inputs[j]] && nextOutputList[id]) {            //if the pre and postsynaptic neuron both fire
-          //the specific synapse gets an increased hebbian value
+          //the specific synapse gets an increased hebbian value if its below the max possible value
+          if (learningArray[learningPos] < maxLearningVal) learningArray[learningPos] = learningArray[learningPos] + 1;
         } else if (!outputList[n.inputs[j]] && !nextOutputList[id]) {   //if the pre and postsynaptic neuron both do NOT fire
-          //the specific synapse gets a decreased hebbian value
+          //the specific synapse gets a decreased hebbian value if its above the min possible value
+          if (learningArray[learningPos] > minLearningVal) learningArray[learningPos] = learningArray[learningPos] - 1;
         }
+
+        learningPos++;                                                  //increment the counter for the learning array position
       }
     }
   }
 
   //flush the buffer
-    for (int16_t i = 0; i < 302; i++) {
+    for (int16_t i = 0; i < totalNeurons; i++) {
       outputList[i] = nextOutputList[i];
       id = 0;
     }
@@ -1203,24 +1030,24 @@ void drawInputs(uint8_t scroll, char option1[], char option2[], char option3[], 
 
   if (scroll == 0 || scroll == 1 || scroll == 2) {
     arduboy.setCursor(10,3);
-    arduboy.print("Select Input Type: ");
+    arduboy.print(F("Select Input Type: "));
     arduboy.setCursor(10,23);
-    arduboy.print("- ");
+    arduboy.print(F("- "));
     arduboy.print(option1);
     arduboy.setCursor(10,33);      
-    arduboy.print("- ");
+    arduboy.print(F("- "));
     arduboy.print(option2);
     arduboy.setCursor(10,43);
-    arduboy.print("- ");
+    arduboy.print(F("- "));
     arduboy.print(option3);
     arduboy.setCursor(10,53);      
-    arduboy.print("- ");
+    arduboy.print(F("- "));
     arduboy.print(option4);
   } else if (scroll == 3) {            //if its the last of the input screens just print the one option
     arduboy.setCursor(10,3);
-    arduboy.print("Select Input Type: ");
+    arduboy.print(F("Select Input Type: "));
     arduboy.setCursor(10,23);
-    arduboy.print("- ");
+    arduboy.print(F("- "));
     arduboy.print(option1);
   }
   
@@ -1380,15 +1207,15 @@ void doPos() {
 void printMovementDir(uint16_t xpos, uint16_t ypos) {
   if (vaRatio + daRatio > vbRatio + dbRatio) {
     arduboy.setCursor(xpos, ypos);
-    arduboy.print("BACKWARD-");
+    arduboy.print(F("BACKWARD-"));
   } else {
     arduboy.setCursor(xpos, ypos);      
-    arduboy.print("FORWARD-");
+    arduboy.print(F("FORWARD-"));
   }
   
   if (vaRatio + vbRatio > daRatio + dbRatio) {
-    arduboy.print("L/VENTRAL");
+    arduboy.print(F("L/VENTRAL"));
   } else {
-    arduboy.print("R/DORSAL");
+    arduboy.print(F("R/DORSAL"));
   }
 }
