@@ -1,19 +1,3 @@
-/**    
- * TODO: figure out why gap junction versions of the data set all break... (did K not account for it with generator?)
- * TODO: fix worm movement... does not seem to work...
- *
- * NOTE: drawFaces() neurons may need to be adjustedy
- * TODO: Fix off by one error in diag screen-- currently displaying an extra pre-id synapse
- *
- *    MISC. IDEAS 
- * add an actually accurate perceptron model in diag screen
- * use neuron names instead of IDs?
- * for diag screen, do not display any pre-Ids unless user has entered input to initialize
- * add T menu sprites for the other screens?
- * add sprites for the Different options?
- * quick scrolling in menus?
- */
-
 #include "sprites.h"              //import libraries
 #include "neuralROM.h"
 #include "bit_array.h"
@@ -38,7 +22,7 @@ Arduboy2 arduboy;                 //create arduboy object
 const uint16_t totalNeurons = 302;
 const uint8_t threshold = 15;      //threshold for activation function
 const uint16_t maxSynapse = 65;   //max synapses a neuron can have as inputs
-const uint16_t synapseCount = 8526;
+const uint16_t synapseCount = 8379;
 const uint8_t expressionX = 40;   //X position to draw the expression
 const uint8_t expressionY = 35;   //Y position to draw the expression
 uint16_t currentID = 0;           //interface variable to indicate which neuron is being analyzed
@@ -62,7 +46,6 @@ uint16_t tick = 0;                //connectome ticks (resets to zero at 3628800)
 bool sated = false;               //indicates if worm is sated
 bool isEating = false;            //indicates if worm is eating
 bool isAsleep = false;            //indicates if worm is sleeping
-bool isTonic = false;             //indicates if an input is tonic (or phasic)
 bool isChemotaxis = false;        //indicates if the worm is experiencing some kind of chemotaxis
 uint8_t maxLearningVal = 7;       //maximum possible value of learning array elements (max: 7, min: -8)
 const uint8_t minLearningVal = -8;
@@ -137,32 +120,45 @@ void loop() {
  * and allows the user to make changes
  */
 void doDiagnosticScreen() {
+  const char species[] = "elegans";             //write the name of the species here
+
   lastScreen = 3;
 
   arduboy.clear();
+  arduboy.drawRoundRect(4, 3, 75, 52, 2);       //draw a borders around text
+  arduboy.drawRoundRect(80, 3, 46, 22, 2);
+  arduboy.setCursor(83, 6);                     //write out text
+  arduboy.print(F("NAME:"));
+  arduboy.setCursor(83, 15);
+  arduboy.print(species);
   arduboy.setCursor(10, 10);
-  arduboy.print(currentID);
-  arduboy.print(F(" Syn: "));
-  arduboy.print(numSynapses);
+  arduboy.print(F("NEURON: "));
+  arduboy.setCursor(55, 10);
+  arduboy.print(currentID); 
   arduboy.setCursor(10, 20);
-  arduboy.print(F("Weight: "));
+  arduboy.print(F("SYN CT: "));
+  arduboy.setCursor(55, 20);
+  arduboy.print(numSynapses);
 
-  if (synWeight >= gapJuncMinVal) {
-    arduboy.print(F("GAP-"));
+  arduboy.setCursor(10, 30);                    //write remaining text
+  arduboy.print(F("INPUTS: "));
+  arduboy.setCursor(55, 30);
+  arduboy.print(preID);
+  arduboy.setCursor(10, 40);
+  arduboy.print(F("WEIGHT: "));  
+  arduboy.setCursor(55, 40);
+
+  if (synWeight >= gapJuncMinVal) {             //handle gap junction text
+    arduboy.print(F("GAP"));
     arduboy.print(synWeight - gapJuncMinVal);
   } else {
     arduboy.print(synWeight);
   }
 
-  arduboy.setCursor(10, 30);
-  arduboy.print(F("Pre ID: "));
-  arduboy.print(preID);
-  arduboy.setCursor(10, 40);
-  arduboy.print(F("postID: "));
-  arduboy.print(currentID);
 
-  if (outputList[currentID]) Sprites::drawOverwrite(85, 30, perceptronON, 0);
-  if (!outputList[currentID]) Sprites::drawOverwrite(85, 30, perceptronOFF, 0);
+  arduboy.drawRoundRect(86, 28, 35, 27, 2);     //draw a border around the perceptron model
+  if (outputList[currentID]) Sprites::drawOverwrite(88, 30, perceptronON, 0);       //draw the perceptron image
+  if (!outputList[currentID]) Sprites::drawOverwrite(88, 30, perceptronOFF, 0);
 
   arduboy.display();
 }
@@ -190,30 +186,6 @@ void doInputScreen() {
       if (scroll == 3) {
         drawInputs(3, "State:Sleeping", " ", " ", " ");
       }
-
-      //draw a tonic/phasic key
-      if (isTonic) {
-        arduboy.drawPixel(123, 53);       //indicator pixels
-        arduboy.drawPixel(124, 53);
-        arduboy.drawRect(114, 50, 8, 8);  //draw a border
-        arduboy.drawPixel(117, 52);       //draw a mini "T"
-        arduboy.drawPixel(117, 53);
-        arduboy.drawPixel(117, 54);
-        arduboy.drawPixel(117, 55);
-        arduboy.drawPixel(116, 52);
-        arduboy.drawPixel(118, 52);
-      } else {
-        arduboy.drawPixel(117, 47);       //indicator pixels
-        arduboy.drawPixel(117, 48);
-        arduboy.drawRect(114, 50, 8, 8);  //draw a border
-        arduboy.drawPixel(117, 52);       //draw a mini "P"
-        arduboy.drawPixel(117, 53);
-        arduboy.drawPixel(117, 54);
-        arduboy.drawPixel(117, 55);
-        arduboy.drawPixel(118, 52);
-        arduboy.drawPixel(119, 53);
-        arduboy.drawPixel(118, 54);
-      }
 }
 
 /**
@@ -222,101 +194,56 @@ void doInputScreen() {
 void doButtons() {
   const uint8_t longSkip = 20;
 
+  //exit to bootloader
+  if (arduboy.justPressed(UP_BUTTON) && arduboy.justPressed(DOWN_BUTTON)) arduboy.exitToBootloader();
+
   //MATRIX SCREEN
   if (lastScreen == 1) {
     if (arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON)) {     //activate sense with A+B
       startInputFlag = true;
       if (sense == 0) {
-        if (isTonic) {
-          tonic(false, 5, 0, doGentleNoseTouch);    //sense gentle nose touch
-        } else {
           phasic(false, 0, doGentleNoseTouch);
-        }
       }
       if (sense == 1) {
         isChemotaxis = true;
-        if (isTonic) {
-          tonic(false, 5, 0, doChemoattraction);    //sense attractant chemicals
-        } else {
           phasic(false, 0, doChemoattraction);
-        }
       }
       if (sense == 2) {
         isChemotaxis = true;
-        if (isTonic) {
-          tonic(false, 5, 0, doChemorepulsion);     //sense avoidant chemicals
-        } else {
           phasic(false, 0, doChemoattraction);
-        }
       }
       if (sense == 3) {
-        if (isTonic) {
-          tonic(false, 5, 0, doCoolingResponse);            //sense cooling
-        } else {
           phasic(false, 0, doCoolingResponse);
-        }
       }
       if (sense == 4) {
-        if (isTonic) {
-          tonic(false, 5, 0, doHeatingResponse);            //sense warmth
-        } else {
           phasic(false, 0, doHeatingResponse);
-        }
       }
       if (sense == 5) {
-        if (isTonic) {
-          tonic(false, 5, 0, doPhotosensation);     //sense light
-        } else {
           phasic(false, 0, doPhotosensation);
-        }
       }
       if (sense == 6) {
-        if (isTonic) {
-          tonic(false, 5, 0, doOxygenSensation);    //sense oxygen
-        } else {
           phasic(false, 0, doPhotosensation);
-        }
       }
       if (sense == 7) {
         isChemotaxis = true;
-        if (isTonic) {
-          tonic(false, 5, 0, sensePheromones);      //sense pheromones
-        } else {
           phasic(false, 0, sensePheromones);
-        }
       }
       if (sense == 8) {
         isChemotaxis = false;
-        if (isTonic) {
-          tonic(false, 5, 0, doBaseline);     //activtate baseline state
-        } else {
           phasic(false, 0, doBaseline);
-        }
       }
       if (sense == 9) {                 //toggle fullness state
         sated = false;
-        if (isTonic) {
-          tonic(false, 5, 0, isHungry);
-        } else {
           phasic(false, 0, isHungry);
-        }
       }
       if (sense == 10) {                //toggle fullness state
         sated = true;
-        if (isTonic) {
-          tonic(false, 5, 0, doSatiety);
-        } else {
           phasic(false, 0, doSatiety);
-        }
       }
       if (sense == 11 && !sated) {                //toggle eating state
         isChemotaxis = true;
         isEating = true;
-        if (isTonic) {
-          tonic(false, 5, 0, doGustation);
-        } else {
           phasic(false, 0, doGustation);
-        }
       } else if (sense == 11 && sated) {
         isChemotaxis = true;
         isEating = false;
@@ -325,11 +252,11 @@ void doButtons() {
         delay(50);
       }
       if (sense == 12 && isAsleep) {    //toggle sleep state
-        tonic(false, 5, 0, maintainSleep);
+        phasic(false, 0, maintainSleep);
       } else if (sense == 12 && !isAsleep) {
         isAsleep = true;
         phasic(false, 0, activateSleep);
-        tonic(false, 5, 0, maintainSleep);
+        phasic(false, 0, maintainSleep);
       }
     }
 
@@ -405,28 +332,38 @@ void doButtons() {
     if (arduboy.justPressed(RIGHT_BUTTON)) {                                             //right to matrix
       doMatrixScreen();
       preID = preSynapticNeuronList[synCounter];
-    } else if (arduboy.justPressed(UP_BUTTON) || arduboy.justPressed(B_BUTTON)) {        //UP and B increases by one
+    } else if (arduboy.justPressed(B_BUTTON)) {      //B increases n.inputs array by one
       if (synCounter == numSynapses) {
         synCounter = 0;
       } else {
         synCounter++;
       }
       preID = preSynapticNeuronList[synCounter];
-    } else if (arduboy.justPressed(DOWN_BUTTON) || arduboy.justPressed(A_BUTTON)) {      //DOWN and A decreases by one
+    } else if (arduboy.justPressed(A_BUTTON)) {      //A decreases n.inputs array by one
       if (synCounter == 0) {
         synCounter = numSynapses;
       } else {
         synCounter--;   
       }
       preID = preSynapticNeuronList[synCounter];
+    } else if (arduboy.justPressed(UP_BUTTON)) {     //UP increases current neuron ID
+      if (currentID == 0) {
+        currentID = totalNeurons - 1;
+      } else {
+        currentID--;
+      }
+    } else if (arduboy.justPressed(DOWN_BUTTON)) {   //DOWN decreases current neuron ID
+      if (currentID == totalNeurons - 1) {
+          currentID = 0;
+      } else {
+        currentID++;
+      }      
     }
   }// LEFT unused
   
   //INPUT SELECT SCREEN
   if (lastScreen == 4) {
-    if (arduboy.justPressed(RIGHT_BUTTON)) {                                           //RIGHT button toggles phase type
-      isTonic = !isTonic;
-    } else if (arduboy.justPressed(B_BUTTON) || arduboy.justPressed(DOWN_BUTTON)) {      //B and DOWN incrementally scroll
+    if (arduboy.justPressed(B_BUTTON) || arduboy.justPressed(DOWN_BUTTON)) {      //B and DOWN incrementally scroll
       if (posCount == 12) {
         posCount = 0;
       } else {
@@ -443,8 +380,6 @@ void doButtons() {
     } else if (arduboy.justPressed(LEFT_BUTTON)) {         //left goes to matrix screen
       doMatrixScreen();
     }
-
-    //doInputScreen();
   }  
 
   arduboy.display();
@@ -460,7 +395,7 @@ void doTitleScreen() {
     arduboy.clear();
     arduboy.setCursor(15, 10);
     arduboy.print(F("-ArduNet Elegans-"));
-    arduboy.setCursor(10, 50);
+    arduboy.setCursor(30, 50);
     arduboy.print(F("APP: MATRIX"));
     arduboy.display();
 
@@ -489,7 +424,7 @@ void doMatrixScreen() {
   arduboy.print(F("Mood: "));
 
   arduboy.setCursor(5, 45);
-  arduboy.print(F("CURRENT CELL ID: "));
+  arduboy.print(F("CELL ID: "));
   arduboy.print(currentID);
 
   if (!startInputFlag) {
@@ -504,11 +439,12 @@ void doMatrixScreen() {
 
   uint8_t gridWidth = 17;
   uint8_t gridHeight = 18;
-  uint16_t xPos = 80;
-  uint16_t yPos = 5;
+  uint16_t xPos = 85;
+  uint16_t yPos = 10;
         
-  //draw border on grid of cells
-  arduboy.drawRect(xPos, yPos, (gridWidth + 1)*2, (gridHeight + 1)*2);
+  arduboy.drawRoundRect(xPos - 5, yPos - 5, (gridWidth*2) + 15, (gridHeight*2) + 12, 3);      //draw a border around the matrix
+  arduboy.drawRoundRect(5, 18, 34, 23, 2);      //draw a border around the legend
+  arduboy.drawRect(xPos, yPos, (gridWidth + 1)*2, (gridHeight + 1)*2);  //draw border on grid of cells
 
   int neuronCounter = 0;
       
@@ -752,7 +688,12 @@ void maintainSleep() { //tonic
 void drawFaces() {        
   for (uint16_t i = 0; i < totalNeurons; i++) {
     if (outputList[i]) {
-      if (i == 53 || i == 54 || i == 57 || i == 58 || i == 59 || i == 60) {  //escape behavior; fear
+      if (outputList[39] && !outputList[40]) { //attractive chemotaxis; contented
+        currentExp = 0;           //ASEL is on and ASER is off indicates attractive chemotaxis
+        arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
+        Sprites::drawOverwrite(expressionX + 9, expressionY - 4, content, 0);       //^-^
+        arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);  
+      } else if (i == 53 || i == 54 || i == 57 || i == 58 || i == 59 || i == 60) {  //escape behavior; fear
         currentExp = 1;           //AVA, AVD, AVE; command interneurons for reversals
         arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
         Sprites::drawOverwrite(expressionX + 9, expressionY - 4, fear, 0);          //O_O
@@ -782,11 +723,6 @@ void drawFaces() {
         arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
         Sprites::drawOverwrite(expressionX + 8, expressionY - 4, pain, 0);          //;_;
         arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);         
-      } else if (outputList[39] && !outputList[40]) { //attractive chemotaxis; contented
-        currentExp = 0;           //ASEL is on and ASER is off indicates attractive chemotaxis
-        arduboy.fillRect(expressionX + 7, expressionY - 4, 10, 10, BLACK);
-        Sprites::drawOverwrite(expressionX + 9, expressionY - 4, content, 0);       //^-^
-        arduboy.drawRoundRect(expressionX + 5, expressionY - 6, 17, 8, 2, WHITE);  
       }
     }
   }
@@ -807,14 +743,14 @@ void phasic(bool useGradient, uint8_t mod, void (*senseFunction)()) {
 /**
  * Function to calculate tonic activation of a neuron
  */
-void tonic(bool useGradient, uint8_t mod, uint8_t gradientStep, void (*senseFunction)()) {
+/*void tonic(bool useGradient, uint8_t mod, uint8_t gradientStep, void (*senseFunction)()) {
   if (useGradient) {
     mod = (mod / gradientStep) + 1;                 //modify distance or rate adjustment; 5 is the precision of the gradient, the step of the gradient
     if (tick % mod == 0) senseFunction();
   } else {
     if (tick % mod == 0) senseFunction();
   }
-}
+}*/
 
 /******************************************SENSES********************************************/
 void doGentleNoseTouch() { //tonic
@@ -931,96 +867,6 @@ void doProprioception() { //phasic, unless held then it becomes tonic
   outputList[110] = true;
 }       //DVA
 
-/*************************************SIMULATION FUNCTIONS***************************************/
-/**
- *The activation function is the main simulation, it calculates all the next ticks of the connectome
- * and then sets the next tick to the current one when each has been individually calculated
- */
-void activationFunction() {  
-  uint16_t index = 0;
-  const float hebbianVariable = 0.2;               //constant representing the amount the learning array affects a given synapse
-
-  //calculate next output for all neurons using the current output list
-  for (id; id < totalNeurons; id++) {
-    // Read input length (Number of synapses) from ROM
-    n.inputLen = NEURAL_ROM[index]; 
-    index++;
-
-    // Read neuron inputs from ROM
-    for (uint8_t i = 0; i < n.inputLen; i++) {
-      n.inputs[i] = NEURAL_ROM[index++];
-    }
-
-    // Read neuron weights from ROM
-    for (uint8_t i = 0; i < n.inputLen; i++) {
-      n.weights[i] = NEURAL_ROM[index++];
-    }
-    
-    static uint16_t learningPos = 0;                 //static variable for the position in the learning array; (functions as "global" var) 
-    int32_t sum = 0;                                 //variable to store a running sum for the neuron
-    bool hebFlag = false;                            //boolean flag that indicates hebbian learning done at the current neuron
-    uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
-
-    for (uint8_t hebIndex = 0; hebIndex < totalLearningNeurons; hebIndex++) {             //check to see if current ID is in the hebbian-capable neuron  list
-      if (HEBBIAN_NEURONS[hebIndex] == id) {                            //if the current neuron being read in is in the hebbian neuron array
-        for (uint8_t hebInput = 0; hebInput < n.inputLen; hebInput++) {             //for every presynapse to the current neuron
-          n.weights[hebInput] += hebbianVariable * learningArray[learningPos + hebInput];            //adjust its weight based on the learning array
-
-          if (learningPos >= learnValMax) {                                     //unless its at the end
-            learningPos = 0;                                            //then reset the counter to zero
-          }
-        }
-
-        hebFlag = true;                                                 //flag to mark the neuron's synapse as doing hebbian learning
-      }
-    }
-
-    for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
-      if (id == currentID) {                                            //if the current neuron is the one selected in matrix screen
-        numSynapses = n.inputLen;                                       //get the input length
-        preSynapticNeuronList[j] = n.inputs[j];                         //get the pre-synaptic neuron (inputs) list
-        if (n.inputs[j] == preID) synWeight = n.weights[j];             //if the current pre-synaptic neuron (input) is the one selected in matrix screen, get its weight
-      }
-
-      if (n.weights[j] >= gapJuncMinVal) {                                         //if the weight has a gap junction indicator (9_)
-        int8_t gapWeight = n.weights[j] - gapJuncMinVal;                           //gap junctions are indicated by weights at 90-99
-        uint8_t gapOutput = 0;                                          //gap junctions presynapse outputs are adjusted, as they are not binary
-        if (outputList[n.inputs[j]]) gapOutput = (1 + offset);          //outputList value is adjusted for non-binary activation
-        if (!outputList[n.inputs[j]]) gapOutput = -(1 + offset);
-        sum += gapWeight * gapOutput;                                   //do the summation calculation for a gap junction synapse
-      } else {
-        sum += n.weights[j] * outputList[n.inputs[j]];                  //do the summation calculation on current synapse
-      }
-    }
-
-    if (sum >= threshold) {                                             //check if activation function outputs a true or false
-      nextOutputList[id] = true;                                        //store the output in a buffer
-    } else {
-      nextOutputList[id] = false;
-    }
-
-    for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
-      if (hebFlag) {                                                    //if current neuron is in list
-        if (outputList[n.inputs[j]] && nextOutputList[id]) {            //if the pre and postsynaptic neuron both fire
-          //the specific synapse gets an increased hebbian value if its below the max possible value
-          if (learningArray[learningPos] < maxLearningVal) learningArray[learningPos] = learningArray[learningPos] + 1;
-        } else if (!outputList[n.inputs[j]] && !nextOutputList[id]) {   //if the pre and postsynaptic neuron both do NOT fire
-          //the specific synapse gets a decreased hebbian value if its above the min possible value
-          if (learningArray[learningPos] > minLearningVal) learningArray[learningPos] = learningArray[learningPos] - 1;
-        }
-
-        learningPos++;                                                  //increment the counter for the learning array position
-      }
-    }
-  }
-
-  //flush the buffer
-    for (int16_t i = 0; i < totalNeurons; i++) {
-      outputList[i] = nextOutputList[i];
-      id = 0;
-    }
-}
-
 /*************************************HELPER FUNCTIONS***************************************/
 /**
  * Function to draw the contents of the input screen
@@ -1064,11 +910,6 @@ void drawInputs(uint8_t scroll, char option1[], char option2[], char option3[], 
 
   //draw the input select indicator on the left
   if (posCount == 0 || posCount == 4 || posCount == 8 || posCount == 12) {
-    if (isTonic) {                      //if its a tonic selection draw a pixel to the right of the indicator
-      arduboy.drawPixel(6, 26, WHITE);
-    } else {                            //if its a phasic selection draw a pixel to the left
-      arduboy.drawPixel(3, 23, WHITE);
-    }
     arduboy.drawPixel(2, 26, WHITE);    //draw the rest of the pixel
     arduboy.drawPixel(3, 26, WHITE);
     arduboy.drawPixel(4, 26, WHITE);
@@ -1076,11 +917,6 @@ void drawInputs(uint8_t scroll, char option1[], char option2[], char option3[], 
     arduboy.drawPixel(3, 27, WHITE);
     arduboy.display();
   } else if (posCount == 1 || posCount == 5 || posCount == 9) {
-    if (isTonic) {
-      arduboy.drawPixel(6, 36, WHITE);
-    } else {
-      arduboy.drawPixel(3, 33, WHITE);
-    }
     arduboy.drawPixel(2, 36, WHITE);
     arduboy.drawPixel(3, 36, WHITE);
     arduboy.drawPixel(4, 36, WHITE);
@@ -1088,11 +924,6 @@ void drawInputs(uint8_t scroll, char option1[], char option2[], char option3[], 
     arduboy.drawPixel(3, 37, WHITE);
     arduboy.display();
   } else if (posCount == 2 || posCount == 6 || posCount == 10) {
-    if (isTonic) {
-      arduboy.drawPixel(6, 46, WHITE);
-    } else {
-      arduboy.drawPixel(3, 43, WHITE);
-    }
     arduboy.drawPixel(2, 46, WHITE);
     arduboy.drawPixel(3, 46, WHITE);
     arduboy.drawPixel(4, 46, WHITE);
@@ -1100,11 +931,6 @@ void drawInputs(uint8_t scroll, char option1[], char option2[], char option3[], 
     arduboy.drawPixel(3, 47, WHITE);
     arduboy.display();
   } else if (posCount == 3 || posCount == 7 || posCount == 11) {
-    if (isTonic) {
-      arduboy.drawPixel(6, 56, WHITE);
-    } else {
-      arduboy.drawPixel(3, 53, WHITE);
-    }
     arduboy.drawPixel(2, 56, WHITE);
     arduboy.drawPixel(3, 56, WHITE);
     arduboy.drawPixel(4, 56, WHITE);
@@ -1200,6 +1026,7 @@ void doPos() {
     sense = 12;
   }
 }
+
 /**
  * A small function to draw out the muscle ratio information to the screen.
  * Used by the UI to make information more readable for the user.
@@ -1219,3 +1046,95 @@ void printMovementDir(uint16_t xpos, uint16_t ypos) {
     arduboy.print(F("R/DORSAL"));
   }
 }
+
+
+/*************************************SIMULATION FUNCTIONS***************************************/
+/**
+ *The activation function is the main simulation, it calculates all the next ticks of the connectome
+ * and then sets the next tick to the current one when each has been individually calculated
+ */
+void activationFunction() {  
+  uint16_t index = 0;
+  const float hebbianConstant = 1;               //constant representing the amount the learning array affects a given synapse
+
+  //calculate next output for all neurons using the current output list
+  for (id; id < totalNeurons; id++) {
+    // Read input length (Number of synapses) from ROM
+    n.inputLen = NEURAL_ROM[index]; 
+    index++;
+
+    // Read neuron inputs from ROM
+    for (uint8_t i = 0; i < n.inputLen; i++) {
+      n.inputs[i] = NEURAL_ROM[index++];
+    }
+
+    // Read neuron weights from ROM
+    for (uint8_t i = 0; i < n.inputLen; i++) {
+      n.weights[i] = NEURAL_ROM[index++];
+    }
+    
+    static uint16_t learningPos = 0;                 //static variable for the position in the learning array; (functions as "global" var) 
+    int32_t sum = 0;                                 //variable to store a running sum for the neuron
+    bool hebFlag = false;                            //boolean flag that indicates hebbian learning done at the current neuron
+    uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
+
+    for (uint8_t hebIndex = 0; hebIndex < totalLearningNeurons; hebIndex++) {             //check to see if current ID is in the hebbian-capable neuron  list
+      if (HEBBIAN_NEURONS[hebIndex] == id) {                            //if the current neuron being read in is in the hebbian neuron array
+        for (uint8_t hebInput = 0; hebInput < n.inputLen; hebInput++) {             //for every presynapse to the current neuron
+          n.weights[hebInput] += hebbianConstant * learningArray[learningPos + hebInput];            //adjust its weight based on the learning array
+
+          if (learningPos >= learnValMax) {                                     //unless its at the end
+            learningPos = 0;                                            //then reset the counter to zero
+          }
+        }
+
+        hebFlag = true;                                                 //flag to mark the neuron's synapse as doing hebbian learning
+      }
+    }
+
+    for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
+      if (id == currentID) {                                            //if the current neuron is the one selected in matrix screen
+        numSynapses = n.inputLen;                                       //get the input length
+        preSynapticNeuronList[j] = n.inputs[j];                         //get the pre-synaptic neuron (inputs) list
+        if (n.inputs[j] == preID) synWeight = n.weights[j];             //if the current pre-synaptic neuron (input) is the one selected in matrix screen, get its weight
+      }
+
+      if (n.weights[j] >= gapJuncMinVal) {                                         //if the weight has a gap junction indicator (9_)
+        int8_t gapWeight = n.weights[j] - gapJuncMinVal;                           //gap junctions are indicated by weights at 90-99
+        int8_t gapOutput = 0;                                          //gap junctions presynapse outputs are adjusted, as they are not binary
+        if (outputList[n.inputs[j]]) gapOutput = (1 + offset);          //outputList value is adjusted for non-binary activation
+        if (!outputList[n.inputs[j]]) gapOutput = -(1 + offset);
+        sum += gapWeight * gapOutput;                                   //do the summation calculation for a gap junction synapse
+      } else {
+        sum += n.weights[j] * outputList[n.inputs[j]];                  //do the summation calculation on current synapse
+      }
+    }
+
+    if (sum >= threshold) {                                             //check if activation function outputs a true or false
+      nextOutputList[id] = true;                                        //store the output in a buffer
+    } else {
+      nextOutputList[id] = false;
+    }
+
+    for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
+      if (hebFlag) {                                                    //if current neuron is in list
+        if (outputList[n.inputs[j]] && nextOutputList[id]) {            //if the pre and postsynaptic neuron both fire
+          //the specific synapse gets an increased hebbian value if its below the max possible value
+          if (learningArray[learningPos] < maxLearningVal) learningArray[learningPos] = learningArray[learningPos] + 1;
+        } else if (!outputList[n.inputs[j]] && !nextOutputList[id]) {   //if the pre and postsynaptic neuron both do NOT fire
+          //the specific synapse gets a decreased hebbian value if its above the min possible value
+          if (learningArray[learningPos] > minLearningVal) learningArray[learningPos] = learningArray[learningPos] - 1;
+        }
+
+        learningPos++;                                                  //increment the counter for the learning array position
+      }
+    }
+  }
+
+  //flush the buffer
+    for (int16_t i = 0; i < totalNeurons; i++) {
+      outputList[i] = nextOutputList[i];
+      id = 0;
+    }
+}
+

@@ -1,49 +1,3 @@
-/**
- * TODO: fix worm movement... does not seem to work...
- *
- * NOTE: drawFaces() neurons may need to be adjusted
- * TODO: add collision logic for rock1, rock3, leaves, and sticks... "hitboxes"?
- * TODO: implement petting when bond is good (check weights of relevant synapses)
- *
- *    MISC. IDEAS
- * make screen prettier?... 
- *      remove stipling? 
- *      make larger tree sprite with more intricate roots? 
- *      change rock sprites?
- * simulation demarcations updated
- *      add numbers to the simulation demarcations to show gas level and temperature readouts
- *      indicate both goldilocks numbers and nociceptive numbers
- * create a cycle of where the leaves fall from the tree
- *      blink after so many ticks
- *      then disappear and drop food
- *      when it is eaten the cycle repeats
- * create randomizers for toxin spawn position and sun/moon
- *      if moon: black out some sun pixels, remove noxious surface heat and replace with cold, remove phototaxis
- *      if sun: full sun sprite, keeps noxious surface heat, keeps phototaxis
- * add multiple "screens" 
- *      first screen has mostly sticks and a toxin
- *      second has sticks and leaves
- *      third has sticks, leaves, and a tree 
- *      make sensory gradients larger
- */
-
-/*
-Sources for Memory Neurons:
-    https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2013.00088/full
-    https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0006019
-    https://www.eneuro.org/content/9/4/ENEURO.0084-22.2022
-
-sources for satiety circuit
-    https://pmc.ncbi.nlm.nih.gov/articles/PMC3726252/
-
-sources for definitional help
-    https://www.biorxiv.org/content/10.1101/2025.07.21.665845v1.full
-
-Credit to Nategri for the motor neuron summation idea for tank drive
-Credit to wormatlas for learning and memory-related synapses
-*/
-
-
 #include "sprites.h"              //import libraries
 #include "neuralROM.h"
 #include "bit_array.h"
@@ -146,6 +100,9 @@ void loop() {
 void doButtons() {
   const uint8_t repRadius = 10;
   const uint8_t cursorHop = 5;
+
+  //exit to bootloader
+  if (arduboy.justPressed(UP_BUTTON) && arduboy.justPressed(DOWN_BUTTON)) arduboy.exitToBootloader();
 
   //if last screen was the simulation
     if (arduboy.justPressed(A_BUTTON)) {
@@ -985,7 +942,7 @@ void doProprioception() { //phasic, unless held then it becomes tonic
  */
 void activationFunction() {  
   uint16_t index = 0;
-  const float hebbianVariable = 0.2;               //constant representing the amount the learning array affects a given synapse
+  const float hebbianConstant = 1;               //constant representing the amount the learning array affects a given synapse
 
   //calculate next output for all neurons using the current output list
   for (id; id < totalNeurons; id++) {
@@ -1010,7 +967,7 @@ void activationFunction() {
     for (uint8_t hebIndex = 0; hebIndex < totalLearningNeurons; hebIndex++) {             //check to see if current ID is in the hebbian-capable neuron  list
       if (HEBBIAN_NEURONS[hebIndex] == id) {                            //if the current neuron being read in is in the hebbian neuron array
         for (uint8_t hebInput = 0; hebInput < n.inputLen; hebInput++) {             //for every presynapse to the current neuron
-          n.weights[hebInput] += hebbianVariable * learningArray[learningPos + hebInput];            //adjust its weight based on the learning array
+          n.weights[hebInput] += hebbianConstant * learningArray[learningPos + hebInput];            //adjust its weight based on the learning array
 
           if (learningPos >= learnValMax) {                                     //unless its at the end
             learningPos = 0;                                            //then reset the counter to zero

@@ -1,15 +1,3 @@
-/**
- * TODO: fix worm movement... does not seem to work...
- *
- * TODO: add sprites for the different options
- *      -host sim sprite
- *      -save editor sprite
- *      -save to serial sprite
- * TODO: make it so the incoming serial signal can tonically activate inputs and select the variable type
- *      -do this by adding new if-statements for tonic activation, such as T-HT (tonic heat)
- *      -when activated it uses static variables in the sim function to fire persistently between loops
- */
-
 #include "sprites.h"              //import libraries
 #include "neuralROM.h"
 #include "bit_array.h"
@@ -70,7 +58,6 @@ void loop() {
   }
 
   doTitleScreen();
-  activationFunction();                         //do the main calculation of the connectome
   arduboy.drawRoundRect(0, 0, screenWidth, screenHeight, 3);      //draw a border around the screen
 
   if (tick == maxTick) {                        //reset tick Counter for gradient senses when it reaches the factorial of 10 (each gradient is 5)
@@ -83,7 +70,7 @@ void loop() {
   arduboy.pollButtons();                        //get buttons pressed and send to function to process them
   doButtons();                                  //get user input and update the selected option variable
 
-  if (selectedOption == 1) doSerialPrintScreen(); 
+  if (selectedOption == 1) doDeleteSave(); 
   if (selectedOption == 2) doSerialHostScreen();
   if (selectedOption == 3) doSaveEditorScreen();
 
@@ -117,6 +104,9 @@ void doTitleScreen() {
  * function to query which buttons are pressed, setting up proper screen transitions
  */
 void doButtons() {
+  //exit to bootloader
+  if (arduboy.justPressed(UP_BUTTON) && arduboy.justPressed(DOWN_BUTTON)) arduboy.exitToBootloader();
+
   if (arduboy.justPressed(DOWN_BUTTON) || arduboy.justPressed(RIGHT_BUTTON)) {  //increment position in options
     if (option == 2) {
       option = 0;
@@ -151,11 +141,12 @@ void doOptions() {
   arduboy.setCursor(38, 5);
   arduboy.print(F("-OPTIONS-"));                   //print out the options
   arduboy.setCursor(10, 20);
-  arduboy.print(F("PRINT SAVE"));
+  arduboy.print(F("DELETE SAVE"));
   arduboy.setCursor(10, 35);
   arduboy.print(F("HOST SIM"));
   arduboy.setCursor(10, 50);
   arduboy.print(F("EDIT SAVE"));
+  arduboy.drawRect(83, 20, 36, 36);
 
   if (option == 0) {
     arduboy.drawPixel(4, 23);
@@ -164,6 +155,7 @@ void doOptions() {
     arduboy.drawPixel(5, 22);
     arduboy.drawPixel(5, 24);
     arduboy.display();
+    Sprites::drawOverwrite(85, 22, erase, 0);    
   } else if (option == 1) {
     arduboy.drawPixel(4, 38);
     arduboy.drawPixel(5, 38);
@@ -171,6 +163,7 @@ void doOptions() {
     arduboy.drawPixel(5, 37);
     arduboy.drawPixel(5, 39);
     arduboy.display();
+    Sprites::drawOverwrite(85, 22, host, 0);
   } else if (option == 2) {
     arduboy.drawPixel(4, 53);
     arduboy.drawPixel(5, 53);
@@ -178,44 +171,71 @@ void doOptions() {
     arduboy.drawPixel(5, 52);
     arduboy.drawPixel(5, 54);
     arduboy.display();
+    Sprites::drawOverwrite(85, 22, edit, 0);
   }
 }
 
 /**
  * Function to do logic for the options serial print subscreen
  */
-void doSerialPrintScreen() {  
+void doDeleteSave() {  
   arduboy.clear();
-  arduboy.setCursor(2, 5);
-  arduboy.print(F("Print: Save -> Serial"));   //print out a screen title
-  uint16_t arraySize = learningArray.count;
-  arduboy.drawRect(2, 30, (arraySize/saveSizeMod) + 1, 5);  //draw a status bar
-    
-  Serial.begin(9600);
+  
+  while (!(arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON))) {  //if user selects NO
+    arduboy.setCursor(2, 5);
+    arduboy.print(F("DELETE SAVE DATA?"));   //print out a screen title
+    arduboy.setCursor(30, 15);
+    arduboy.print(F("(L+R) - YES"));
+    arduboy.setCursor(30, 25);
+    arduboy.print(F("(A+B) - NO"));
+    arduboy.display();
 
-  for (uint16_t i = 0; i < arraySize; i++) {  //print each element of the learning array save data
-    int8_t val = learningArray[i];
-    Serial.println(val);
+    if (arduboy.justPressed(LEFT_BUTTON) && arduboy.justPressed(RIGHT_BUTTON)) {            //if user selects YES
+      arduboy.clear();
+      arduboy.drawRect(2, 40, (learningArray.size/saveSizeMod) + 1, 5);  //draw a status bar
+      arduboy.setCursor(5, 5);
+      arduboy.print(F("Erasing Data..."));
 
-    if (i % saveSizeMod == 0) {
-      arduboy.drawPixel(3 + (i / saveSizeMod), 31, WHITE);  //top bar pixel
-      arduboy.drawPixel(3 + (i / saveSizeMod), 32, WHITE);  //middle bar pixel
-      arduboy.drawPixel(3 + (i / saveSizeMod), 33, WHITE);  //bottom bar pixel
+      for (uint16_t i = 0; i < learningArray.count; i++) {  //set the learning array to zeroes
+        learningArray[i] = 0;
+      }
+
+      for (uint16_t i = 0; i < learningArray.size; i++) {  //save that to eeprom
+        EEPROM.write(EEPROM_STORAGE_SPACE_START + i, learningArray.compressed[i]);
+  
+        if (i % saveSizeMod == 0) {
+          arduboy.drawPixel(3 + (i / saveSizeMod), 41, WHITE);  //top bar pixel
+          arduboy.drawPixel(3 + (i / saveSizeMod), 42, WHITE);  //middle bar pixel
+          arduboy.drawPixel(3 + (i / saveSizeMod), 43, WHITE);  //bottom bar pixel
+          arduboy.display();
+        }
+
+        delay(10);  //delay to give time to update
+      }
+      
+      arduboy.clear();  //print success message
+      arduboy.drawRoundRect(0, 0, screenWidth, screenHeight, 3);
+      arduboy.setCursor(2, 5);
+      arduboy.print(F("SAVE DATA DELETED."));
       arduboy.display();
+      delay(3000);
+
+      selectedOption = 0;     //go back to options screen
+      doOptions();
+
+      return;
     }
-    delay(10);  //delay to give time to update
+
+    arduboy.pollButtons();
   }
 
-  Serial.end();
-
-  arduboy.clear();  //print out success message
+  arduboy.clear();    //if the user selected NO
   arduboy.drawRoundRect(0, 0, screenWidth, screenHeight, 3);
-  arduboy.setCursor(5, 5);
-  arduboy.print(F("SERIAL DATA SENT!"));
   arduboy.display();
-  delay(3000);  //delay before going to normal screen again
+  delay(1000);
 
   selectedOption = 0;
+  doOptions();
 }
 
 /**
@@ -223,6 +243,7 @@ void doSerialPrintScreen() {
  */
 void doSerialHostScreen() {
   char serChar;
+  static bool isSimulating = false;
 
   arduboy.clear();
   arduboy.setCursor(5, 5);
@@ -244,13 +265,17 @@ void doSerialHostScreen() {
     arduboy.print(serInput[3]);
 
     if (serChar == '[' || serChar == ',') {               //simulation start character
+      isSimulating = true;
       serInput[0] = Serial.read();      //read in the next four characters
       serInput[1] = Serial.read();
       serInput[2] = Serial.read();
       serInput[3] = Serial.read();
     } else if (serChar == ']') {        //simulation end character
+      isSimulating = false;
       break;
     }
+
+    if (isSimulating) activationFunction(); //run simulation if the proper serial command was received
 
 /*                                          Input Legend
                   .MTR = write output matrix to serial,
@@ -421,6 +446,10 @@ void doSaveEditorScreen() {
     arduboy.drawPixel(63, 21);
     arduboy.drawPixel(65, 21);
 
+    //draw the current elements number
+    arduboy.setCursor(62, 39);
+    arduboy.print(savePos);
+
     //print current element
     arduboy.setCursor(49, 25);
     arduboy.print(F("["));
@@ -438,7 +467,7 @@ void doSaveEditorScreen() {
     arduboy.drawPixel(65, 35);
 
     //print next element (if not last)
-    if (savePos < learningArray.count) {
+    if (savePos != learningArray.count - 1) {
       arduboy.setCursor(79, 25);
       arduboy.print(F("-"));
       arduboy.setCursor(85, 25);
@@ -465,16 +494,16 @@ void doSaveEditorScreen() {
     int8_t saveData = learningArray[savePos];
 
     if (arduboy.justPressed(RIGHT_BUTTON)) {        //if R press; move to next position in array
-      if (savePos != learningArray.count + 1) {
+      if (savePos != learningArray.count - 1) {
         savePos++;
       } else {
         savePos = 0;
       }
     } else if (arduboy.justPressed(LEFT_BUTTON)) {  //if L press; move to prev position in array
-      if (savePos != -1) {
+      if (savePos != 0) {
         savePos--;
       } else {
-        savePos = learningArray.count;
+        savePos = learningArray.count - 1;
       }      
     } else if (arduboy.justPressed(UP_BUTTON)) {    //if Up press; change value in current position
       if (saveData >= maxLearningVal) {
@@ -503,7 +532,7 @@ void doSaveEditorScreen() {
       arduboy.pollButtons();
       delay(3000);
 
-      selectedOption = 3;
+      selectedOption = 0;
       doOptions();
 
       return;
@@ -720,7 +749,7 @@ void doProprioception() { //phasic, unless held then it becomes tonic
  */
 void activationFunction() {  
   uint16_t index = 0;
-  const float hebbianVariable = 0.2;               //constant representing the amount the learning array affects a given synapse
+  const float hebbianConstant = 1;               //constant representing the amount the learning array affects a given synapse
 
   //calculate next output for all neurons using the current output list
   for (id; id < totalNeurons; id++) {
@@ -745,7 +774,7 @@ void activationFunction() {
     for (uint8_t hebIndex = 0; hebIndex < totalLearningNeurons; hebIndex++) {             //check to see if current ID is in the hebbian-capable neuron  list
       if (HEBBIAN_NEURONS[hebIndex] == id) {                            //if the current neuron being read in is in the hebbian neuron array
         for (uint8_t hebInput = 0; hebInput < n.inputLen; hebInput++) {             //for every presynapse to the current neuron
-          n.weights[hebInput] += hebbianVariable * learningArray[learningPos + hebInput];            //adjust its weight based on the learning array
+          n.weights[hebInput] += hebbianConstant * learningArray[learningPos + hebInput];            //adjust its weight based on the learning array
 
           if (learningPos >= learnValMax) {                                     //unless its at the end
             learningPos = 0;                                            //then reset the counter to zero
@@ -759,7 +788,7 @@ void activationFunction() {
     for (uint8_t j = 0; j < n.inputLen; j++) {                          //loop over every presynaptic neuron
       if (n.weights[j] >= gapJuncMinVal) {                                         //if the weight has a gap junction indicator (9_)
         int8_t gapWeight = n.weights[j] - gapJuncMinVal;                           //gap junctions are indicated by weights at 90-99
-        uint8_t gapOutput = 0;                                          //gap junctions presynapse outputs are adjusted, as they are not binary
+        int8_t gapOutput = 0;                                          //gap junctions presynapse outputs are adjusted, as they are not binary
         if (outputList[n.inputs[j]]) gapOutput = (1 + offset);          //outputList value is adjusted for non-binary activation
         if (!outputList[n.inputs[j]]) gapOutput = -(1 + offset);
         sum += gapWeight * gapOutput;                                   //do the summation calculation for a gap junction synapse

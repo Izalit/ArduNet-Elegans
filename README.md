@@ -55,7 +55,7 @@ DIAGNOSTIC SCREEN: This screen allows you to see information about the neuron th
 
 You can scroll through each these synapses using the A and B buttons, the Pre ID will change, as this is the ID of the presynaptic neuron. The postID will stay the same, as this is selected neuron. On start-up a placeholder value of 999 is sometimes displayed; this placeholder should go away after any interaction, though. Finally, on the right it will show you a diagram of the neuron connected to the synapses-- if the neuron is filled in that means it just fired! If it is empty, then it has not. The pre and post-synaptic circles attached to this diagram are just abstractions and do not actually represent the displayed number of synapses. Yet.
 
-INPUT SELECT SCREEN: This simple screen lets you choose between some input modalities for when you press the A and B buttons in the *Matrix Screen* simply press up or down (or A and B) to scroll through the list, and whichever sense the cursor is on is the sense that will be used when pressing the buttons in the *Matrix Screen*. You can also set the input type to tonic (a steady and constant activation) or phasic (a sudden and single activations) inputs to the neuron by clicking right and togging between the P and T indicators (P is marked by a tick mark on top of the "*" selector, T is marked by a horizontal tick). From here just press left to go to the matrix once more.
+INPUT SELECT SCREEN: This simple screen lets you choose between some input modalities for when you press the A and B buttons in the *Matrix Screen* simply press up or down (or A and B) to scroll through the list, and whichever sense the cursor is on is the sense that will be used when pressing the buttons in the *Matrix Screen*. Please note that all inputs for the matrix app are defaulted to phasic (single big activation spikes of sensory neurons), so no gradient or background activation of neurons here-- this means it will not be as realistic as the simulation app. Regardless, from here just press left to go to the matrix once more.
 
 SETTINGS: The last screen is the settings screen. Use the L/R buttons on the D-Pad to move the selector cursor left and right. Clicking A goes to the appropriate sub-menu for the option selected. The "SAVE" option saves whatever learned changes have been made while doing the inputs using the input screen, and when it is selected it uses a status bar to indicate progress. The "PRINT SAVE" setting prints the save data array over serial to be used with other devices. A loading bar shows progress of sent information. Pretty simple. Lastly there is a credits option that pops up a little box with the main programming team for the project. 
 
@@ -103,31 +103,23 @@ Simulation:
 * Make the worm's movement more biologically accurate (remove the "tank-drive" abstraction from current code), make doProprioception() more bio-accurate
 
 Matrix:
-* !! - Diag screen seems to have an error where it prints a random negative value in the weights list sometimes? Memory error of some kind? Off by one?
-
-* !! - Change or remove implementation of the tonic activation option in the input screen; could have it persist after it is activated or while buttons are held
+* !! - Diag screen seems to have an error where it prints a random negative value in the weights list sometimes? Memory error of some kind? Off by one? This seems inconsistent???
 
 * Add quick scrolling for the currently selected neuron
 
 * Print out neuron IDs as irl names in the diag screen and the matrix screen
 
-* For *Matrix Ver.*, add an actually accurate percpetron model in diag screen
+* Add an actual percpetron model in diag screen that labels the number of inputs
 
 Options:
-* !! - Remove the serial printout option (it is redundant)
-
-* !! - Add an option to wipe the entire eeprom/save data
-
-* !! - in the save editor add a number showing what neuron the center neuron is (print its position in the learning array to the middle of screen)
-
-* Add sprites for each option
-
 * Make it possible to do tonic activation over serial in the host function
 
 * in the save editor add quick scrolling
 
 ## Installation
-Reccommended Method: uploading to your Arduboy using the hex files (TBD). Theres a few tools out there for this, but I recommend using like the official arduboy flashers like this https://community.arduboy.com/t/arduboy-web-flasher/11633.
+*BEFORE INSTALLING PLEASE READ:* If you have any save data on your arduboy, any other games or files, PLEASE move them off the Arduboy before putting *any* of this software on the device. This code, is not just extremely unstable, but it also *USES THE ENTIRE EEPROM* (except for the settings at the beginning) and as such it is not meant to be on an arduboy flashcart with anything except other tools made specifically for the AI as there is *NO ROOM FOR OTHER GAMES TO SAVE WITH THESE APPS* on the device. The current suite contains just the Matrix, Simulation, and Options Applications, so no other Arduboy games or programs that use its EEPROM are compatible.
+
+Reccommended Method: uploading to your Arduboy using the hex files (*TBD*). Theres a few tools out there for this, but I recommend using like the official arduboy flashers like this https://community.arduboy.com/t/arduboy-web-flasher/11633.
 
 From Source: You are welcome to try but I wouldn't do it for personal use. To install this from source, simply put the ArduNet folders in your arduino sketches folder, usually found in your documents, but you may have installed it elsewhere. You'll need the arduboy2 library and will also need to have the arduboy board added to your board manager, but other than that you should be able to select the board and port and upload it just like that. With some editing you could also probably get this to work on other arduino devices. I plan on uploading some code for that eventually...
 
