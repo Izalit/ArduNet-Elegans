@@ -433,7 +433,6 @@ I plan to make it so you can see which neuron this is soon, but for right now he
 :D
 ## Credits
 ArduNet Team:
-
 Izalit: (https://github.com/Izalit/) Lead programmer, designer, researcher, and project coordinator. Various iterations of this project have been my passion since my first year of college. I'm glad to finally have something to say for all the hard work. It was not possible without the help of everyone listed here. My hope is to use this as a platform to jump to more generalized AI projects later~!
 
 Dinokaiz2: (https://github.com/Dinokaiz2/) My friend K, who made the compression tool and the reader for the neural ROM and the learning array, as well as for their assistance when I consulted them in logic and debugging particularly difficult issues. They've been an incredible friend and support while I've worked on this project over the years and I really cannot thank them enough for the incredible work they've done to make this possible.
@@ -443,7 +442,6 @@ Gwyndoll: (https://github.com/gwyndoll) My partner, Molly, who I would like to p
 Nova: Inspiration and consulation for this project and its goals. You'll likely hear more from them in the future.
 
 Referenced Works:
-
 B. Nikhil: as their work on wormweb (http://wormweb.org/neuralnet#c=BAG&m=1) was used for finding connections between neurons and for debugging. I love their webtool it is amazingly rad.
 
 B. Tahereh et al.: Their paper "Mechanisms of plasticity in a Caenorhabditis elegans mechanosensory circuit" helped identify the plastic neurons in the mechanosensory circuit to add to our hebbian learning array (https://www.frontiersin.org/journals/physiology/articles/10.3389/fphys.2013.00088/full)
