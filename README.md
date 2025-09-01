@@ -92,8 +92,6 @@ General:
 * !! - Worm movement seems to currently be non-functional (maybe because of missing gap junctions?)
 
 Simulation:
-* !! - Add collision logic for the rest of the rocks, leaves, and stick sprites, not just the pixel where it is printed at
-
 * Add numbers to the simulation demarcations to show gas level and temperature readouts, indicate both goldilocks numbers and nociceptive numbers
 
 * Create a cycle of where the leaves fall from the tree, blink after so many ticks, then disappear and drop food; when it is eaten the cycle repeats

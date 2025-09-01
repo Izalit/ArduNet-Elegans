@@ -22,7 +22,7 @@ Arduboy2 arduboy;                 //create arduboy object
 const uint16_t totalNeurons = 302;
 const uint8_t threshold = 15;      //threshold for activation function
 const uint16_t maxSynapse = 65;   //max synapses a neuron can have as inputs
-const uint16_t synapseCount = 8379;
+const uint16_t synapseCount = 8526;
 const uint8_t expressionX = 40;   //X position to draw the expression
 const uint8_t expressionY = 35;   //Y position to draw the expression
 uint16_t currentID = 0;           //interface variable to indicate which neuron is being analyzed

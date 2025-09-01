@@ -760,17 +760,45 @@ void calculateGradients() {
  * Function to calculate collisions of simulation objects
  */
 void calculateCollisions() {
-//TODO: add collisions for other obstacles: 4 (leaf) and 5 (leaf)
-  //if worm hits obstacles 1 (rock), 2 (stick), or 3 (rock), activate touch
-  if ((wormX == obstacleX1 && wormY == obstacleY1) || (wormX == obstacleX2 && wormY == obstacleY2) || (wormX == obstacleX3 && wormY == obstacleY3)) {
+  //obstacle 1 (rock 1) collisions
+  if ((obstacleX1 <= wormX && wormX <= obstacleX1 + 18) && 
+      (obstacleY1 <= wormY && wormY <= obstacleY1 + 15)) {
     //activate harsh touch
+    doHarshNoseTouch();
+  }
+
+  //obstacle 2 (stick) collisions
+  if ((obstacleX2 <= wormX && wormX <= obstacleX2 + 24) && 
+      (obstacleY2 <= wormY && wormY <= obstacleY2 + 5)) {
+    //activate harsh touch
+    doHarshNoseTouch();
+  }
+
+  //obstacle 3 (rock 3) collisions
+  if ((obstacleX3 <= wormX && wormX <= obstacleX3 + 18) && 
+      (obstacleY3 <= wormY && wormY <= obstacleY3 + 19)) {
+    //activate harsh touch
+    doHarshNoseTouch();
+  }
+
+  //obstacle 4 (leaf) collisions
+  if ((obstacleX4 <= wormX && wormX <= obstacleX4 + 9) && 
+      (obstacleY4 <= wormY && wormY <= obstacleY4 + 8)) {
+    //activate gentle touch
+    doGentleNoseTouch();
+  }
+  
+  //obstacle 5 (leaf) collisions
+  if ((obstacleX5 <= wormX && wormX <= obstacleX5 + 9) && 
+      (obstacleY5 <= wormY && wormY <= obstacleY5 + 8)) {
+    //activate gentle touch
     doGentleNoseTouch();
   }
 
-  //if worm hits border, activate soft touch
+  //if worm hits border, activate harsh touch
   if (wormX == 0 || wormX == screenWidth || wormY == 0 || wormY == screenHeight) {
-    //activate soft touch
-    doGentleNoseTouch();
+    //activate harsh touch
+    doHarshNoseTouch();
   }
 
   //if worm hits cursor, activate soft touch
