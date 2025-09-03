@@ -72,7 +72,7 @@ ADEL,0,0,SIBVR,2,chemical,false,false,false,false,false,false,false,false,false,
 ADEL,0,0,SMBDR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 ADEL,0,0,SMBVL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 ADEL,0,0,URBL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-ADEL,0,0,VB01,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+ADEL,0,0,VB1,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 ADER,0,0,ADAR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 ADER,0,0,ADEL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 ADER,0,0,ALNR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -277,7 +277,7 @@ AIBR,Glu,0,SIADL,1,chemical,false,false,false,false,false,false,false,false,fals
 AIBR,Glu,0,SIBVR,2,chemical,true,false,false,false,false,false,false,false,false,+
 AIBR,Glu,0,SMDDL,17,chemical,true,false,false,false,false,false,false,false,false,+
 AIBR,Glu,0,SMDVL,7,chemical,true,false,false,false,false,false,false,false,false,+
-AIBR,Glu,0,VB01,3,chemical,true,false,false,false,false,false,false,false,false,+
+AIBR,Glu,0,VB1,3,chemical,true,false,false,false,false,false,false,false,false,+
 AIML,Glu,ACh,AIAL,11,chemical,true,true,false,false,false,false,false,false,true,complex
 AIML,Glu,ACh,ALML,1,chemical,true,true,true,false,false,false,true,true,true,complex
 AIML,Glu,ACh,ASGL,8,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -396,7 +396,7 @@ AIZL,Glu,0,SMBDL,24,chemical,false,false,false,false,false,false,false,false,fal
 AIZL,Glu,0,SMBVL,21,chemical,false,false,false,false,false,false,false,false,false,no pred
 AIZL,Glu,0,SMDVL,3,chemical,true,false,false,false,false,false,false,false,false,+
 AIZL,Glu,0,URYDL,3,chemical,true,false,false,false,false,false,false,false,false,+
-AIZL,Glu,0,VB02,1,chemical,true,false,false,false,false,false,false,false,false,+
+AIZL,Glu,0,VB2,1,chemical,true,false,false,false,false,false,false,false,false,+
 AIZR,Glu,0,ADFR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AIZR,Glu,0,AIAR,5,chemical,true,true,false,false,false,false,false,false,true,complex
 AIZR,Glu,0,AIBL,50,chemical,true,false,false,false,false,false,false,false,false,+
@@ -479,33 +479,33 @@ AQR,Glu,0,RIAR,4,chemical,true,true,false,false,false,false,false,false,true,com
 AQR,Glu,0,RIGL,1,chemical,true,false,false,false,false,false,false,false,false,+
 AQR,Glu,0,RIR,1,chemical,true,false,false,false,false,false,false,false,false,+
 AQR,Glu,0,URXL,5,chemical,false,false,false,false,false,false,false,false,false,no pred
-AS01,ACh,0,AS01,3,chemical,false,false,true,false,false,false,false,false,false,+
-AS01,ACh,0,DA01,8,chemical,false,false,true,false,false,false,false,false,false,+
-AS01,ACh,0,DB01,3,chemical,false,false,true,false,false,false,false,false,false,+
-AS01,ACh,0,DD01,2,chemical,false,false,true,false,false,false,false,false,false,+
-AS01,ACh,0,VD01,20,chemical,false,false,true,false,false,false,false,false,false,+
-AS02,ACh,0,DB01,1,chemical,false,false,true,false,false,false,false,false,false,+
-AS02,ACh,0,DD01,3,chemical,false,false,true,false,false,false,false,false,false,+
-AS02,ACh,0,RID,2,chemical,false,false,true,false,false,false,false,false,false,+
-AS02,ACh,0,VD02,21,chemical,false,false,true,false,false,false,false,false,false,+
-AS03,ACh,0,DA03,1,chemical,false,false,true,false,false,false,false,false,false,+
-AS03,ACh,0,VD03,23,chemical,false,false,true,false,false,false,false,false,false,+
-AS04,ACh,0,DA03,2,chemical,false,false,true,false,false,false,false,false,false,+
-AS04,ACh,0,DB02,2,chemical,false,false,true,false,false,false,false,false,false,+
-AS04,ACh,0,DD01,2,chemical,false,false,true,false,false,false,false,false,false,+
-AS04,ACh,0,DD02,4,chemical,false,false,true,false,false,false,false,false,false,+
-AS04,ACh,0,VD04,21,chemical,false,false,true,false,false,false,false,false,false,+
-AS05,ACh,0,AS05,3,chemical,false,false,true,false,false,false,false,false,false,+
-AS05,ACh,0,VD05,12,chemical,false,false,true,false,false,false,false,false,false,+
-AS06,ACh,0,DA05,1,chemical,false,false,true,false,false,false,false,false,false,+
-AS06,ACh,0,DB04,1,chemical,false,false,true,false,false,false,false,false,false,+
-AS06,ACh,0,VD06,20,chemical,false,false,true,false,false,false,false,false,false,+
-AS07,ACh,0,VD07,20,chemical,false,false,true,false,false,false,false,false,false,+
-AS08,ACh,0,VD08,20,chemical,false,false,true,false,false,false,false,false,false,+
-AS09,ACh,0,VD09,20,chemical,false,false,true,false,false,false,false,false,false,+
+AS1,ACh,0,AS1,3,chemical,false,false,true,false,false,false,false,false,false,+
+AS1,ACh,0,DA1,8,chemical,false,false,true,false,false,false,false,false,false,+
+AS1,ACh,0,DB1,3,chemical,false,false,true,false,false,false,false,false,false,+
+AS1,ACh,0,DD1,2,chemical,false,false,true,false,false,false,false,false,false,+
+AS1,ACh,0,VD1,20,chemical,false,false,true,false,false,false,false,false,false,+
+AS2,ACh,0,DB1,1,chemical,false,false,true,false,false,false,false,false,false,+
+AS2,ACh,0,DD1,3,chemical,false,false,true,false,false,false,false,false,false,+
+AS2,ACh,0,RID,2,chemical,false,false,true,false,false,false,false,false,false,+
+AS2,ACh,0,VD2,21,chemical,false,false,true,false,false,false,false,false,false,+
+AS3,ACh,0,DA3,1,chemical,false,false,true,false,false,false,false,false,false,+
+AS3,ACh,0,VD3,23,chemical,false,false,true,false,false,false,false,false,false,+
+AS4,ACh,0,DA3,2,chemical,false,false,true,false,false,false,false,false,false,+
+AS4,ACh,0,DB2,2,chemical,false,false,true,false,false,false,false,false,false,+
+AS4,ACh,0,DD1,2,chemical,false,false,true,false,false,false,false,false,false,+
+AS4,ACh,0,DD2,4,chemical,false,false,true,false,false,false,false,false,false,+
+AS4,ACh,0,VD4,21,chemical,false,false,true,false,false,false,false,false,false,+
+AS5,ACh,0,AS5,3,chemical,false,false,true,false,false,false,false,false,false,+
+AS5,ACh,0,VD5,12,chemical,false,false,true,false,false,false,false,false,false,+
+AS6,ACh,0,DA5,1,chemical,false,false,true,false,false,false,false,false,false,+
+AS6,ACh,0,DB4,1,chemical,false,false,true,false,false,false,false,false,false,+
+AS6,ACh,0,VD6,20,chemical,false,false,true,false,false,false,false,false,false,+
+AS7,ACh,0,VD7,20,chemical,false,false,true,false,false,false,false,false,false,+
+AS8,ACh,0,VD8,20,chemical,false,false,true,false,false,false,false,false,false,+
+AS9,ACh,0,VD9,20,chemical,false,false,true,false,false,false,false,false,false,+
 AS10,ACh,0,VD10,10,chemical,false,false,true,false,false,false,false,false,false,+
 AS10,ACh,0,VD11,10,chemical,false,false,true,false,false,false,false,false,false,+
-AS11,ACh,0,DD06,6,chemical,false,false,true,false,false,false,false,false,false,+
+AS11,ACh,0,DD6,6,chemical,false,false,true,false,false,false,false,false,false,+
 AS11,ACh,0,VD12,20,chemical,false,false,true,false,false,false,false,false,false,+
 AS11,ACh,0,VD13,4,chemical,false,false,true,false,false,false,false,false,false,+
 ASEL,Glu,0,ADFR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -671,12 +671,12 @@ AUAR,Glu,0,BAGL,1,chemical,false,false,false,false,false,false,false,false,false
 AUAR,Glu,0,RIAR,22,chemical,true,true,false,false,false,false,false,false,true,complex
 AUAR,Glu,0,RIBR,31,chemical,true,true,false,false,false,false,false,false,true,complex
 AUAR,Glu,0,URXR,5,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVAL,ACh,GABA,AS02,2,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAL,ACh,GABA,AS04,2,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAL,ACh,GABA,AS05,6,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAL,ACh,GABA,AS07,6,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAL,ACh,GABA,AS08,6,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAL,ACh,GABA,AS09,11,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAL,ACh,GABA,AS2,2,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAL,ACh,GABA,AS4,2,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAL,ACh,GABA,AS5,6,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAL,ACh,GABA,AS7,6,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAL,ACh,GABA,AS8,6,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAL,ACh,GABA,AS9,11,chemical,false,false,true,false,false,true,true,true,false,complex
 AVAL,ACh,GABA,AS10,5,chemical,false,false,true,false,false,true,true,true,false,complex
 AVAL,ACh,GABA,AS11,8,chemical,false,false,true,false,false,true,true,true,false,complex
 AVAL,ACh,GABA,AVAR,12,chemical,false,false,true,true,false,true,true,true,true,complex
@@ -685,15 +685,15 @@ AVAL,ACh,GABA,AVDL,3,chemical,false,false,false,false,true,false,false,false,fal
 AVAL,ACh,GABA,AVDR,2,chemical,false,false,false,false,true,false,false,false,false,+
 AVAL,ACh,GABA,AVEL,1,chemical,false,false,false,true,false,true,true,false,false,-
 AVAL,ACh,GABA,AVER,2,chemical,false,false,false,true,false,true,true,false,false,-
-AVAL,ACh,GABA,DA01,6,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,DA02,10,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,DA03,12,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,DA04,12,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,DA05,14,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,DA07,4,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,DA08,5,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,DA09,3,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,DB07,2,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,DA1,6,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,DA2,10,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,DA3,12,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,DA4,12,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,DA5,14,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,DA7,4,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,DA8,5,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,DA9,3,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,DB7,2,chemical,false,false,true,false,true,true,true,true,true,complex
 AVAL,ACh,GABA,LUAL,6,chemical,false,false,false,false,false,true,false,false,false,-
 AVAL,ACh,GABA,LUAR,2,chemical,false,false,false,false,false,true,false,false,false,-
 AVAL,ACh,GABA,PVCL,21,chemical,false,false,true,false,false,true,true,true,false,complex
@@ -701,26 +701,26 @@ AVAL,ACh,GABA,PVCR,16,chemical,false,false,true,false,false,true,true,true,false
 AVAL,ACh,GABA,PVNL,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVAL,ACh,GABA,RIAL,3,chemical,false,false,false,true,false,false,false,false,false,-
 AVAL,ACh,GABA,SABVL,2,chemical,false,false,false,false,false,true,false,false,false,-
-AVAL,ACh,GABA,VA01,2,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,VA02,8,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,VA03,6,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,VA04,7,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,VA05,7,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,VA06,8,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,VA07,7,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,VA08,7,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAL,ACh,GABA,VA09,7,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,VA1,2,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,VA2,8,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,VA3,6,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,VA4,7,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,VA5,7,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,VA6,8,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,VA7,7,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,VA8,7,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAL,ACh,GABA,VA9,7,chemical,false,false,true,false,true,true,true,true,true,complex
 AVAL,ACh,GABA,VA10,9,chemical,false,false,true,false,true,true,true,true,true,complex
 AVAL,ACh,GABA,VA11,6,chemical,false,false,true,false,true,true,true,true,true,complex
 AVAL,ACh,GABA,VA12,5,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,AS01,2,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAR,ACh,GABA,AS02,3,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAR,ACh,GABA,AS04,2,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAR,ACh,GABA,AS05,1,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAR,ACh,GABA,AS06,2,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAR,ACh,GABA,AS07,6,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAR,ACh,GABA,AS08,10,chemical,false,false,true,false,false,true,true,true,false,complex
-AVAR,ACh,GABA,AS09,10,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAR,ACh,GABA,AS1,2,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAR,ACh,GABA,AS2,3,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAR,ACh,GABA,AS4,2,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAR,ACh,GABA,AS5,1,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAR,ACh,GABA,AS6,2,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAR,ACh,GABA,AS7,6,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAR,ACh,GABA,AS8,10,chemical,false,false,true,false,false,true,true,true,false,complex
+AVAR,ACh,GABA,AS9,10,chemical,false,false,true,false,false,true,true,true,false,complex
 AVAR,ACh,GABA,AS11,10,chemical,false,false,true,false,false,true,true,true,false,complex
 AVAR,ACh,GABA,AVAL,7,chemical,false,false,true,true,false,true,true,true,true,complex
 AVAR,ACh,GABA,AVBL,3,chemical,false,false,true,false,false,true,true,true,false,complex
@@ -728,17 +728,17 @@ AVAR,ACh,GABA,AVBR,4,chemical,false,false,true,false,false,true,true,true,false,
 AVAR,ACh,GABA,AVDL,3,chemical,false,false,false,false,true,false,false,false,false,+
 AVAR,ACh,GABA,AVDR,6,chemical,false,false,false,false,true,false,false,false,false,+
 AVAR,ACh,GABA,AVER,3,chemical,false,false,false,true,false,true,true,false,false,-
-AVAR,ACh,GABA,DA01,2,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DA02,9,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DA03,8,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DA04,9,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DA05,9,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DA06,4,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DA07,6,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DA08,20,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DA09,3,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DB02,2,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,DB03,2,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DA1,2,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DA2,9,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DA3,8,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DA4,9,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DA5,9,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DA6,4,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DA7,6,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DA8,20,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DA9,3,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DB2,2,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,DB3,2,chemical,false,false,true,false,true,true,true,true,true,complex
 AVAR,ACh,GABA,LUAL,4,chemical,false,false,false,false,false,true,false,false,false,-
 AVAR,ACh,GABA,LUAR,16,chemical,false,false,false,false,false,true,false,false,false,-
 AVAR,ACh,GABA,PVCL,20,chemical,false,false,true,false,false,true,true,true,false,complex
@@ -747,18 +747,18 @@ AVAR,ACh,GABA,RIGL,1,chemical,false,false,true,true,false,false,false,false,true
 AVAR,ACh,GABA,SAAVR,6,chemical,false,false,true,true,false,false,false,false,true,complex
 AVAR,ACh,GABA,SABVR,2,chemical,false,false,false,false,false,true,false,false,false,-
 AVAR,ACh,GABA,SMDVR,1,chemical,false,false,true,true,false,true,true,true,true,complex
-AVAR,ACh,GABA,VA02,5,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,VA03,6,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,VA04,6,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,VA05,2,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,VA06,9,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,VA07,7,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,VA08,7,chemical,false,false,true,false,true,true,true,true,true,complex
-AVAR,ACh,GABA,VA09,7,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,VA2,5,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,VA3,6,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,VA4,6,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,VA5,2,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,VA6,9,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,VA7,7,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,VA8,7,chemical,false,false,true,false,true,true,true,true,true,complex
+AVAR,ACh,GABA,VA9,7,chemical,false,false,true,false,true,true,true,true,true,complex
 AVAR,ACh,GABA,VA10,4,chemical,false,false,true,false,true,true,true,true,true,complex
 AVAR,ACh,GABA,VA11,13,chemical,false,false,true,false,true,true,true,true,true,complex
-AVBL,ACh,GABA,AS04,1,chemical,false,false,true,false,false,true,true,true,false,complex
-AVBL,ACh,GABA,AS05,2,chemical,false,false,true,false,false,true,true,true,false,complex
+AVBL,ACh,GABA,AS4,1,chemical,false,false,true,false,false,true,true,true,false,complex
+AVBL,ACh,GABA,AS5,2,chemical,false,false,true,false,false,true,true,true,false,complex
 AVBL,ACh,GABA,AS10,2,chemical,false,false,true,false,false,true,true,true,false,complex
 AVBL,ACh,GABA,AVAL,9,chemical,false,false,true,true,false,true,true,true,true,complex
 AVBL,ACh,GABA,AVAR,14,chemical,false,false,true,true,false,true,true,true,true,complex
@@ -767,21 +767,21 @@ AVBL,ACh,GABA,AVDR,3,chemical,false,false,false,false,true,false,false,false,fal
 AVBL,ACh,GABA,AVER,1,chemical,false,false,false,true,false,true,true,false,false,-
 AVBL,ACh,GABA,AVJR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVBL,ACh,GABA,AVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVBL,ACh,GABA,DA05,1,chemical,false,false,true,false,true,true,true,true,true,complex
-AVBL,ACh,GABA,DA07,1,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBL,ACh,GABA,DA5,1,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBL,ACh,GABA,DA7,1,chemical,false,false,true,false,true,true,true,true,true,complex
 AVBL,ACh,GABA,DVA,2,chemical,false,false,true,false,true,true,true,true,true,complex
 AVBL,ACh,GABA,PVCR,2,chemical,false,false,true,false,false,true,true,true,false,complex
 AVBL,ACh,GABA,PVNR,3,chemical,false,false,true,false,false,false,false,false,false,+
 AVBL,ACh,GABA,PVPR,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVBL,ACh,GABA,SDQL,1,chemical,false,false,true,false,false,true,true,true,false,complex
-AVBL,ACh,GABA,VA02,3,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBL,ACh,GABA,VA2,3,chemical,false,false,true,false,true,true,true,true,true,complex
 AVBL,ACh,GABA,VA10,1,chemical,false,false,true,false,true,true,true,true,true,complex
-AVBL,ACh,GABA,VB02,3,chemical,false,false,true,false,true,true,true,true,true,complex
-AVBL,ACh,GABA,VC03,3,chemical,false,false,true,false,false,true,true,true,false,complex
+AVBL,ACh,GABA,VB2,3,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBL,ACh,GABA,VC3,3,chemical,false,false,true,false,false,true,true,true,false,complex
 AVBR,ACh,GABA,AIBR,1,chemical,false,false,false,true,false,true,true,false,false,-
-AVBR,ACh,GABA,AS01,2,chemical,false,false,true,false,false,true,true,true,false,complex
-AVBR,ACh,GABA,AS03,3,chemical,false,false,true,false,false,true,true,true,false,complex
-AVBR,ACh,GABA,AS04,1,chemical,false,false,true,false,false,true,true,true,false,complex
+AVBR,ACh,GABA,AS1,2,chemical,false,false,true,false,false,true,true,true,false,complex
+AVBR,ACh,GABA,AS3,3,chemical,false,false,true,false,false,true,true,true,false,complex
+AVBR,ACh,GABA,AS4,1,chemical,false,false,true,false,false,true,true,true,false,complex
 AVBR,ACh,GABA,AS10,1,chemical,false,false,true,false,false,true,true,true,false,complex
 AVBR,ACh,GABA,AVAL,10,chemical,false,false,true,true,false,true,true,true,true,complex
 AVBR,ACh,GABA,AVAR,14,chemical,false,false,true,true,false,true,true,true,true,complex
@@ -789,15 +789,15 @@ AVBR,ACh,GABA,AVBL,2,chemical,false,false,true,false,false,true,true,true,false,
 AVBR,ACh,GABA,AVDL,4,chemical,false,false,false,false,true,false,false,false,false,+
 AVBR,ACh,GABA,AVER,2,chemical,false,false,false,true,false,true,true,false,false,-
 AVBR,ACh,GABA,AVJL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVBR,ACh,GABA,DA03,3,chemical,false,false,true,false,true,true,true,true,true,complex
-AVBR,ACh,GABA,DA04,1,chemical,false,false,true,false,true,true,true,true,true,complex
-AVBR,ACh,GABA,DA07,1,chemical,false,false,true,false,true,true,true,true,true,complex
-AVBR,ACh,GABA,DB04,1,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBR,ACh,GABA,DA3,3,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBR,ACh,GABA,DA4,1,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBR,ACh,GABA,DA7,1,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBR,ACh,GABA,DB4,1,chemical,false,false,true,false,true,true,true,true,true,complex
 AVBR,ACh,GABA,HSNR,1,chemical,false,false,true,false,false,true,true,true,false,complex
-AVBR,ACh,GABA,VA03,3,chemical,false,false,true,false,true,true,true,true,true,complex
-AVBR,ACh,GABA,VA04,2,chemical,false,false,true,false,true,true,true,true,true,complex
-AVBR,ACh,GABA,VD03,2,chemical,false,false,true,false,false,false,false,false,false,+
-AVDL,ACh,0,AS04,2,chemical,false,false,true,false,false,false,false,false,false,+
+AVBR,ACh,GABA,VA3,3,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBR,ACh,GABA,VA4,2,chemical,false,false,true,false,true,true,true,true,true,complex
+AVBR,ACh,GABA,VD3,2,chemical,false,false,true,false,false,false,false,false,false,+
+AVDL,ACh,0,AS4,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVDL,ACh,0,AS10,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVDL,ACh,0,AS11,4,chemical,false,false,true,false,false,false,false,false,false,+
 AVDL,ACh,0,AVAL,37,chemical,false,false,true,true,false,false,false,false,true,complex
@@ -805,20 +805,20 @@ AVDL,ACh,0,AVAR,37,chemical,false,false,true,true,false,false,false,false,true,c
 AVDL,ACh,0,AVDR,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVDL,ACh,0,AVEL,5,chemical,false,false,false,true,false,false,false,false,false,-
 AVDL,ACh,0,AVJL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVDL,ACh,0,DA01,4,chemical,false,false,true,false,false,false,false,false,false,+
-AVDL,ACh,0,DA02,2,chemical,false,false,true,false,false,false,false,false,false,+
-AVDL,ACh,0,DA03,9,chemical,false,false,true,false,false,false,false,false,false,+
-AVDL,ACh,0,DA04,3,chemical,false,false,true,false,false,false,false,false,false,+
-AVDL,ACh,0,DA05,1,chemical,false,false,true,false,false,false,false,false,false,+
-AVDL,ACh,0,DA08,2,chemical,false,false,true,false,false,false,false,false,false,+
+AVDL,ACh,0,DA1,4,chemical,false,false,true,false,false,false,false,false,false,+
+AVDL,ACh,0,DA2,2,chemical,false,false,true,false,false,false,false,false,false,+
+AVDL,ACh,0,DA3,9,chemical,false,false,true,false,false,false,false,false,false,+
+AVDL,ACh,0,DA4,3,chemical,false,false,true,false,false,false,false,false,false,+
+AVDL,ACh,0,DA5,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVDL,ACh,0,DA8,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVDL,ACh,0,DVC,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVDL,ACh,0,LUAL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVDL,ACh,0,PVCL,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVDL,ACh,0,SABD,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVDL,ACh,0,SABVL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVDL,ACh,0,SABVR,5,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVDL,ACh,0,VA03,3,chemical,false,false,true,false,false,false,false,false,false,+
-AVDL,ACh,0,VA05,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVDL,ACh,0,VA3,3,chemical,false,false,true,false,false,false,false,false,false,+
+AVDL,ACh,0,VA5,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVDL,ACh,0,VA10,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVDL,ACh,0,VA12,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVDR,ACh,0,ALA,1,chemical,false,false,true,false,false,false,false,false,false,+
@@ -830,14 +830,14 @@ AVDR,ACh,0,AVBL,1,chemical,false,false,true,false,false,false,false,false,false,
 AVDR,ACh,0,AVDL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVDR,ACh,0,AVER,2,chemical,false,false,false,true,false,false,false,false,false,-
 AVDR,ACh,0,AVJR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVDR,ACh,0,DA01,5,chemical,false,false,true,false,false,false,false,false,false,+
-AVDR,ACh,0,DA02,5,chemical,false,false,true,false,false,false,false,false,false,+
-AVDR,ACh,0,DA03,3,chemical,false,false,true,false,false,false,false,false,false,+
-AVDR,ACh,0,DA04,2,chemical,false,false,true,false,false,false,false,false,false,+
-AVDR,ACh,0,DA05,3,chemical,false,false,true,false,false,false,false,false,false,+
-AVDR,ACh,0,DA08,1,chemical,false,false,true,false,false,false,false,false,false,+
-AVDR,ACh,0,DB01,1,chemical,false,false,true,false,false,false,false,false,false,+
-AVDR,ACh,0,DB04,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,DA1,5,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,DA2,5,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,DA3,3,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,DA4,2,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,DA5,3,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,DA8,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,DB1,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,DB4,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVDR,ACh,0,DVC,4,chemical,false,false,true,false,false,false,false,false,false,+
 AVDR,ACh,0,LUAL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVDR,ACh,0,PQR,3,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -845,19 +845,19 @@ AVDR,ACh,0,PVCR,2,chemical,false,false,true,false,false,false,false,false,false,
 AVDR,ACh,0,SABD,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVDR,ACh,0,SABVL,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVDR,ACh,0,SABVR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVDR,ACh,0,VA02,1,chemical,false,false,true,false,false,false,false,false,false,+
-AVDR,ACh,0,VA03,2,chemical,false,false,true,false,false,false,false,false,false,+
-AVDR,ACh,0,VA05,3,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,VA2,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,VA3,2,chemical,false,false,true,false,false,false,false,false,false,+
+AVDR,ACh,0,VA5,3,chemical,false,false,true,false,false,false,false,false,false,+
 AVDR,ACh,0,VA11,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVEL,ACh,0,ALML,1,chemical,false,false,true,false,false,false,false,false,false,+
-AVEL,ACh,0,AS01,3,chemical,false,false,true,false,false,false,false,false,false,+
+AVEL,ACh,0,AS1,3,chemical,false,false,true,false,false,false,false,false,false,+
 AVEL,ACh,0,AVAL,17,chemical,false,false,true,true,false,false,false,false,true,complex
 AVEL,ACh,0,AVAR,3,chemical,false,false,true,true,false,false,false,false,true,complex
 AVEL,ACh,0,AVDL,5,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVEL,ACh,0,DA01,11,chemical,false,false,true,false,false,false,false,false,false,+
-AVEL,ACh,0,DA02,5,chemical,false,false,true,false,false,false,false,false,false,+
-AVEL,ACh,0,DA03,6,chemical,false,false,true,false,false,false,false,false,false,+
-AVEL,ACh,0,DB03,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVEL,ACh,0,DA1,11,chemical,false,false,true,false,false,false,false,false,false,+
+AVEL,ACh,0,DA2,5,chemical,false,false,true,false,false,false,false,false,false,+
+AVEL,ACh,0,DA3,6,chemical,false,false,true,false,false,false,false,false,false,+
+AVEL,ACh,0,DB3,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVEL,ACh,0,PVCL,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVEL,ACh,0,PVCR,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVEL,ACh,0,PVT,1,chemical,false,false,true,false,false,false,false,false,false,+
@@ -865,24 +865,24 @@ AVEL,ACh,0,RMGL,2,chemical,false,false,false,false,false,false,false,false,false
 AVEL,ACh,0,SABD,18,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVEL,ACh,0,SABVL,16,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVEL,ACh,0,SABVR,12,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVEL,ACh,0,VA01,12,chemical,false,false,true,false,false,false,false,false,false,+
-AVEL,ACh,0,VA03,1,chemical,false,false,true,false,false,false,false,false,false,+
-AVEL,ACh,0,VD02,1,chemical,false,false,true,false,false,false,false,false,false,+
-AVEL,ACh,0,VD03,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVEL,ACh,0,VA1,12,chemical,false,false,true,false,false,false,false,false,false,+
+AVEL,ACh,0,VA3,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVEL,ACh,0,VD2,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVEL,ACh,0,VD3,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVER,ACh,0,AIZR,1,chemical,false,false,false,true,false,false,false,false,false,-
-AVER,ACh,0,AS01,6,chemical,false,false,true,false,false,false,false,false,false,+
-AVER,ACh,0,AS02,4,chemical,false,false,true,false,false,false,false,false,false,+
-AVER,ACh,0,AS03,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,AS1,6,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,AS2,4,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,AS3,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVER,ACh,0,AVAL,14,chemical,false,false,true,true,false,false,false,false,true,complex
 AVER,ACh,0,AVAR,33,chemical,false,false,true,true,false,false,false,false,true,complex
 AVER,ACh,0,AVDL,4,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVER,ACh,0,AVDR,4,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVER,ACh,0,AVEL,3,chemical,false,false,false,true,false,false,false,false,false,-
 AVER,ACh,0,CEPDL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVER,ACh,0,DA01,11,chemical,false,false,true,false,false,false,false,false,false,+
-AVER,ACh,0,DA02,7,chemical,false,false,true,false,false,false,false,false,false,+
-AVER,ACh,0,DA03,3,chemical,false,false,true,false,false,false,false,false,false,+
-AVER,ACh,0,DB03,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,DA1,11,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,DA2,7,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,DA3,3,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,DB3,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVER,ACh,0,OLLL,1,chemical,false,false,false,true,false,false,false,false,false,-
 AVER,ACh,0,RIMR,1,chemical,false,false,true,true,false,false,false,false,true,complex
 AVER,ACh,0,RMGR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -890,10 +890,10 @@ AVER,ACh,0,SABD,1,chemical,false,false,false,false,false,false,false,false,false
 AVER,ACh,0,SABVL,12,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVER,ACh,0,SABVR,11,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVER,ACh,0,URXR,1,chemical,false,false,false,true,false,false,false,false,false,-
-AVER,ACh,0,VA01,5,chemical,false,false,true,false,false,false,false,false,false,+
-AVER,ACh,0,VA02,4,chemical,false,false,true,false,false,false,false,false,false,+
-AVER,ACh,0,VA03,1,chemical,false,false,true,false,false,false,false,false,false,+
-AVER,ACh,0,VA04,2,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,VA1,5,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,VA2,4,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,VA3,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVER,ACh,0,VA4,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVFL,GABA,0,AIML,1,chemical,false,false,false,false,false,true,false,false,false,-
 AVFL,GABA,0,AS10,1,chemical,false,false,false,false,false,true,false,false,false,-
 AVFL,GABA,0,AVBL,4,chemical,false,false,false,false,false,true,false,false,false,-
@@ -912,9 +912,9 @@ AVFL,GABA,0,PVQL,1,chemical,false,false,false,false,false,true,false,false,false
 AVFL,GABA,0,RIFL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVFL,GABA,0,RIFR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVFL,GABA,0,SMBVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVFL,GABA,0,VB01,2,chemical,false,false,false,false,true,true,false,false,true,complex
-AVFL,GABA,0,VB02,2,chemical,false,false,false,false,true,true,false,false,true,complex
-AVFL,GABA,0,VC01,1,chemical,false,false,false,false,false,true,false,false,false,-
+AVFL,GABA,0,VB1,2,chemical,false,false,false,false,true,true,false,false,true,complex
+AVFL,GABA,0,VB2,2,chemical,false,false,false,false,true,true,false,false,true,complex
+AVFL,GABA,0,VC1,1,chemical,false,false,false,false,false,true,false,false,false,-
 AVFR,GABA,0,AIAL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVFR,GABA,0,AIML,1,chemical,false,false,false,false,false,true,false,false,false,-
 AVFR,GABA,0,ASHR,1,chemical,false,false,false,false,false,true,false,false,false,-
@@ -934,7 +934,7 @@ AVFR,GABA,0,PVPR,1,chemical,false,false,false,false,false,false,false,false,fals
 AVFR,GABA,0,PVQL,2,chemical,false,false,false,false,false,true,false,false,false,-
 AVFR,GABA,0,RMDDL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVFR,GABA,0,RMGL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVFR,GABA,0,VA02,1,chemical,false,false,false,false,true,true,false,false,true,complex
+AVFR,GABA,0,VA2,1,chemical,false,false,false,false,true,true,false,false,true,complex
 AVG,ACh,0,AVAL,3,chemical,false,false,true,true,false,false,false,false,true,complex
 AVG,ACh,0,AVAR,3,chemical,false,false,true,true,false,false,false,false,true,complex
 AVG,ACh,0,AVBL,5,chemical,false,false,true,false,false,false,false,false,false,+
@@ -946,7 +946,7 @@ AVG,ACh,0,AVFL,3,chemical,false,false,false,false,false,false,false,false,false,
 AVG,ACh,0,AVG,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVG,ACh,0,AVJL,7,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVG,ACh,0,AVJR,3,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVG,ACh,0,DA08,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVG,ACh,0,DA8,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVG,ACh,0,DVC,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVG,ACh,0,PHAL,3,chemical,false,false,false,true,false,false,false,false,false,-
 AVG,ACh,0,PVCL,1,chemical,false,false,true,false,false,false,false,false,false,+
@@ -955,9 +955,9 @@ AVG,ACh,0,PVNL,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVG,ACh,0,PVNR,4,chemical,false,false,true,false,false,false,false,false,false,+
 AVG,ACh,0,PVQR,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVG,ACh,0,PVT,2,chemical,false,false,true,false,false,false,false,false,false,+
-AVG,ACh,0,VA06,1,chemical,false,false,true,false,false,false,false,false,false,+
+AVG,ACh,0,VA6,1,chemical,false,false,true,false,false,false,false,false,false,+
 AVG,ACh,0,VA11,1,chemical,false,false,true,false,false,false,false,false,false,+
-AVG,ACh,0,VC01,2,chemical,false,false,true,false,false,false,false,false,false,+
+AVG,ACh,0,VC1,2,chemical,false,false,true,false,false,false,false,false,false,+
 AVHL,0,0,ADFR,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHL,0,0,ASHR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHL,0,0,AVAR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -971,7 +971,7 @@ AVHL,0,0,AVJL,4,chemical,false,false,false,false,false,false,false,false,false,n
 AVHL,0,0,AVJR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHL,0,0,AWBR,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHL,0,0,BDUR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVHL,0,0,DD01,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+AVHL,0,0,DD1,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHL,0,0,PVPR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHL,0,0,PVQR,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHL,0,0,RIFR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -980,7 +980,7 @@ AVHL,0,0,RIR,2,chemical,false,false,false,false,false,false,false,false,false,no
 AVHL,0,0,SABD,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHL,0,0,SMBDR,4,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHL,0,0,SMBVR,4,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVHL,0,0,VD01,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+AVHL,0,0,VD1,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHR,0,0,ADLR,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHR,0,0,AQR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVHR,0,0,ASKR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -1063,8 +1063,8 @@ AVKR,0,0,SMDDR,3,chemical,false,false,false,false,false,false,false,false,false,
 AVKR,0,0,SMDVR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVL,GABA,0,AVEL,3,chemical,false,false,false,false,false,true,false,false,false,-
 AVL,GABA,0,AVKR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVL,GABA,0,DD01,4,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVL,GABA,0,DD06,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+AVL,GABA,0,DD1,4,chemical,false,false,false,false,false,false,false,false,false,no pred
+AVL,GABA,0,DD6,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVL,GABA,0,DVB,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVL,GABA,0,DVC,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVL,GABA,0,HSNR,2,chemical,false,false,false,false,false,true,false,false,false,-
@@ -1075,9 +1075,9 @@ AVL,GABA,0,RIS,1,chemical,false,false,false,false,false,true,false,false,false,-
 AVL,GABA,0,SABD,9,chemical,false,false,false,false,true,true,false,false,true,complex
 AVL,GABA,0,SABVL,9,chemical,false,false,false,false,false,true,false,false,false,-
 AVL,GABA,0,SABVR,6,chemical,false,false,false,false,false,true,false,false,false,-
-AVL,GABA,0,VC01,2,chemical,false,false,false,false,false,true,false,false,false,-
-AVL,GABA,0,VC02,2,chemical,false,false,false,false,false,true,false,false,false,-
-AVL,GABA,0,VC06,1,chemical,false,false,false,false,false,true,false,false,false,-
+AVL,GABA,0,VC1,2,chemical,false,false,false,false,false,true,false,false,false,-
+AVL,GABA,0,VC2,2,chemical,false,false,false,false,false,true,false,false,false,-
+AVL,GABA,0,VC6,1,chemical,false,false,false,false,false,true,false,false,false,-
 AVL,GABA,0,VD12,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVM,Glu,0,ADER,4,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVM,Glu,0,AVBL,13,chemical,true,false,false,false,false,false,false,false,false,+
@@ -1089,7 +1089,7 @@ AVM,Glu,0,AVJR,1,chemical,true,false,false,false,false,false,false,false,false,+
 AVM,Glu,0,AVKL,1,chemical,true,false,false,false,false,false,false,false,false,+
 AVM,Glu,0,BDUL,3,chemical,true,false,false,false,false,false,false,false,false,+
 AVM,Glu,0,BDUR,5,chemical,true,false,false,false,false,false,false,false,false,+
-AVM,Glu,0,DA01,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+AVM,Glu,0,DA1,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVM,Glu,0,PVCL,10,chemical,true,false,false,false,false,false,false,false,false,+
 AVM,Glu,0,PVCR,17,chemical,true,false,false,false,false,false,false,false,false,+
 AVM,Glu,0,PVNL,4,chemical,true,false,false,false,false,false,false,false,false,+
@@ -1097,8 +1097,8 @@ AVM,Glu,0,PVNR,3,chemical,true,false,false,false,false,false,false,false,false,+
 AVM,Glu,0,PVR,6,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVM,Glu,0,RID,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 AVM,Glu,0,SIBVL,4,chemical,true,false,false,false,false,false,false,false,false,+
-AVM,Glu,0,VA02,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-AVM,Glu,0,VB03,1,chemical,true,false,false,false,false,false,false,false,false,+
+AVM,Glu,0,VA2,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+AVM,Glu,0,VB3,1,chemical,true,false,false,false,false,false,false,false,false,+
 AWAL,0,0,ADAL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 AWAL,0,0,AFDL,7,chemical,false,false,false,false,false,false,false,false,false,no pred
 AWAL,0,0,AIYL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -1327,133 +1327,133 @@ CEPVR,0,0,SMBVR,2,chemical,false,false,false,false,false,false,false,false,false
 CEPVR,0,0,SMDDR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 CEPVR,0,0,URAVR,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 CEPVR,0,0,URYVR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-DA01,ACh,0,AS01,13,chemical,false,false,true,false,false,false,false,false,false,+
-DA01,ACh,0,DB01,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA01,ACh,0,DD01,12,chemical,false,false,true,false,false,false,false,false,false,+
-DA01,ACh,0,FLPR,2,chemical,false,false,true,false,false,false,false,false,false,+
-DA01,ACh,0,VD02,4,chemical,false,false,true,false,false,false,false,false,false,+
-DA02,ACh,0,AS02,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA02,ACh,0,DA03,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA02,ACh,0,DB01,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA02,ACh,0,DD01,7,chemical,false,false,true,false,false,false,false,false,false,+
-DA02,ACh,0,VD02,17,chemical,false,false,true,false,false,false,false,false,false,+
-DA02,ACh,0,VD03,11,chemical,false,false,true,false,false,false,false,false,false,+
-DA03,ACh,0,AS04,2,chemical,false,false,true,false,false,false,false,false,false,+
-DA03,ACh,0,DA04,2,chemical,false,false,true,false,false,false,false,false,false,+
-DA03,ACh,0,DB03,2,chemical,false,false,true,false,false,false,false,false,false,+
-DA03,ACh,0,DD02,3,chemical,false,false,true,false,false,false,false,false,false,+
-DA03,ACh,0,VD03,43,chemical,false,false,true,false,false,false,false,false,false,+
-DA03,ACh,0,VD04,13,chemical,false,false,true,false,false,false,false,false,false,+
-DA04,ACh,0,DB02,2,chemical,false,false,true,false,false,false,false,false,false,+
-DA04,ACh,0,DD02,4,chemical,false,false,true,false,false,false,false,false,false,+
-DA04,ACh,0,VD04,11,chemical,false,false,true,false,false,false,false,false,false,+
-DA04,ACh,0,VD05,21,chemical,false,false,true,false,false,false,false,false,false,+
-DA05,ACh,0,DA04,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA05,ACh,0,DB04,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA05,ACh,0,DD03,12,chemical,false,false,true,false,false,false,false,false,false,+
-DA05,ACh,0,VD05,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA05,ACh,0,VD06,22,chemical,false,false,true,false,false,false,false,false,false,+
-DA06,ACh,0,DA05,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA06,ACh,0,DB05,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA06,ACh,0,DD03,7,chemical,false,false,true,false,false,false,false,false,false,+
-DA06,ACh,0,VD04,3,chemical,false,false,true,false,false,false,false,false,false,+
-DA06,ACh,0,VD05,3,chemical,false,false,true,false,false,false,false,false,false,+
-DA06,ACh,0,VD06,13,chemical,false,false,true,false,false,false,false,false,false,+
-DA06,ACh,0,VD07,13,chemical,false,false,true,false,false,false,false,false,false,+
-DA07,ACh,0,DA06,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA07,ACh,0,DB06,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA07,ACh,0,DD04,3,chemical,false,false,true,false,false,false,false,false,false,+
-DA07,ACh,0,VD07,10,chemical,false,false,true,false,false,false,false,false,false,+
-DA07,ACh,0,VD08,12,chemical,false,false,true,false,false,false,false,false,false,+
-DA07,ACh,0,VD09,10,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,DA07,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,DB07,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,DD04,4,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,DD05,4,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,VD08,5,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,VD09,5,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,VD10,7,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,VD11,5,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,VD12,5,chemical,false,false,true,false,false,false,false,false,false,+
-DA08,ACh,0,VD13,5,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,AS11,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,DA08,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,DB07,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,DD06,4,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,DVA,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,VA12,1,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,VD09,5,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,VD10,5,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,VD11,11,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,VD12,11,chemical,false,false,true,false,false,false,false,false,false,+
-DA09,ACh,0,VD13,1,chemical,false,false,true,false,false,false,false,false,false,+
-DB01,ACh,0,AS01,28,chemical,false,false,true,false,false,false,false,false,false,+
-DB01,ACh,0,AS02,4,chemical,false,false,true,false,false,false,false,false,false,+
-DB01,ACh,0,DA01,16,chemical,false,false,true,false,false,false,false,false,false,+
-DB01,ACh,0,DA02,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB01,ACh,0,DD01,31,chemical,false,false,true,false,false,false,false,false,false,+
-DB01,ACh,0,FLPR,1,chemical,false,false,true,false,false,false,false,false,false,+
-DB01,ACh,0,RID,1,chemical,false,false,true,false,false,false,false,false,false,+
-DB01,ACh,0,VD02,24,chemical,false,false,true,false,false,false,false,false,false,+
-DB01,ACh,0,VD03,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB02,ACh,0,AS03,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB02,ACh,0,AS04,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB02,ACh,0,DA02,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB02,ACh,0,DA03,12,chemical,false,false,true,false,false,false,false,false,false,+
-DB02,ACh,0,DA04,1,chemical,false,false,true,false,false,false,false,false,false,+
-DB02,ACh,0,DD01,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB02,ACh,0,DD02,16,chemical,false,false,true,false,false,false,false,false,false,+
-DB02,ACh,0,VD03,33,chemical,false,false,true,false,false,false,false,false,false,+
-DB02,ACh,0,VD04,15,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,AS04,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,AS05,1,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,DA04,4,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,DA05,1,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,DD02,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,DD03,14,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,DD05,14,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,VD04,9,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,VD05,24,chemical,false,false,true,false,false,false,false,false,false,+
-DB03,ACh,0,VD06,4,chemical,false,false,true,false,false,false,false,false,false,+
-DB04,ACh,0,AS06,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB04,ACh,0,DA05,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB04,ACh,0,DD03,9,chemical,false,false,true,false,false,false,false,false,false,+
-DB04,ACh,0,DD04,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB04,ACh,0,DD05,9,chemical,false,false,true,false,false,false,false,false,false,+
-DB04,ACh,0,DD06,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB04,ACh,0,VD06,14,chemical,false,false,true,false,false,false,false,false,false,+
-DB05,ACh,0,AS07,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB05,ACh,0,AS08,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB05,ACh,0,DA06,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB05,ACh,0,DA07,12,chemical,false,false,true,false,false,false,false,false,false,+
-DB05,ACh,0,DA08,1,chemical,false,false,true,false,false,false,false,false,false,+
-DB05,ACh,0,VD04,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB05,ACh,0,VD05,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB05,ACh,0,VD06,13,chemical,false,false,true,false,false,false,false,false,false,+
-DB05,ACh,0,VD07,13,chemical,false,false,true,false,false,false,false,false,false,+
-DB06,ACh,0,AS08,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB06,ACh,0,AS09,1,chemical,false,false,true,false,false,false,false,false,false,+
-DB06,ACh,0,DA08,4,chemical,false,false,true,false,false,false,false,false,false,+
-DB06,ACh,0,DA09,1,chemical,false,false,true,false,false,false,false,false,false,+
-DB06,ACh,0,VD07,10,chemical,false,false,true,false,false,false,false,false,false,+
-DB06,ACh,0,VD08,12,chemical,false,false,true,false,false,false,false,false,false,+
-DB06,ACh,0,VD09,10,chemical,false,false,true,false,false,false,false,false,false,+
-DB07,ACh,0,AS10,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB07,ACh,0,AS11,2,chemical,false,false,true,false,false,false,false,false,false,+
-DB07,ACh,0,DA09,3,chemical,false,false,true,false,false,false,false,false,false,+
-DB07,ACh,0,VD08,5,chemical,false,false,true,false,false,false,false,false,false,+
-DB07,ACh,0,VD09,5,chemical,false,false,true,false,false,false,false,false,false,+
-DB07,ACh,0,VD10,7,chemical,false,false,true,false,false,false,false,false,false,+
-DB07,ACh,0,VD11,5,chemical,false,false,true,false,false,false,false,false,false,+
-DB07,ACh,0,VD12,5,chemical,false,false,true,false,false,false,false,false,false,+
-DB07,ACh,0,VD13,5,chemical,false,false,true,false,false,false,false,false,false,+
-DD01,GABA,0,DA02,3,chemical,false,false,false,false,true,true,false,false,true,complex
-DD01,GABA,0,VB02,1,chemical,false,false,false,false,true,true,false,false,true,complex
-DD01,GABA,0,VD02,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-DD02,GABA,0,DA03,2,chemical,false,false,false,false,true,true,false,false,true,complex
-DD02,GABA,0,VD03,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-DD02,GABA,0,VD04,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-DD03,GABA,0,DA05,1,chemical,false,false,false,false,true,true,false,false,true,complex
+DA1,ACh,0,AS1,13,chemical,false,false,true,false,false,false,false,false,false,+
+DA1,ACh,0,DB1,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA1,ACh,0,DD1,12,chemical,false,false,true,false,false,false,false,false,false,+
+DA1,ACh,0,FLPR,2,chemical,false,false,true,false,false,false,false,false,false,+
+DA1,ACh,0,VD2,4,chemical,false,false,true,false,false,false,false,false,false,+
+DA2,ACh,0,AS2,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA2,ACh,0,DA3,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA2,ACh,0,DB1,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA2,ACh,0,DD1,7,chemical,false,false,true,false,false,false,false,false,false,+
+DA2,ACh,0,VD2,17,chemical,false,false,true,false,false,false,false,false,false,+
+DA2,ACh,0,VD3,11,chemical,false,false,true,false,false,false,false,false,false,+
+DA3,ACh,0,AS4,2,chemical,false,false,true,false,false,false,false,false,false,+
+DA3,ACh,0,DA4,2,chemical,false,false,true,false,false,false,false,false,false,+
+DA3,ACh,0,DB3,2,chemical,false,false,true,false,false,false,false,false,false,+
+DA3,ACh,0,DD2,3,chemical,false,false,true,false,false,false,false,false,false,+
+DA3,ACh,0,VD3,43,chemical,false,false,true,false,false,false,false,false,false,+
+DA3,ACh,0,VD4,13,chemical,false,false,true,false,false,false,false,false,false,+
+DA4,ACh,0,DB2,2,chemical,false,false,true,false,false,false,false,false,false,+
+DA4,ACh,0,DD2,4,chemical,false,false,true,false,false,false,false,false,false,+
+DA4,ACh,0,VD4,11,chemical,false,false,true,false,false,false,false,false,false,+
+DA4,ACh,0,VD5,21,chemical,false,false,true,false,false,false,false,false,false,+
+DA5,ACh,0,DA4,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA5,ACh,0,DB4,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA5,ACh,0,DD3,12,chemical,false,false,true,false,false,false,false,false,false,+
+DA5,ACh,0,VD5,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA5,ACh,0,VD6,22,chemical,false,false,true,false,false,false,false,false,false,+
+DA6,ACh,0,DA5,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA6,ACh,0,DB5,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA6,ACh,0,DD3,7,chemical,false,false,true,false,false,false,false,false,false,+
+DA6,ACh,0,VD4,3,chemical,false,false,true,false,false,false,false,false,false,+
+DA6,ACh,0,VD5,3,chemical,false,false,true,false,false,false,false,false,false,+
+DA6,ACh,0,VD6,13,chemical,false,false,true,false,false,false,false,false,false,+
+DA6,ACh,0,VD7,13,chemical,false,false,true,false,false,false,false,false,false,+
+DA7,ACh,0,DA6,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA7,ACh,0,DB6,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA7,ACh,0,DD4,3,chemical,false,false,true,false,false,false,false,false,false,+
+DA7,ACh,0,VD7,10,chemical,false,false,true,false,false,false,false,false,false,+
+DA7,ACh,0,VD8,12,chemical,false,false,true,false,false,false,false,false,false,+
+DA7,ACh,0,VD9,10,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,DA7,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,DB7,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,DD4,4,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,DD5,4,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,VD8,5,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,VD9,5,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,VD10,7,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,VD11,5,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,VD12,5,chemical,false,false,true,false,false,false,false,false,false,+
+DA8,ACh,0,VD13,5,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,AS11,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,DA8,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,DB7,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,DD6,4,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,DVA,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,VA12,1,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,VD9,5,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,VD10,5,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,VD11,11,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,VD12,11,chemical,false,false,true,false,false,false,false,false,false,+
+DA9,ACh,0,VD13,1,chemical,false,false,true,false,false,false,false,false,false,+
+DB1,ACh,0,AS1,28,chemical,false,false,true,false,false,false,false,false,false,+
+DB1,ACh,0,AS2,4,chemical,false,false,true,false,false,false,false,false,false,+
+DB1,ACh,0,DA1,16,chemical,false,false,true,false,false,false,false,false,false,+
+DB1,ACh,0,DA2,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB1,ACh,0,DD1,31,chemical,false,false,true,false,false,false,false,false,false,+
+DB1,ACh,0,FLPR,1,chemical,false,false,true,false,false,false,false,false,false,+
+DB1,ACh,0,RID,1,chemical,false,false,true,false,false,false,false,false,false,+
+DB1,ACh,0,VD2,24,chemical,false,false,true,false,false,false,false,false,false,+
+DB1,ACh,0,VD3,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB2,ACh,0,AS3,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB2,ACh,0,AS4,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB2,ACh,0,DA2,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB2,ACh,0,DA3,12,chemical,false,false,true,false,false,false,false,false,false,+
+DB2,ACh,0,DA4,1,chemical,false,false,true,false,false,false,false,false,false,+
+DB2,ACh,0,DD1,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB2,ACh,0,DD2,16,chemical,false,false,true,false,false,false,false,false,false,+
+DB2,ACh,0,VD3,33,chemical,false,false,true,false,false,false,false,false,false,+
+DB2,ACh,0,VD4,15,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,AS4,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,AS5,1,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,DA4,4,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,DA5,1,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,DD2,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,DD3,14,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,DD5,14,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,VD4,9,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,VD5,24,chemical,false,false,true,false,false,false,false,false,false,+
+DB3,ACh,0,VD6,4,chemical,false,false,true,false,false,false,false,false,false,+
+DB4,ACh,0,AS6,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB4,ACh,0,DA5,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB4,ACh,0,DD3,9,chemical,false,false,true,false,false,false,false,false,false,+
+DB4,ACh,0,DD4,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB4,ACh,0,DD5,9,chemical,false,false,true,false,false,false,false,false,false,+
+DB4,ACh,0,DD6,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB4,ACh,0,VD6,14,chemical,false,false,true,false,false,false,false,false,false,+
+DB5,ACh,0,AS7,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB5,ACh,0,AS8,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB5,ACh,0,DA6,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB5,ACh,0,DA7,12,chemical,false,false,true,false,false,false,false,false,false,+
+DB5,ACh,0,DA8,1,chemical,false,false,true,false,false,false,false,false,false,+
+DB5,ACh,0,VD4,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB5,ACh,0,VD5,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB5,ACh,0,VD6,13,chemical,false,false,true,false,false,false,false,false,false,+
+DB5,ACh,0,VD7,13,chemical,false,false,true,false,false,false,false,false,false,+
+DB6,ACh,0,AS8,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB6,ACh,0,AS9,1,chemical,false,false,true,false,false,false,false,false,false,+
+DB6,ACh,0,DA8,4,chemical,false,false,true,false,false,false,false,false,false,+
+DB6,ACh,0,DA9,1,chemical,false,false,true,false,false,false,false,false,false,+
+DB6,ACh,0,VD7,10,chemical,false,false,true,false,false,false,false,false,false,+
+DB6,ACh,0,VD8,12,chemical,false,false,true,false,false,false,false,false,false,+
+DB6,ACh,0,VD9,10,chemical,false,false,true,false,false,false,false,false,false,+
+DB7,ACh,0,AS10,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB7,ACh,0,AS11,2,chemical,false,false,true,false,false,false,false,false,false,+
+DB7,ACh,0,DA9,3,chemical,false,false,true,false,false,false,false,false,false,+
+DB7,ACh,0,VD8,5,chemical,false,false,true,false,false,false,false,false,false,+
+DB7,ACh,0,VD9,5,chemical,false,false,true,false,false,false,false,false,false,+
+DB7,ACh,0,VD10,7,chemical,false,false,true,false,false,false,false,false,false,+
+DB7,ACh,0,VD11,5,chemical,false,false,true,false,false,false,false,false,false,+
+DB7,ACh,0,VD12,5,chemical,false,false,true,false,false,false,false,false,false,+
+DB7,ACh,0,VD13,5,chemical,false,false,true,false,false,false,false,false,false,+
+DD1,GABA,0,DA2,3,chemical,false,false,false,false,true,true,false,false,true,complex
+DD1,GABA,0,VB2,1,chemical,false,false,false,false,true,true,false,false,true,complex
+DD1,GABA,0,VD2,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+DD2,GABA,0,DA3,2,chemical,false,false,false,false,true,true,false,false,true,complex
+DD2,GABA,0,VD3,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+DD2,GABA,0,VD4,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+DD3,GABA,0,DA5,1,chemical,false,false,false,false,true,true,false,false,true,complex
 DVA,ACh,0,AIZL,5,chemical,false,false,false,true,false,false,false,false,false,-
 DVA,ACh,0,AIZR,3,chemical,false,false,false,true,false,false,false,false,false,-
 DVA,ACh,0,AQR,6,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -1466,11 +1466,11 @@ DVA,ACh,0,AVBR,1,chemical,false,false,true,false,false,false,false,false,false,+
 DVA,ACh,0,AVDR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 DVA,ACh,0,AVEL,19,chemical,false,false,false,true,false,false,false,false,false,-
 DVA,ACh,0,AVER,17,chemical,false,false,false,true,false,false,false,false,false,-
-DVA,ACh,0,DA02,1,chemical,false,false,true,false,false,false,false,false,false,+
-DVA,ACh,0,DB02,2,chemical,false,false,true,false,false,false,false,false,false,+
-DVA,ACh,0,DB03,3,chemical,false,false,true,false,false,false,false,false,false,+
-DVA,ACh,0,DB04,1,chemical,false,false,true,false,false,false,false,false,false,+
-DVA,ACh,0,DB07,1,chemical,false,false,true,false,false,false,false,false,false,+
+DVA,ACh,0,DA2,1,chemical,false,false,true,false,false,false,false,false,false,+
+DVA,ACh,0,DB2,2,chemical,false,false,true,false,false,false,false,false,false,+
+DVA,ACh,0,DB3,3,chemical,false,false,true,false,false,false,false,false,false,+
+DVA,ACh,0,DB4,1,chemical,false,false,true,false,false,false,false,false,false,+
+DVA,ACh,0,DB7,1,chemical,false,false,true,false,false,false,false,false,false,+
 DVA,ACh,0,PDER,1,chemical,false,false,false,true,false,false,false,false,false,-
 DVA,ACh,0,PVCL,4,chemical,false,false,true,false,false,false,false,false,false,+
 DVA,ACh,0,PVCR,1,chemical,false,false,true,false,false,false,false,false,false,+
@@ -1491,15 +1491,15 @@ DVA,ACh,0,SMBVR,6,chemical,false,false,false,true,false,false,false,false,false,
 DVA,ACh,0,SMDVL,1,chemical,false,false,true,true,false,false,false,false,true,complex
 DVA,ACh,0,URXL,1,chemical,false,false,false,true,false,false,false,false,false,-
 DVA,ACh,0,URYDL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
-DVA,ACh,0,VA02,2,chemical,false,false,true,false,false,false,false,false,false,+
-DVA,ACh,0,VA06,1,chemical,false,false,true,false,false,false,false,false,false,+
-DVA,ACh,0,VA08,1,chemical,false,false,true,false,false,false,false,false,false,+
+DVA,ACh,0,VA2,2,chemical,false,false,true,false,false,false,false,false,false,+
+DVA,ACh,0,VA6,1,chemical,false,false,true,false,false,false,false,false,false,+
+DVA,ACh,0,VA8,1,chemical,false,false,true,false,false,false,false,false,false,+
 DVA,ACh,0,VA12,1,chemical,false,false,true,false,false,false,false,false,false,+
-DVA,ACh,0,VB01,1,chemical,false,false,true,false,false,false,false,false,false,+
+DVA,ACh,0,VB1,1,chemical,false,false,true,false,false,false,false,false,false,+
 DVA,ACh,0,VB11,2,chemical,false,false,true,false,false,false,false,false,false,+
 DVB,GABA,0,AVL,21,chemical,false,false,false,false,false,false,false,false,false,no pred
-DVB,GABA,0,DA08,10,chemical,false,false,false,false,true,true,false,false,true,complex
-DVB,GABA,0,DD06,10,chemical,false,false,false,false,false,false,false,false,false,no pred
+DVB,GABA,0,DA8,10,chemical,false,false,false,false,true,true,false,false,true,complex
+DVB,GABA,0,DD6,10,chemical,false,false,false,false,false,false,false,false,false,no pred
 DVB,GABA,0,DVC,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 DVB,GABA,0,PDA,2,chemical,false,false,false,false,true,false,false,false,false,+
 DVB,GABA,0,PHCL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -1522,7 +1522,7 @@ DVC,Glu,0,RIVR,2,chemical,false,false,false,false,false,false,false,false,false,
 DVC,Glu,0,RMFL,14,chemical,true,false,false,false,false,false,false,false,false,+
 DVC,Glu,0,RMFR,9,chemical,true,false,false,false,false,false,false,false,false,+
 DVC,Glu,0,URAVL,1,chemical,true,false,false,false,false,false,false,false,false,+
-DVC,Glu,0,VD09,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+DVC,Glu,0,VD9,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 FLPL,Glu,0,ADEL,22,chemical,false,false,false,false,false,false,false,false,false,no pred
 FLPL,Glu,0,ADER,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 FLPL,Glu,0,AIBL,3,chemical,true,false,false,false,false,false,false,false,false,+
@@ -1533,12 +1533,12 @@ FLPL,Glu,0,AVBL,22,chemical,true,false,false,false,false,false,false,false,false
 FLPL,Glu,0,AVBR,22,chemical,true,false,false,false,false,false,false,false,false,+
 FLPL,Glu,0,AVDL,30,chemical,true,false,false,false,false,false,false,false,false,+
 FLPL,Glu,0,AVDR,34,chemical,true,false,false,false,false,false,false,false,false,+
-FLPL,Glu,0,DD01,6,chemical,false,false,false,false,false,false,false,false,false,no pred
+FLPL,Glu,0,DD1,6,chemical,false,false,false,false,false,false,false,false,false,no pred
 FLPL,Glu,0,DVA,1,chemical,true,false,false,false,false,false,false,false,false,+
 FLPL,Glu,0,FLPR,2,chemical,true,false,false,false,false,false,false,false,false,+
 FLPL,Glu,0,PVCR,6,chemical,true,false,false,false,false,false,false,false,false,+
 FLPL,Glu,0,RIS,1,chemical,true,true,false,false,false,false,false,false,true,complex
-FLPL,Glu,0,VA01,5,chemical,false,false,false,false,false,false,false,false,false,no pred
+FLPL,Glu,0,VA1,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 FLPR,Glu,0,ADAL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 FLPR,Glu,0,ADAR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 FLPR,Glu,0,ADER,6,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -1555,7 +1555,7 @@ FLPR,Glu,0,AVJR,2,chemical,true,false,false,false,false,false,false,false,false,
 FLPR,Glu,0,DVA,6,chemical,true,false,false,false,false,false,false,false,false,+
 FLPR,Glu,0,FLPL,14,chemical,true,false,false,false,false,false,false,false,false,+
 FLPR,Glu,0,PVCL,2,chemical,true,false,false,false,false,false,false,false,false,+
-FLPR,Glu,0,VB01,1,chemical,true,false,false,false,false,false,false,false,false,+
+FLPR,Glu,0,VB1,1,chemical,true,false,false,false,false,false,false,false,false,+
 HSNL,ACh,0,ADLL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 HSNL,ACh,0,ADLR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 HSNL,ACh,0,AIAL,8,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -1580,12 +1580,12 @@ HSNL,ACh,0,RIFL,9,chemical,false,false,false,false,false,false,false,false,false
 HSNL,ACh,0,RIML,4,chemical,false,false,true,true,false,false,false,false,true,complex
 HSNL,ACh,0,RIR,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 HSNL,ACh,0,RMGR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-HSNL,ACh,0,VC05,9,chemical,false,false,true,false,false,false,false,false,false,+
+HSNL,ACh,0,VC5,9,chemical,false,false,true,false,false,false,false,false,false,+
 HSNR,ACh,0,AIAL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 HSNR,ACh,0,AIBL,2,chemical,false,false,false,true,false,false,false,false,false,-
 HSNR,ACh,0,AIZL,3,chemical,false,false,false,true,false,false,false,false,false,-
 HSNR,ACh,0,AIZR,1,chemical,false,false,false,true,false,false,false,false,false,-
-HSNR,ACh,0,AS05,2,chemical,false,false,true,false,false,false,false,false,false,+
+HSNR,ACh,0,AS5,2,chemical,false,false,true,false,false,false,false,false,false,+
 HSNR,ACh,0,ASHL,4,chemical,false,false,false,false,false,false,false,false,false,no pred
 HSNR,ACh,0,AVBR,1,chemical,false,false,true,false,false,false,false,false,false,+
 HSNR,ACh,0,AVDR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -1597,8 +1597,8 @@ HSNR,ACh,0,AVHR,2,chemical,false,false,false,false,false,false,false,false,false
 HSNR,ACh,0,AVJL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 HSNR,ACh,0,AWBL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 HSNR,ACh,0,BDUR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-HSNR,ACh,0,DA05,2,chemical,false,false,true,false,false,false,false,false,false,+
-HSNR,ACh,0,DA06,1,chemical,false,false,true,false,false,false,false,false,false,+
+HSNR,ACh,0,DA5,2,chemical,false,false,true,false,false,false,false,false,false,+
+HSNR,ACh,0,DA6,1,chemical,false,false,true,false,false,false,false,false,false,+
 HSNR,ACh,0,HSNL,1,chemical,false,false,true,false,false,false,false,false,false,+
 HSNR,ACh,0,PVNR,2,chemical,false,false,true,false,false,false,false,false,false,+
 HSNR,ACh,0,PVPR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -1611,11 +1611,11 @@ HSNR,ACh,0,RMDDR,1,chemical,false,false,false,true,false,false,false,false,false
 HSNR,ACh,0,RMGR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 HSNR,ACh,0,SABD,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 HSNR,ACh,0,SABVR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-HSNR,ACh,0,VA06,2,chemical,false,false,true,false,false,false,false,false,false,+
-HSNR,ACh,0,VC02,6,chemical,false,false,true,false,false,false,false,false,false,+
-HSNR,ACh,0,VC03,1,chemical,false,false,true,false,false,false,false,false,false,+
-HSNR,ACh,0,VC04,1,chemical,false,false,true,false,false,false,false,false,false,+
-HSNR,ACh,0,VC05,2,chemical,false,false,true,false,false,false,false,false,false,+
+HSNR,ACh,0,VA6,2,chemical,false,false,true,false,false,false,false,false,false,+
+HSNR,ACh,0,VC2,6,chemical,false,false,true,false,false,false,false,false,false,+
+HSNR,ACh,0,VC3,1,chemical,false,false,true,false,false,false,false,false,false,+
+HSNR,ACh,0,VC4,1,chemical,false,false,true,false,false,false,false,false,false,+
+HSNR,ACh,0,VC5,2,chemical,false,false,true,false,false,false,false,false,false,+
 I1L,ACh,0,I2L,10,chemical,false,false,false,false,false,false,false,false,false,no pred
 I1L,ACh,0,I3,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 I1L,ACh,0,I5,2,chemical,false,false,true,false,false,false,false,false,false,+
@@ -1975,13 +1975,13 @@ OLQVR,Glu,0,RMDVL,18,chemical,true,false,false,false,false,false,false,false,fal
 OLQVR,Glu,0,RMER,2,chemical,true,false,false,false,false,false,false,false,false,+
 OLQVR,Glu,0,RMHR,1,chemical,true,false,false,false,false,false,false,false,false,+
 OLQVR,Glu,0,SIBVR,18,chemical,true,false,false,false,false,false,false,false,false,+
-PDA,ACh,0,DA09,1,chemical,false,false,true,false,false,false,false,false,false,+
-PDA,ACh,0,DD06,3,chemical,false,false,true,false,false,false,false,false,false,+
+PDA,ACh,0,DA9,1,chemical,false,false,true,false,false,false,false,false,false,+
+PDA,ACh,0,DD6,3,chemical,false,false,true,false,false,false,false,false,false,+
 PDA,ACh,0,PVNR,1,chemical,false,false,true,false,false,false,false,false,false,+
 PDA,ACh,0,VD11,10,chemical,false,false,true,false,false,false,false,false,false,+
 PDA,ACh,0,VD12,12,chemical,false,false,true,false,false,false,false,false,false,+
 PDA,ACh,0,VD13,10,chemical,false,false,true,false,false,false,false,false,false,+
-PDB,ACh,0,DD06,2,chemical,false,false,true,false,false,false,false,false,false,+
+PDB,ACh,0,DD6,2,chemical,false,false,true,false,false,false,false,false,false,+
 PDB,ACh,0,VD12,10,chemical,false,false,true,false,false,false,false,false,false,+
 PDB,ACh,0,VD13,10,chemical,false,false,true,false,false,false,false,false,false,+
 PDEL,0,0,DVA,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -1993,7 +1993,7 @@ PHAL,Glu,0,AVFL,4,chemical,false,false,false,false,false,false,false,false,false
 PHAL,Glu,0,AVG,11,chemical,true,false,false,false,false,false,false,false,false,+
 PHAL,Glu,0,AVHL,4,chemical,true,false,false,false,false,false,false,false,false,+
 PHAL,Glu,0,AVHR,1,chemical,true,false,false,false,false,false,false,false,false,+
-PHAL,Glu,0,DA08,3,chemical,true,false,false,false,false,false,false,false,false,+
+PHAL,Glu,0,DA8,3,chemical,true,false,false,false,false,false,false,false,false,+
 PHAL,Glu,0,DVA,2,chemical,true,false,false,false,false,false,false,false,false,+
 PHAL,Glu,0,PHAR,13,chemical,false,false,false,false,false,false,false,false,false,no pred
 PHAL,Glu,0,PHBL,7,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2002,7 +2002,7 @@ PHAL,Glu,0,PVQL,3,chemical,true,false,false,false,false,false,false,false,false,
 PHAR,Glu,0,AVDR,2,chemical,true,false,false,false,false,false,false,false,false,+
 PHAR,Glu,0,AVG,9,chemical,true,false,false,false,false,false,false,false,false,+
 PHAR,Glu,0,AVHR,1,chemical,true,false,false,false,false,false,false,false,false,+
-PHAR,Glu,0,DA08,2,chemical,true,false,false,false,false,false,false,false,false,+
+PHAR,Glu,0,DA8,2,chemical,true,false,false,false,false,false,false,false,false,+
 PHAR,Glu,0,DVA,6,chemical,true,false,false,false,false,false,false,false,false,+
 PHAR,Glu,0,PHAL,11,chemical,false,false,false,false,false,false,false,false,false,no pred
 PHAR,Glu,0,PHBL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2017,7 +2017,7 @@ PHBL,Glu,0,AVAR,33,chemical,true,false,false,false,false,false,false,false,false
 PHBL,Glu,0,AVDL,6,chemical,true,false,false,false,false,false,false,false,false,+
 PHBL,Glu,0,AVDR,1,chemical,true,false,false,false,false,false,false,false,false,+
 PHBL,Glu,0,AVG,1,chemical,true,false,false,false,false,false,false,false,false,+
-PHBL,Glu,0,DA08,1,chemical,true,false,false,false,false,false,false,false,false,+
+PHBL,Glu,0,DA8,1,chemical,true,false,false,false,false,false,false,false,false,+
 PHBL,Glu,0,PHBR,4,chemical,false,false,false,false,false,false,false,false,false,no pred
 PHBL,Glu,0,PVCL,71,chemical,true,false,false,false,false,false,false,false,false,+
 PHBL,Glu,0,PVNL,1,chemical,true,false,false,false,false,false,false,false,false,+
@@ -2033,7 +2033,7 @@ PHBR,Glu,0,PVCR,21,chemical,true,false,false,false,false,false,false,false,false
 PHBR,Glu,0,VA12,1,chemical,false,true,false,false,false,false,false,false,false,-
 PHCL,Glu,0,AVAL,5,chemical,true,false,false,false,false,false,false,false,false,+
 PHCL,Glu,0,AVHR,1,chemical,true,false,false,false,false,false,false,false,false,+
-PHCL,Glu,0,DA09,1,chemical,true,true,false,false,false,false,false,false,true,complex
+PHCL,Glu,0,DA9,1,chemical,true,true,false,false,false,false,false,false,true,complex
 PHCL,Glu,0,DVA,12,chemical,true,false,false,false,false,false,false,false,false,+
 PHCL,Glu,0,LUAL,2,chemical,true,false,false,false,false,false,false,false,false,+
 PHCL,Glu,0,PHCR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2041,7 +2041,7 @@ PHCL,Glu,0,PVCL,7,chemical,true,false,false,false,false,false,false,false,false,
 PHCL,Glu,0,PVQR,2,chemical,true,false,false,false,false,false,false,false,false,+
 PHCL,Glu,0,VA12,6,chemical,false,true,false,false,false,false,false,false,false,-
 PHCR,Glu,0,AVHR,2,chemical,true,false,false,false,false,false,false,false,false,+
-PHCR,Glu,0,DA09,23,chemical,true,true,false,false,false,false,false,false,true,complex
+PHCR,Glu,0,DA9,23,chemical,true,true,false,false,false,false,false,false,true,complex
 PHCR,Glu,0,DVA,22,chemical,true,false,false,false,false,false,false,false,false,+
 PHCR,Glu,0,LUAR,6,chemical,true,false,false,false,false,false,false,false,false,+
 PHCR,Glu,0,PHAR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2068,8 +2068,8 @@ PQR,Glu,0,AVDR,20,chemical,true,false,false,false,false,false,false,false,false,
 PQR,Glu,0,AVG,1,chemical,true,false,false,false,false,false,false,false,false,+
 PQR,Glu,0,AVHL,1,chemical,true,false,false,false,false,false,false,false,false,+
 PQR,Glu,0,AVJR,1,chemical,true,false,false,false,false,false,false,false,false,+
-PQR,Glu,0,DA08,1,chemical,true,false,false,false,false,false,false,false,false,+
-PQR,Glu,0,DB07,2,chemical,true,false,false,false,false,false,false,false,false,+
+PQR,Glu,0,DA8,1,chemical,true,false,false,false,false,false,false,false,false,+
+PQR,Glu,0,DB7,2,chemical,true,false,false,false,false,false,false,false,false,+
 PQR,Glu,0,LUAR,3,chemical,true,false,false,false,false,false,false,false,false,+
 PQR,Glu,0,PHBL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 PQR,Glu,0,PVCL,1,chemical,true,false,false,false,false,false,false,false,false,+
@@ -2077,8 +2077,8 @@ PQR,Glu,0,PVCR,1,chemical,true,false,false,false,false,false,false,false,false,+
 PQR,Glu,0,PVNL,2,chemical,true,false,false,false,false,false,false,false,false,+
 PQR,Glu,0,PVPR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVCL,ACh,0,ADLR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVCL,ACh,0,AS01,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVCL,ACh,0,AS02,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,AS1,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,AS2,1,chemical,false,false,true,false,false,false,false,false,false,+
 PVCL,ACh,0,ASHR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVCL,ACh,0,AVAL,5,chemical,false,false,true,true,false,false,false,false,true,complex
 PVCL,ACh,0,AVAR,7,chemical,false,false,true,true,false,false,false,false,true,complex
@@ -2091,12 +2091,12 @@ PVCL,ACh,0,AVER,7,chemical,false,false,false,true,false,false,false,false,false,
 PVCL,ACh,0,AVG,2,chemical,false,false,true,false,false,false,false,false,false,+
 PVCL,ACh,0,AVJL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVCL,ACh,0,AVJR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVCL,ACh,0,DA05,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVCL,ACh,0,DA08,2,chemical,false,false,true,false,false,false,false,false,false,+
-PVCL,ACh,0,DB02,4,chemical,false,false,true,false,false,false,false,false,false,+
-PVCL,ACh,0,DB03,2,chemical,false,false,true,false,false,false,false,false,false,+
-PVCL,ACh,0,DB04,6,chemical,false,false,true,false,false,false,false,false,false,+
-PVCL,ACh,0,DB07,5,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,DA5,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,DA8,2,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,DB2,4,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,DB3,2,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,DB4,6,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,DB7,5,chemical,false,false,true,false,false,false,false,false,false,+
 PVCL,ACh,0,DVA,4,chemical,false,false,true,false,false,false,false,false,false,+
 PVCL,ACh,0,PDER,1,chemical,false,false,false,true,false,false,false,false,false,-
 PVCL,ACh,0,PVCL,1,chemical,false,false,true,false,false,false,false,false,false,+
@@ -2106,8 +2106,8 @@ PVCL,ACh,0,RIS,2,chemical,false,false,false,false,false,false,false,false,false,
 PVCL,ACh,0,SIBVL,7,chemical,false,false,true,true,false,false,false,false,true,complex
 PVCL,ACh,0,SMBVR,3,chemical,false,false,false,true,false,false,false,false,false,-
 PVCL,ACh,0,VA11,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVCL,ACh,0,VB04,3,chemical,false,false,true,false,false,false,false,false,false,+
-PVCL,ACh,0,VB06,2,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,VB4,3,chemical,false,false,true,false,false,false,false,false,false,+
+PVCL,ACh,0,VB6,2,chemical,false,false,true,false,false,false,false,false,false,+
 PVCL,ACh,0,VB11,1,chemical,false,false,true,false,false,false,false,false,false,+
 PVCR,ACh,0,AQR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVCR,ACh,0,AVAL,10,chemical,false,false,true,true,false,false,false,false,true,complex
@@ -2120,13 +2120,13 @@ PVCR,ACh,0,AVEL,6,chemical,false,false,false,true,false,false,false,false,false,
 PVCR,ACh,0,AVER,6,chemical,false,false,false,true,false,false,false,false,false,-
 PVCR,ACh,0,AVHL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVCR,ACh,0,AVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVCR,ACh,0,DA02,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVCR,ACh,0,DA04,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVCR,ACh,0,DA05,2,chemical,false,false,true,false,false,false,false,false,false,+
-PVCR,ACh,0,DA07,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVCR,ACh,0,DB02,4,chemical,false,false,true,false,false,false,false,false,false,+
-PVCR,ACh,0,DB03,6,chemical,false,false,true,false,false,false,false,false,false,+
-PVCR,ACh,0,DB04,6,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,DA2,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,DA4,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,DA5,2,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,DA7,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,DB2,4,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,DB3,6,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,DB4,6,chemical,false,false,true,false,false,false,false,false,false,+
 PVCR,ACh,0,DVA,3,chemical,false,false,true,false,false,false,false,false,false,+
 PVCR,ACh,0,FLPL,2,chemical,false,false,true,false,false,false,false,false,false,+
 PVCR,ACh,0,LUAR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2139,9 +2139,9 @@ PVCR,ACh,0,PVR,1,chemical,false,false,false,false,false,false,false,false,false,
 PVCR,ACh,0,PVWR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVCR,ACh,0,RID,19,chemical,false,false,true,false,false,false,false,false,false,+
 PVCR,ACh,0,SIBVR,10,chemical,false,false,true,true,false,false,false,false,true,complex
-PVCR,ACh,0,VB03,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVCR,ACh,0,VB04,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVCR,ACh,0,VB06,4,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,VB3,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,VB4,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVCR,ACh,0,VB6,4,chemical,false,false,true,false,false,false,false,false,false,+
 PVCR,ACh,0,VB11,3,chemical,false,false,true,false,false,false,false,false,false,+
 PVDL,Glu,0,AVAL,13,chemical,true,false,false,false,false,false,false,false,false,+
 PVDL,Glu,0,AVAR,29,chemical,true,false,false,false,false,false,false,false,false,+
@@ -2149,7 +2149,7 @@ PVDL,Glu,0,AVDL,1,chemical,true,false,false,false,false,false,false,false,false,
 PVDL,Glu,0,AVDR,1,chemical,true,false,false,false,false,false,false,false,false,+
 PVDL,Glu,0,AVFL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVDL,Glu,0,AVG,8,chemical,true,false,false,false,false,false,false,false,false,+
-PVDL,Glu,0,DD05,3,chemical,false,false,false,false,false,false,false,false,false,no pred
+PVDL,Glu,0,DD5,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVDL,Glu,0,PVCL,13,chemical,true,false,false,false,false,false,false,false,false,+
 PVDL,Glu,0,PVCR,36,chemical,true,false,false,false,false,false,false,false,false,+
 PVDL,Glu,0,PVDR,10,chemical,true,true,false,false,false,false,false,false,true,complex
@@ -2162,10 +2162,10 @@ PVDR,Glu,0,DVA,5,chemical,true,false,false,false,false,false,false,false,false,+
 PVDR,Glu,0,PVCL,29,chemical,true,false,false,false,false,false,false,false,false,+
 PVDR,Glu,0,PVCR,29,chemical,true,false,false,false,false,false,false,false,false,+
 PVDR,Glu,0,PVDL,2,chemical,true,true,false,false,false,false,false,false,true,complex
-PVDR,Glu,0,VA09,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+PVDR,Glu,0,VA9,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVDR,Glu,0,VA12,3,chemical,false,true,false,false,false,false,false,false,false,-
-PVDR,Glu,0,VB05,1,chemical,true,false,false,false,false,false,false,false,false,+
-PVDR,Glu,0,VB06,4,chemical,true,false,false,false,false,false,false,false,false,+
+PVDR,Glu,0,VB5,1,chemical,true,false,false,false,false,false,false,false,false,+
+PVDR,Glu,0,VB6,4,chemical,true,false,false,false,false,false,false,false,false,+
 PVM,Glu,0,AVKL,15,chemical,true,false,false,false,false,false,false,false,false,+
 PVM,Glu,0,AVM,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVM,Glu,0,DVA,3,chemical,true,false,false,false,false,false,false,false,false,+
@@ -2182,7 +2182,7 @@ PVNL,ACh,0,AVJR,8,chemical,false,false,false,false,false,false,false,false,false
 PVNL,ACh,0,AVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVNL,ACh,0,BDUL,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVNL,ACh,0,BDUR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVNL,ACh,0,DD01,5,chemical,false,false,true,false,false,false,false,false,false,+
+PVNL,ACh,0,DD1,5,chemical,false,false,true,false,false,false,false,false,false,+
 PVNL,ACh,0,LUAL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVNL,ACh,0,PQR,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVNL,ACh,0,PVCL,5,chemical,false,false,true,false,false,false,false,false,false,+
@@ -2205,8 +2205,8 @@ PVNR,ACh,0,AVJR,1,chemical,false,false,false,false,false,false,false,false,false
 PVNR,ACh,0,AVL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVNR,ACh,0,BDUL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVNR,ACh,0,CEPDL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVNR,ACh,0,DB03,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVNR,ACh,0,DD02,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVNR,ACh,0,DB3,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVNR,ACh,0,DD2,1,chemical,false,false,true,false,false,false,false,false,false,+
 PVNR,ACh,0,HSNR,1,chemical,false,false,true,false,false,false,false,false,false,+
 PVNR,ACh,0,PQR,4,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVNR,ACh,0,PVCR,2,chemical,false,false,true,false,false,false,false,false,false,+
@@ -2218,13 +2218,13 @@ PVNR,ACh,0,PVWL,9,chemical,false,false,false,false,false,false,false,false,false
 PVNR,ACh,0,PVWR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVNR,ACh,0,URBL,2,chemical,false,false,true,false,false,false,false,false,false,+
 PVNR,ACh,0,URXL,2,chemical,false,false,false,true,false,false,false,false,false,-
-PVNR,ACh,0,VA06,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVNR,ACh,0,VA6,1,chemical,false,false,true,false,false,false,false,false,false,+
 PVNR,ACh,0,VA11,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVNR,ACh,0,VC02,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVNR,ACh,0,VD03,3,chemical,false,false,true,false,false,false,false,false,false,+
-PVNR,ACh,0,VD04,6,chemical,false,false,true,false,false,false,false,false,false,+
-PVNR,ACh,0,VD06,1,chemical,false,false,true,false,false,false,false,false,false,+
-PVNR,ACh,0,VD07,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVNR,ACh,0,VC2,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVNR,ACh,0,VD3,3,chemical,false,false,true,false,false,false,false,false,false,+
+PVNR,ACh,0,VD4,6,chemical,false,false,true,false,false,false,false,false,false,+
+PVNR,ACh,0,VD6,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVNR,ACh,0,VD7,1,chemical,false,false,true,false,false,false,false,false,false,+
 PVNR,ACh,0,VD13,2,chemical,false,false,true,false,false,false,false,false,false,+
 PVPL,ACh,0,ADAL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVPL,ACh,0,AQR,8,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2250,7 +2250,7 @@ PVPR,ACh,0,AVG,1,chemical,false,false,true,false,false,false,false,false,false,+
 PVPR,ACh,0,AVHL,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVPR,ACh,0,AVJL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVPR,ACh,0,AVL,4,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVPR,ACh,0,DD02,1,chemical,false,false,true,false,false,false,false,false,false,+
+PVPR,ACh,0,DD2,1,chemical,false,false,true,false,false,false,false,false,false,+
 PVPR,ACh,0,DVC,3,chemical,false,false,true,false,false,false,false,false,false,+
 PVPR,ACh,0,HSNR,2,chemical,false,false,true,false,false,false,false,false,false,+
 PVPR,ACh,0,PVCL,6,chemical,false,false,true,false,false,false,false,false,false,+
@@ -2264,8 +2264,8 @@ PVQL,Glu,0,ASJL,3,chemical,false,false,false,false,false,false,false,false,false
 PVQL,Glu,0,ASKL,12,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVQL,Glu,0,AVHR,1,chemical,true,false,false,false,false,false,false,false,false,+
 PVQL,Glu,0,AWAL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVQL,Glu,0,DA08,1,chemical,true,false,false,false,false,false,false,false,false,+
-PVQL,Glu,0,DD06,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+PVQL,Glu,0,DA8,1,chemical,true,false,false,false,false,false,false,false,false,+
+PVQL,Glu,0,DD6,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVQL,Glu,0,HSNL,3,chemical,true,false,false,false,false,false,false,false,false,+
 PVQL,Glu,0,HSNR,6,chemical,true,false,false,false,false,false,false,false,false,+
 PVQL,Glu,0,PVPL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2280,12 +2280,12 @@ PVQR,Glu,0,AVBR,1,chemical,true,false,false,false,false,false,false,false,false,
 PVQR,Glu,0,AVFR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVQR,Glu,0,AVL,2,chemical,false,true,false,false,false,false,false,false,false,-
 PVQR,Glu,0,AWAR,4,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVQR,Glu,0,DD01,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVQR,Glu,0,DD06,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+PVQR,Glu,0,DD1,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+PVQR,Glu,0,DD6,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVQR,Glu,0,RIFR,4,chemical,true,false,false,false,false,false,false,false,false,+
 PVQR,Glu,0,RMGR,1,chemical,true,true,false,false,false,false,false,false,true,complex
-PVQR,Glu,0,VC02,1,chemical,true,false,false,false,false,false,false,false,false,+
-PVQR,Glu,0,VD01,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+PVQR,Glu,0,VC2,1,chemical,true,false,false,false,false,false,false,false,false,+
+PVQR,Glu,0,VD1,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVR,Glu,0,ADAR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVR,Glu,0,ALMR,2,chemical,true,true,false,false,false,false,false,false,true,complex
 PVR,Glu,0,AVBL,17,chemical,true,false,false,false,false,false,false,false,false,+
@@ -2294,12 +2294,12 @@ PVR,Glu,0,AVJL,11,chemical,true,false,false,false,false,false,false,false,false,
 PVR,Glu,0,AVJR,5,chemical,true,false,false,false,false,false,false,false,false,+
 PVR,Glu,0,AVKL,1,chemical,true,false,false,false,false,false,false,false,false,+
 PVR,Glu,0,CEPVR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVR,Glu,0,DA05,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-PVR,Glu,0,DA09,2,chemical,true,true,false,false,false,false,false,false,true,complex
-PVR,Glu,0,DB02,2,chemical,true,false,false,false,false,false,false,false,false,+
-PVR,Glu,0,DB03,3,chemical,true,false,false,false,false,false,false,false,false,+
-PVR,Glu,0,DB04,1,chemical,true,false,false,false,false,false,false,false,false,+
-PVR,Glu,0,DB07,2,chemical,true,false,false,false,false,false,false,false,false,+
+PVR,Glu,0,DA5,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+PVR,Glu,0,DA9,2,chemical,true,true,false,false,false,false,false,false,true,complex
+PVR,Glu,0,DB2,2,chemical,true,false,false,false,false,false,false,false,false,+
+PVR,Glu,0,DB3,3,chemical,true,false,false,false,false,false,false,false,false,+
+PVR,Glu,0,DB4,1,chemical,true,false,false,false,false,false,false,false,false,+
+PVR,Glu,0,DB7,2,chemical,true,false,false,false,false,false,false,false,false,+
 PVR,Glu,0,DVA,2,chemical,true,false,false,false,false,false,false,false,false,+
 PVR,Glu,0,IL1DR,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVR,Glu,0,IL1VL,9,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2312,7 +2312,7 @@ PVR,Glu,0,RIPR,19,chemical,false,false,false,false,false,false,false,false,false
 PVR,Glu,0,SABD,2,chemical,true,false,false,false,false,false,false,false,false,+
 PVR,Glu,0,SDQR,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVR,Glu,0,URADL,3,chemical,true,false,false,false,false,false,false,false,false,+
-PVR,Glu,0,VB03,2,chemical,true,false,false,false,false,false,false,false,false,+
+PVR,Glu,0,VB3,2,chemical,true,false,false,false,false,false,false,false,false,+
 PVT,0,0,AIBL,5,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVT,0,0,AIBR,10,chemical,false,false,false,false,false,false,false,false,false,no pred
 PVT,0,0,AVKL,7,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2466,15 +2466,15 @@ RICR,0,0,SMDDR,9,chemical,false,false,false,false,false,false,false,false,false,
 RICR,0,0,SMDVL,6,chemical,false,false,false,false,false,false,false,false,false,no pred
 RICR,0,0,SMDVR,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 RICR,0,0,URBR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-RICR,0,0,VB01,7,chemical,false,false,false,false,false,false,false,false,false,no pred
-RID,0,0,DA02,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-RID,0,0,DA06,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-RID,0,0,DB01,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-RID,0,0,DD01,3,chemical,false,false,false,false,false,false,false,false,false,no pred
-RID,0,0,DD02,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+RICR,0,0,VB1,7,chemical,false,false,false,false,false,false,false,false,false,no pred
+RID,0,0,DA2,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+RID,0,0,DA6,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+RID,0,0,DB1,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+RID,0,0,DD1,3,chemical,false,false,false,false,false,false,false,false,false,no pred
+RID,0,0,DD2,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 RID,0,0,FLPL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 RID,0,0,RMED,5,chemical,false,false,false,false,false,false,false,false,false,no pred
-RID,0,0,VD05,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+RID,0,0,VD5,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 RIFL,ACh,0,ALML,5,chemical,false,false,true,false,false,false,false,false,false,+
 RIFL,ACh,0,AVBL,26,chemical,false,false,true,false,false,false,false,false,false,+
 RIFL,ACh,0,AVBR,1,chemical,false,false,true,false,false,false,false,false,false,+
@@ -2593,7 +2593,7 @@ RIML,Glu,0,SAAVR,10,chemical,true,false,false,false,false,false,false,false,fals
 RIML,Glu,0,SMDDL,11,chemical,true,false,false,false,false,false,false,false,false,+
 RIML,Glu,0,SMDDR,14,chemical,true,false,false,false,false,false,false,false,false,+
 RIML,Glu,0,SMDVL,11,chemical,true,false,false,false,false,false,false,false,false,+
-RIML,Glu,0,VB01,8,chemical,true,false,false,false,false,false,false,false,false,+
+RIML,Glu,0,VB1,8,chemical,true,false,false,false,false,false,false,false,false,+
 RIMR,Glu,0,ADAR,9,chemical,false,false,false,false,false,false,false,false,false,no pred
 RIMR,Glu,0,AIBL,15,chemical,true,false,false,false,false,false,false,false,false,+
 RIMR,Glu,0,AVAL,9,chemical,true,false,false,false,false,false,false,false,false,+
@@ -2614,7 +2614,7 @@ RIMR,Glu,0,SMDDL,9,chemical,true,false,false,false,false,false,false,false,false
 RIMR,Glu,0,SMDDR,14,chemical,true,false,false,false,false,false,false,false,false,+
 RIMR,Glu,0,SMDVL,2,chemical,true,false,false,false,false,false,false,false,false,+
 RIMR,Glu,0,SMDVR,3,chemical,true,false,false,false,false,false,false,false,false,+
-RIMR,Glu,0,VB01,2,chemical,true,false,false,false,false,false,false,false,false,+
+RIMR,Glu,0,VB1,2,chemical,true,false,false,false,false,false,false,false,false,+
 RIPL,0,0,OLQDR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 RIPL,0,0,OLQVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 RIPL,0,0,RIH,2,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -2917,7 +2917,7 @@ SAADR,ACh,0,SMBVR,1,chemical,false,false,false,true,false,false,false,false,fals
 SAADR,ACh,0,SMDVL,5,chemical,false,false,true,true,false,false,false,false,true,complex
 SAAVL,ACh,0,AIBL,1,chemical,false,false,false,true,false,false,false,false,false,-
 SAAVL,ACh,0,AVAL,56,chemical,false,false,true,true,false,false,false,false,true,complex
-SAAVL,ACh,0,DD01,1,chemical,false,false,true,false,false,false,false,false,false,+
+SAAVL,ACh,0,DD1,1,chemical,false,false,true,false,false,false,false,false,false,+
 SAAVL,ACh,0,OLLR,1,chemical,false,false,false,true,false,false,false,false,false,-
 SAAVL,ACh,0,RIML,5,chemical,false,false,true,true,false,false,false,false,true,complex
 SAAVL,ACh,0,RIMR,33,chemical,false,false,true,true,false,false,false,false,true,complex
@@ -2928,13 +2928,13 @@ SAAVL,ACh,0,SABVR,2,chemical,false,false,false,false,false,false,false,false,fal
 SAAVL,ACh,0,SMBDR,2,chemical,false,false,false,true,false,false,false,false,false,-
 SAAVL,ACh,0,SMDDR,18,chemical,false,false,true,true,false,false,false,false,true,complex
 SAAVL,ACh,0,SMDVL,1,chemical,false,false,true,true,false,false,false,false,true,complex
-SAAVL,ACh,0,VA01,1,chemical,false,false,true,false,false,false,false,false,false,+
-SAAVL,ACh,0,VA02,2,chemical,false,false,true,false,false,false,false,false,false,+
-SAAVL,ACh,0,VA03,2,chemical,false,false,true,false,false,false,false,false,false,+
-SAAVL,ACh,0,VA04,2,chemical,false,false,true,false,false,false,false,false,false,+
-SAAVL,ACh,0,VB02,1,chemical,false,false,true,false,false,false,false,false,false,+
-SAAVL,ACh,0,VD01,4,chemical,false,false,true,false,false,false,false,false,false,+
-SAAVL,ACh,0,VD02,2,chemical,false,false,true,false,false,false,false,false,false,+
+SAAVL,ACh,0,VA1,1,chemical,false,false,true,false,false,false,false,false,false,+
+SAAVL,ACh,0,VA2,2,chemical,false,false,true,false,false,false,false,false,false,+
+SAAVL,ACh,0,VA3,2,chemical,false,false,true,false,false,false,false,false,false,+
+SAAVL,ACh,0,VA4,2,chemical,false,false,true,false,false,false,false,false,false,+
+SAAVL,ACh,0,VB2,1,chemical,false,false,true,false,false,false,false,false,false,+
+SAAVL,ACh,0,VD1,4,chemical,false,false,true,false,false,false,false,false,false,+
+SAAVL,ACh,0,VD2,2,chemical,false,false,true,false,false,false,false,false,false,+
 SAAVR,ACh,0,AIBR,1,chemical,false,false,false,true,false,false,false,false,false,-
 SAAVR,ACh,0,ALNR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 SAAVR,ACh,0,ASIR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -3152,7 +3152,7 @@ SMDVR,ACh,GABA,SIAVL,30,chemical,false,false,true,true,false,true,true,true,true
 SMDVR,ACh,GABA,SIBDR,30,chemical,false,false,true,true,true,false,true,true,true,complex
 SMDVR,ACh,GABA,SMDDL,14,chemical,false,false,true,true,false,true,true,true,true,complex
 SMDVR,ACh,GABA,SMDVL,1,chemical,false,false,true,true,false,true,true,true,true,complex
-SMDVR,ACh,GABA,VB01,1,chemical,false,false,true,false,true,true,true,true,true,complex
+SMDVR,ACh,GABA,VB1,1,chemical,false,false,true,false,true,true,true,true,true,complex
 URADL,ACh,0,IL1DL,4,chemical,false,false,true,false,false,false,false,false,false,+
 URADL,ACh,0,RIH,3,chemical,false,false,false,true,false,false,false,false,false,-
 URADL,ACh,0,RIPL,12,chemical,false,false,false,false,false,false,false,false,false,no pred
@@ -3341,100 +3341,100 @@ URYVR,Glu,0,SIBVL,5,chemical,true,false,false,false,false,false,false,false,fals
 URYVR,Glu,0,SIBVR,4,chemical,true,false,false,false,false,false,false,false,false,+
 URYVR,Glu,0,SMBDR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 URYVR,Glu,0,SMDVL,11,chemical,true,false,false,false,false,false,false,false,false,+
-VA01,ACh,0,DA02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA01,ACh,0,DD01,12,chemical,false,false,true,false,false,false,false,false,false,+
-VA01,ACh,0,VD01,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA02,ACh,0,AVAL,1,chemical,false,false,true,true,false,false,false,false,true,complex
-VA02,ACh,0,DD01,20,chemical,false,false,true,false,false,false,false,false,false,+
-VA02,ACh,0,SAAVL,1,chemical,false,false,true,true,false,false,false,false,true,complex
-VA02,ACh,0,VA01,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA02,ACh,0,VA03,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA02,ACh,0,VB01,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA02,ACh,0,VB02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA02,ACh,0,VD01,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA02,ACh,0,VD02,27,chemical,false,false,true,false,false,false,false,false,false,+
-VA03,ACh,0,DD01,18,chemical,false,false,true,false,false,false,false,false,false,+
-VA03,ACh,0,DD02,10,chemical,false,false,true,false,false,false,false,false,false,+
-VA03,ACh,0,VA04,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA03,ACh,0,VB02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA03,ACh,0,VB03,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA03,ACh,0,VD02,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA03,ACh,0,VD03,11,chemical,false,false,true,false,false,false,false,false,false,+
-VA04,ACh,0,AVAR,1,chemical,false,false,true,true,false,false,false,false,true,complex
-VA04,ACh,0,AVDL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VA04,ACh,0,AVER,1,chemical,false,false,false,true,false,false,false,false,false,-
-VA04,ACh,0,DD02,17,chemical,false,false,true,false,false,false,false,false,false,+
-VA04,ACh,0,VB03,8,chemical,false,false,true,false,false,false,false,false,false,+
-VA04,ACh,0,VB04,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA04,ACh,0,VD04,8,chemical,false,false,true,false,false,false,false,false,false,+
-VA05,ACh,0,DD02,6,chemical,false,false,true,false,false,false,false,false,false,+
-VA05,ACh,0,DD03,17,chemical,false,false,true,false,false,false,false,false,false,+
-VA05,ACh,0,VA06,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA05,ACh,0,VB04,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA05,ACh,0,VD05,9,chemical,false,false,true,false,false,false,false,false,false,+
-VA06,ACh,0,AS01,13,chemical,false,false,true,false,false,false,false,false,false,+
-VA06,ACh,0,AS02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA06,ACh,0,AVAR,1,chemical,false,false,true,true,false,false,false,false,true,complex
-VA06,ACh,0,DD03,21,chemical,false,false,true,false,false,false,false,false,false,+
-VA06,ACh,0,VA05,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA06,ACh,0,VB04,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA06,ACh,0,VB05,7,chemical,false,false,true,false,false,false,false,false,false,+
-VA06,ACh,0,VD05,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA06,ACh,0,VD06,6,chemical,false,false,true,false,false,false,false,false,false,+
-VA07,ACh,0,AS01,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA07,ACh,0,AS02,10,chemical,false,false,true,false,false,false,false,false,false,+
-VA07,ACh,0,AS03,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA07,ACh,0,DD03,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA07,ACh,0,DD04,17,chemical,false,false,true,false,false,false,false,false,false,+
-VA07,ACh,0,VB06,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA07,ACh,0,VD06,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA07,ACh,0,VD07,13,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,AS02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,AS03,4,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,AS04,11,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,AS05,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,DD04,9,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,DD05,9,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,VB06,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,VD07,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,VD08,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA08,ACh,0,VD09,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,AS06,5,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,AS07,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,DD04,6,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,DD05,6,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,DD06,6,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,VB07,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,VB08,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,VD09,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,VD10,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA09,ACh,0,VD11,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA10,ACh,0,AS06,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA10,ACh,0,AS07,6,chemical,false,false,true,false,false,false,false,false,false,+
-VA10,ACh,0,DD05,9,chemical,false,false,true,false,false,false,false,false,false,+
-VA10,ACh,0,DD06,9,chemical,false,false,true,false,false,false,false,false,false,+
-VA10,ACh,0,VB08,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA10,ACh,0,VB09,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA1,ACh,0,DA2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA1,ACh,0,DD1,12,chemical,false,false,true,false,false,false,false,false,false,+
+VA1,ACh,0,VD1,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA2,ACh,0,AVAL,1,chemical,false,false,true,true,false,false,false,false,true,complex
+VA2,ACh,0,DD1,20,chemical,false,false,true,false,false,false,false,false,false,+
+VA2,ACh,0,SAAVL,1,chemical,false,false,true,true,false,false,false,false,true,complex
+VA2,ACh,0,VA1,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA2,ACh,0,VA3,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA2,ACh,0,VB1,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA2,ACh,0,VB2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA2,ACh,0,VD1,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA2,ACh,0,VD2,27,chemical,false,false,true,false,false,false,false,false,false,+
+VA3,ACh,0,DD1,18,chemical,false,false,true,false,false,false,false,false,false,+
+VA3,ACh,0,DD2,10,chemical,false,false,true,false,false,false,false,false,false,+
+VA3,ACh,0,VA4,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA3,ACh,0,VB2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA3,ACh,0,VB3,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA3,ACh,0,VD2,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA3,ACh,0,VD3,11,chemical,false,false,true,false,false,false,false,false,false,+
+VA4,ACh,0,AVAR,1,chemical,false,false,true,true,false,false,false,false,true,complex
+VA4,ACh,0,AVDL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VA4,ACh,0,AVER,1,chemical,false,false,false,true,false,false,false,false,false,-
+VA4,ACh,0,DD2,17,chemical,false,false,true,false,false,false,false,false,false,+
+VA4,ACh,0,VB3,8,chemical,false,false,true,false,false,false,false,false,false,+
+VA4,ACh,0,VB4,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA4,ACh,0,VD4,8,chemical,false,false,true,false,false,false,false,false,false,+
+VA5,ACh,0,DD2,6,chemical,false,false,true,false,false,false,false,false,false,+
+VA5,ACh,0,DD3,17,chemical,false,false,true,false,false,false,false,false,false,+
+VA5,ACh,0,VA6,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA5,ACh,0,VB4,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA5,ACh,0,VD5,9,chemical,false,false,true,false,false,false,false,false,false,+
+VA6,ACh,0,AS1,13,chemical,false,false,true,false,false,false,false,false,false,+
+VA6,ACh,0,AS2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA6,ACh,0,AVAR,1,chemical,false,false,true,true,false,false,false,false,true,complex
+VA6,ACh,0,DD3,21,chemical,false,false,true,false,false,false,false,false,false,+
+VA6,ACh,0,VA5,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA6,ACh,0,VB4,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA6,ACh,0,VB5,7,chemical,false,false,true,false,false,false,false,false,false,+
+VA6,ACh,0,VD5,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA6,ACh,0,VD6,6,chemical,false,false,true,false,false,false,false,false,false,+
+VA7,ACh,0,AS1,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA7,ACh,0,AS2,10,chemical,false,false,true,false,false,false,false,false,false,+
+VA7,ACh,0,AS3,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA7,ACh,0,DD3,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA7,ACh,0,DD4,17,chemical,false,false,true,false,false,false,false,false,false,+
+VA7,ACh,0,VB6,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA7,ACh,0,VD6,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA7,ACh,0,VD7,13,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,AS2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,AS3,4,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,AS4,11,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,AS5,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,DD4,9,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,DD5,9,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,VB6,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,VD7,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,VD8,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA8,ACh,0,VD9,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,AS6,5,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,AS7,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,DD4,6,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,DD5,6,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,DD6,6,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,VB7,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,VB8,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,VD9,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,VD10,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA9,ACh,0,VD11,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA10,ACh,0,AS6,3,chemical,false,false,true,false,false,false,false,false,false,+
+VA10,ACh,0,AS7,6,chemical,false,false,true,false,false,false,false,false,false,+
+VA10,ACh,0,DD5,9,chemical,false,false,true,false,false,false,false,false,false,+
+VA10,ACh,0,DD6,9,chemical,false,false,true,false,false,false,false,false,false,+
+VA10,ACh,0,VB8,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA10,ACh,0,VB9,1,chemical,false,false,true,false,false,false,false,false,false,+
 VA10,ACh,0,VD10,2,chemical,false,false,true,false,false,false,false,false,false,+
 VA10,ACh,0,VD11,3,chemical,false,false,true,false,false,false,false,false,false,+
 VA10,ACh,0,VD12,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA11,ACh,0,AS07,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA11,ACh,0,AS08,10,chemical,false,false,true,false,false,false,false,false,false,+
-VA11,ACh,0,AS09,1,chemical,false,false,true,false,false,false,false,false,false,+
-VA11,ACh,0,DD06,19,chemical,false,false,true,false,false,false,false,false,false,+
+VA11,ACh,0,AS7,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA11,ACh,0,AS8,10,chemical,false,false,true,false,false,false,false,false,false,+
+VA11,ACh,0,AS9,1,chemical,false,false,true,false,false,false,false,false,false,+
+VA11,ACh,0,DD6,19,chemical,false,false,true,false,false,false,false,false,false,+
 VA11,ACh,0,PVNR,1,chemical,false,false,true,false,false,false,false,false,false,+
 VA11,ACh,0,VB10,6,chemical,false,false,true,false,false,false,false,false,false,+
 VA11,ACh,0,VD11,5,chemical,false,false,true,false,false,false,false,false,false,+
 VA11,ACh,0,VD12,3,chemical,false,false,true,false,false,false,false,false,false,+
-VA12,ACh,0,AS08,2,chemical,false,false,true,false,false,false,false,false,false,+
-VA12,ACh,0,AS09,8,chemical,false,false,true,false,false,false,false,false,false,+
+VA12,ACh,0,AS8,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA12,ACh,0,AS9,8,chemical,false,false,true,false,false,false,false,false,false,+
 VA12,ACh,0,AS10,6,chemical,false,false,true,false,false,false,false,false,false,+
 VA12,ACh,0,AS11,6,chemical,false,false,true,false,false,false,false,false,false,+
 VA12,ACh,0,AVAL,3,chemical,false,false,true,true,false,false,false,false,true,complex
-VA12,ACh,0,DA08,9,chemical,false,false,true,false,false,false,false,false,false,+
-VA12,ACh,0,DA09,17,chemical,false,false,true,false,false,false,false,false,false,+
-VA12,ACh,0,DB07,10,chemical,false,false,true,false,false,false,false,false,false,+
-VA12,ACh,0,DD06,2,chemical,false,false,true,false,false,false,false,false,false,+
+VA12,ACh,0,DA8,9,chemical,false,false,true,false,false,false,false,false,false,+
+VA12,ACh,0,DA9,17,chemical,false,false,true,false,false,false,false,false,false,+
+VA12,ACh,0,DB7,10,chemical,false,false,true,false,false,false,false,false,false,+
+VA12,ACh,0,DD6,2,chemical,false,false,true,false,false,false,false,false,false,+
 VA12,ACh,0,LUAL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 VA12,ACh,0,PHCR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 VA12,ACh,0,PVCL,3,chemical,false,false,true,false,false,false,false,false,false,+
@@ -3443,196 +3443,196 @@ VA12,ACh,0,VA11,4,chemical,false,false,true,false,false,false,false,false,false,
 VA12,ACh,0,VB11,4,chemical,false,false,true,false,false,false,false,false,false,+
 VA12,ACh,0,VD12,7,chemical,false,false,true,false,false,false,false,false,false,+
 VA12,ACh,0,VD13,12,chemical,false,false,true,false,false,false,false,false,false,+
-VB01,ACh,0,ADAL,5,chemical,false,false,false,false,false,false,false,false,false,no pred
-VB01,ACh,0,AIBR,2,chemical,false,false,false,true,false,false,false,false,false,-
-VB01,ACh,0,DD01,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB01,ACh,0,RIML,10,chemical,false,false,true,true,false,false,false,false,true,complex
-VB01,ACh,0,RMFL,10,chemical,false,false,false,true,false,false,false,false,false,-
-VB01,ACh,0,SAADL,18,chemical,false,false,true,true,false,false,false,false,true,complex
-VB01,ACh,0,SMBVL,3,chemical,false,false,false,true,false,false,false,false,false,-
-VB01,ACh,0,VA01,7,chemical,false,false,true,false,false,false,false,false,false,+
-VB01,ACh,0,VA02,2,chemical,false,false,true,false,false,false,false,false,false,+
-VB01,ACh,0,VA03,2,chemical,false,false,true,false,false,false,false,false,false,+
-VB01,ACh,0,VA04,2,chemical,false,false,true,false,false,false,false,false,false,+
-VB01,ACh,0,VD01,4,chemical,false,false,true,false,false,false,false,false,false,+
-VB01,ACh,0,VD02,2,chemical,false,false,true,false,false,false,false,false,false,+
-VB02,ACh,0,AVEL,1,chemical,false,false,false,true,false,false,false,false,false,-
-VB02,ACh,0,DD01,30,chemical,false,false,true,false,false,false,false,false,false,+
-VB02,ACh,0,DD02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB02,ACh,0,VA02,5,chemical,false,false,true,false,false,false,false,false,false,+
-VB02,ACh,0,VA03,11,chemical,false,false,true,false,false,false,false,false,false,+
-VB02,ACh,0,VC02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB02,ACh,0,VD02,14,chemical,false,false,true,false,false,false,false,false,false,+
-VB02,ACh,0,VD03,4,chemical,false,false,true,false,false,false,false,false,false,+
-VB03,ACh,0,DD02,36,chemical,false,false,true,false,false,false,false,false,false,+
-VB03,ACh,0,VA04,10,chemical,false,false,true,false,false,false,false,false,false,+
-VB03,ACh,0,VA05,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB03,ACh,0,VD03,4,chemical,false,false,true,false,false,false,false,false,false,+
-VB03,ACh,0,VD04,6,chemical,false,false,true,false,false,false,false,false,false,+
-VB04,ACh,0,AVG,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB04,ACh,0,DD02,7,chemical,false,false,true,false,false,false,false,false,false,+
-VB04,ACh,0,DD03,13,chemical,false,false,true,false,false,false,false,false,false,+
-VB04,ACh,0,VA04,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB04,ACh,0,VA05,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB04,ACh,0,VB05,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB04,ACh,0,VD04,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB04,ACh,0,VD05,3,chemical,false,false,true,false,false,false,false,false,false,+
-VB05,ACh,0,DD03,34,chemical,false,false,true,false,false,false,false,false,false,+
-VB05,ACh,0,VA06,2,chemical,false,false,true,false,false,false,false,false,false,+
-VB05,ACh,0,VD06,10,chemical,false,false,true,false,false,false,false,false,false,+
-VB06,ACh,0,DD04,32,chemical,false,false,true,false,false,false,false,false,false,+
-VB06,ACh,0,PVNR,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB06,ACh,0,VA07,3,chemical,false,false,true,false,false,false,false,false,false,+
-VB06,ACh,0,VA08,2,chemical,false,false,true,false,false,false,false,false,false,+
-VB06,ACh,0,VD06,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB06,ACh,0,VD07,22,chemical,false,false,true,false,false,false,false,false,false,+
-VB07,ACh,0,DD05,29,chemical,false,false,true,false,false,false,false,false,false,+
-VB07,ACh,0,VA09,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB07,ACh,0,VA10,1,chemical,false,false,true,false,false,false,false,false,false,+
-VB07,ACh,0,VD08,5,chemical,false,false,true,false,false,false,false,false,false,+
-VB07,ACh,0,VD09,6,chemical,false,false,true,false,false,false,false,false,false,+
-VB08,ACh,0,DD05,10,chemical,false,false,true,false,false,false,false,false,false,+
-VB08,ACh,0,DD06,19,chemical,false,false,true,false,false,false,false,false,false,+
-VB08,ACh,0,VA11,2,chemical,false,false,true,false,false,false,false,false,false,+
-VB08,ACh,0,VD09,5,chemical,false,false,true,false,false,false,false,false,false,+
-VB08,ACh,0,VD10,6,chemical,false,false,true,false,false,false,false,false,false,+
-VB09,ACh,0,DD05,10,chemical,false,false,true,false,false,false,false,false,false,+
-VB09,ACh,0,DD06,19,chemical,false,false,true,false,false,false,false,false,false,+
-VB09,ACh,0,VA11,2,chemical,false,false,true,false,false,false,false,false,false,+
-VB09,ACh,0,VD10,5,chemical,false,false,true,false,false,false,false,false,false,+
-VB09,ACh,0,VD11,6,chemical,false,false,true,false,false,false,false,false,false,+
-VB10,ACh,0,DD06,19,chemical,false,false,true,false,false,false,false,false,false,+
+VB1,ACh,0,ADAL,5,chemical,false,false,false,false,false,false,false,false,false,no pred
+VB1,ACh,0,AIBR,2,chemical,false,false,false,true,false,false,false,false,false,-
+VB1,ACh,0,DD1,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB1,ACh,0,RIML,10,chemical,false,false,true,true,false,false,false,false,true,complex
+VB1,ACh,0,RMFL,10,chemical,false,false,false,true,false,false,false,false,false,-
+VB1,ACh,0,SAADL,18,chemical,false,false,true,true,false,false,false,false,true,complex
+VB1,ACh,0,SMBVL,3,chemical,false,false,false,true,false,false,false,false,false,-
+VB1,ACh,0,VA1,7,chemical,false,false,true,false,false,false,false,false,false,+
+VB1,ACh,0,VA2,2,chemical,false,false,true,false,false,false,false,false,false,+
+VB1,ACh,0,VA3,2,chemical,false,false,true,false,false,false,false,false,false,+
+VB1,ACh,0,VA4,2,chemical,false,false,true,false,false,false,false,false,false,+
+VB1,ACh,0,VD1,4,chemical,false,false,true,false,false,false,false,false,false,+
+VB1,ACh,0,VD2,2,chemical,false,false,true,false,false,false,false,false,false,+
+VB2,ACh,0,AVEL,1,chemical,false,false,false,true,false,false,false,false,false,-
+VB2,ACh,0,DD1,30,chemical,false,false,true,false,false,false,false,false,false,+
+VB2,ACh,0,DD2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB2,ACh,0,VA2,5,chemical,false,false,true,false,false,false,false,false,false,+
+VB2,ACh,0,VA3,11,chemical,false,false,true,false,false,false,false,false,false,+
+VB2,ACh,0,VC2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB2,ACh,0,VD2,14,chemical,false,false,true,false,false,false,false,false,false,+
+VB2,ACh,0,VD3,4,chemical,false,false,true,false,false,false,false,false,false,+
+VB3,ACh,0,DD2,36,chemical,false,false,true,false,false,false,false,false,false,+
+VB3,ACh,0,VA4,10,chemical,false,false,true,false,false,false,false,false,false,+
+VB3,ACh,0,VA5,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB3,ACh,0,VD3,4,chemical,false,false,true,false,false,false,false,false,false,+
+VB3,ACh,0,VD4,6,chemical,false,false,true,false,false,false,false,false,false,+
+VB4,ACh,0,AVG,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB4,ACh,0,DD2,7,chemical,false,false,true,false,false,false,false,false,false,+
+VB4,ACh,0,DD3,13,chemical,false,false,true,false,false,false,false,false,false,+
+VB4,ACh,0,VA4,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB4,ACh,0,VA5,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB4,ACh,0,VB5,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB4,ACh,0,VD4,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB4,ACh,0,VD5,3,chemical,false,false,true,false,false,false,false,false,false,+
+VB5,ACh,0,DD3,34,chemical,false,false,true,false,false,false,false,false,false,+
+VB5,ACh,0,VA6,2,chemical,false,false,true,false,false,false,false,false,false,+
+VB5,ACh,0,VD6,10,chemical,false,false,true,false,false,false,false,false,false,+
+VB6,ACh,0,DD4,32,chemical,false,false,true,false,false,false,false,false,false,+
+VB6,ACh,0,PVNR,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB6,ACh,0,VA7,3,chemical,false,false,true,false,false,false,false,false,false,+
+VB6,ACh,0,VA8,2,chemical,false,false,true,false,false,false,false,false,false,+
+VB6,ACh,0,VD6,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB6,ACh,0,VD7,22,chemical,false,false,true,false,false,false,false,false,false,+
+VB7,ACh,0,DD5,29,chemical,false,false,true,false,false,false,false,false,false,+
+VB7,ACh,0,VA9,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB7,ACh,0,VA10,1,chemical,false,false,true,false,false,false,false,false,false,+
+VB7,ACh,0,VD8,5,chemical,false,false,true,false,false,false,false,false,false,+
+VB7,ACh,0,VD9,6,chemical,false,false,true,false,false,false,false,false,false,+
+VB8,ACh,0,DD5,10,chemical,false,false,true,false,false,false,false,false,false,+
+VB8,ACh,0,DD6,19,chemical,false,false,true,false,false,false,false,false,false,+
+VB8,ACh,0,VA11,2,chemical,false,false,true,false,false,false,false,false,false,+
+VB8,ACh,0,VD9,5,chemical,false,false,true,false,false,false,false,false,false,+
+VB8,ACh,0,VD10,6,chemical,false,false,true,false,false,false,false,false,false,+
+VB9,ACh,0,DD5,10,chemical,false,false,true,false,false,false,false,false,false,+
+VB9,ACh,0,DD6,19,chemical,false,false,true,false,false,false,false,false,false,+
+VB9,ACh,0,VA11,2,chemical,false,false,true,false,false,false,false,false,false,+
+VB9,ACh,0,VD10,5,chemical,false,false,true,false,false,false,false,false,false,+
+VB9,ACh,0,VD11,6,chemical,false,false,true,false,false,false,false,false,false,+
+VB10,ACh,0,DD6,19,chemical,false,false,true,false,false,false,false,false,false,+
 VB10,ACh,0,PVT,1,chemical,false,false,true,false,false,false,false,false,false,+
 VB10,ACh,0,VA11,3,chemical,false,false,true,false,false,false,false,false,false,+
 VB10,ACh,0,VD11,7,chemical,false,false,true,false,false,false,false,false,false,+
 VB10,ACh,0,VD12,6,chemical,false,false,true,false,false,false,false,false,false,+
-VB11,ACh,0,DD06,19,chemical,false,false,true,false,false,false,false,false,false,+
+VB11,ACh,0,DD6,19,chemical,false,false,true,false,false,false,false,false,false,+
 VB11,ACh,0,PVCR,1,chemical,false,false,true,false,false,false,false,false,false,+
 VB11,ACh,0,PVWL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 VB11,ACh,0,PVWR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
 VB11,ACh,0,VA12,5,chemical,false,false,true,false,false,false,false,false,false,+
 VB11,ACh,0,VD12,2,chemical,false,false,true,false,false,false,false,false,false,+
 VB11,ACh,0,VD13,22,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,AVFL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC01,ACh,0,AVL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC01,ACh,0,DD01,6,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,DD02,8,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,DD03,8,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,DVC,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,PVPR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC01,ACh,0,PVT,4,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,VC02,4,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,VC03,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,VD01,5,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,VD02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,VD03,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,VD04,4,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,VD05,4,chemical,false,false,true,false,false,false,false,false,false,+
-VC01,ACh,0,VD06,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,DB04,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,DD01,6,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,DD02,4,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,DD03,8,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,DVC,3,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,PVCL,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,PVPR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC02,ACh,0,PVQR,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,PVT,6,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,VC01,3,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,VC03,4,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,VD01,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,VD02,3,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,VD04,6,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,VD05,4,chemical,false,false,true,false,false,false,false,false,false,+
-VC02,ACh,0,VD06,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,AVBL,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,AVJL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC03,ACh,0,AVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC03,ACh,0,DD01,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,DD02,3,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,DD03,5,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,HSNR,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,PVNR,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,PVPR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC03,ACh,0,PVQR,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,PVT,5,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,SABVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC03,ACh,0,VB02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VB04,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VC01,5,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VC02,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VD01,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VD02,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VD03,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VD04,3,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VD05,3,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VD06,5,chemical,false,false,true,false,false,false,false,false,false,+
-VC03,ACh,0,VD07,8,chemical,false,false,true,false,false,false,false,false,false,+
-VC04,ACh,0,AVBR,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC04,ACh,0,AVHR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC04,ACh,0,VC03,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC04,ACh,0,VC05,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC05,ACh,0,AVFL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC05,ACh,0,AVFR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC05,ACh,0,DVC,3,chemical,false,false,true,false,false,false,false,false,false,+
-VC05,ACh,0,HSNL,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC05,ACh,0,HSNR,3,chemical,false,false,true,false,false,false,false,false,false,+
-VC05,ACh,0,PVR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC05,ACh,0,PVT,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC05,ACh,0,VC04,4,chemical,false,false,true,false,false,false,false,false,false,+
-VC05,ACh,0,VC05,6,chemical,false,false,true,false,false,false,false,false,false,+
-VC06,ACh,0,AVG,1,chemical,false,false,true,false,false,false,false,false,false,+
-VC06,ACh,0,AVL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-VC06,ACh,0,DD06,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC06,ACh,0,PVNR,2,chemical,false,false,true,false,false,false,false,false,false,+
-VC06,ACh,0,VD11,5,chemical,false,false,true,false,false,false,false,false,false,+
-VC06,ACh,0,VD12,3,chemical,false,false,true,false,false,false,false,false,false,+
-VD01,GABA,0,DD01,2,chemical,false,false,false,false,false,false,false,false,false,no pred
-VD01,GABA,0,SAAVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VD01,GABA,0,VA01,8,chemical,false,false,false,false,true,true,false,false,true,complex
-VD01,GABA,0,VB01,5,chemical,false,false,false,false,true,true,false,false,true,complex
-VD02,GABA,0,AS01,1,chemical,false,false,false,false,false,true,false,false,false,-
-VD02,GABA,0,AVEL,1,chemical,false,false,false,false,false,true,false,false,false,-
-VD02,GABA,0,DD01,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VD02,GABA,0,VA02,12,chemical,false,false,false,false,true,true,false,false,true,complex
-VD02,GABA,0,VB02,4,chemical,false,false,false,false,true,true,false,false,true,complex
-VD03,GABA,0,DD01,6,chemical,false,false,false,false,false,false,false,false,false,no pred
-VD03,GABA,0,VA03,4,chemical,false,false,false,false,true,true,false,false,true,complex
-VD03,GABA,0,VB02,2,chemical,false,false,false,false,true,true,false,false,true,complex
-VD03,GABA,0,VB03,1,chemical,false,false,false,false,true,true,false,false,true,complex
-VD04,GABA,0,VA04,1,chemical,false,false,false,false,true,true,false,false,true,complex
-VD04,GABA,0,VB03,2,chemical,false,false,false,false,true,true,false,false,true,complex
-VD05,GABA,0,AVAR,1,chemical,false,false,false,false,false,true,false,false,false,-
-VD05,GABA,0,SAAVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VD05,GABA,0,VA05,2,chemical,false,false,false,false,true,true,false,false,true,complex
-VD05,GABA,0,VA06,1,chemical,false,false,false,false,true,true,false,false,true,complex
-VD05,GABA,0,VB01,1,chemical,false,false,false,false,true,true,false,false,true,complex
-VD05,GABA,0,VB04,2,chemical,false,false,false,false,true,true,false,false,true,complex
-VD06,GABA,0,AVAL,1,chemical,false,false,false,false,false,true,false,false,false,-
-VD06,GABA,0,PVNR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
-VD06,GABA,0,VA06,3,chemical,false,false,false,false,true,true,false,false,true,complex
-VD06,GABA,0,VB05,1,chemical,false,false,false,false,true,true,false,false,true,complex
-VD07,GABA,0,VA07,2,chemical,false,false,false,false,true,true,false,false,true,complex
-VD07,GABA,0,VB06,2,chemical,false,false,false,false,true,true,false,false,true,complex
-VD07,GABA,0,VB07,1,chemical,false,false,false,false,true,true,false,false,true,complex
-VD08,GABA,0,VA08,2,chemical,false,false,false,false,true,true,false,false,true,complex
-VD08,GABA,0,VA09,1,chemical,false,false,false,false,true,true,false,false,true,complex
-VD08,GABA,0,VB07,2,chemical,false,false,false,false,true,true,false,false,true,complex
-VD09,GABA,0,VA09,3,chemical,false,false,false,false,true,true,false,false,true,complex
-VD09,GABA,0,VB08,2,chemical,false,false,false,false,true,true,false,false,true,complex
+VC1,ACh,0,AVFL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC1,ACh,0,AVL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC1,ACh,0,DD1,6,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,DD2,8,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,DD3,8,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,DVC,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,PVPR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC1,ACh,0,PVT,4,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,VC2,4,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,VC3,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,VD1,5,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,VD2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,VD3,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,VD4,4,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,VD5,4,chemical,false,false,true,false,false,false,false,false,false,+
+VC1,ACh,0,VD6,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,DB4,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,DD1,6,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,DD2,4,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,DD3,8,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,DVC,3,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,PVCL,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,PVPR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC2,ACh,0,PVQR,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,PVT,6,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,VC1,3,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,VC3,4,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,VD1,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,VD2,3,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,VD4,6,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,VD5,4,chemical,false,false,true,false,false,false,false,false,false,+
+VC2,ACh,0,VD6,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,AVBL,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,AVJL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC3,ACh,0,AVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC3,ACh,0,DD1,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,DD2,3,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,DD3,5,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,HSNR,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,PVNR,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,PVPR,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC3,ACh,0,PVQR,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,PVT,5,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,SABVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC3,ACh,0,VB2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VB4,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VC1,5,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VC2,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VD1,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VD2,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VD3,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VD4,3,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VD5,3,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VD6,5,chemical,false,false,true,false,false,false,false,false,false,+
+VC3,ACh,0,VD7,8,chemical,false,false,true,false,false,false,false,false,false,+
+VC4,ACh,0,AVBR,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC4,ACh,0,AVHR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC4,ACh,0,VC3,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC4,ACh,0,VC5,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC5,ACh,0,AVFL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC5,ACh,0,AVFR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC5,ACh,0,DVC,3,chemical,false,false,true,false,false,false,false,false,false,+
+VC5,ACh,0,HSNL,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC5,ACh,0,HSNR,3,chemical,false,false,true,false,false,false,false,false,false,+
+VC5,ACh,0,PVR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC5,ACh,0,PVT,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC5,ACh,0,VC4,4,chemical,false,false,true,false,false,false,false,false,false,+
+VC5,ACh,0,VC5,6,chemical,false,false,true,false,false,false,false,false,false,+
+VC6,ACh,0,AVG,1,chemical,false,false,true,false,false,false,false,false,false,+
+VC6,ACh,0,AVL,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+VC6,ACh,0,DD6,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC6,ACh,0,PVNR,2,chemical,false,false,true,false,false,false,false,false,false,+
+VC6,ACh,0,VD11,5,chemical,false,false,true,false,false,false,false,false,false,+
+VC6,ACh,0,VD12,3,chemical,false,false,true,false,false,false,false,false,false,+
+VD1,GABA,0,DD1,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+VD1,GABA,0,SAAVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VD1,GABA,0,VA1,8,chemical,false,false,false,false,true,true,false,false,true,complex
+VD1,GABA,0,VB1,5,chemical,false,false,false,false,true,true,false,false,true,complex
+VD2,GABA,0,AS1,1,chemical,false,false,false,false,false,true,false,false,false,-
+VD2,GABA,0,AVEL,1,chemical,false,false,false,false,false,true,false,false,false,-
+VD2,GABA,0,DD1,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VD2,GABA,0,VA2,12,chemical,false,false,false,false,true,true,false,false,true,complex
+VD2,GABA,0,VB2,4,chemical,false,false,false,false,true,true,false,false,true,complex
+VD3,GABA,0,DD1,6,chemical,false,false,false,false,false,false,false,false,false,no pred
+VD3,GABA,0,VA3,4,chemical,false,false,false,false,true,true,false,false,true,complex
+VD3,GABA,0,VB2,2,chemical,false,false,false,false,true,true,false,false,true,complex
+VD3,GABA,0,VB3,1,chemical,false,false,false,false,true,true,false,false,true,complex
+VD4,GABA,0,VA4,1,chemical,false,false,false,false,true,true,false,false,true,complex
+VD4,GABA,0,VB3,2,chemical,false,false,false,false,true,true,false,false,true,complex
+VD5,GABA,0,AVAR,1,chemical,false,false,false,false,false,true,false,false,false,-
+VD5,GABA,0,SAAVL,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VD5,GABA,0,VA5,2,chemical,false,false,false,false,true,true,false,false,true,complex
+VD5,GABA,0,VA6,1,chemical,false,false,false,false,true,true,false,false,true,complex
+VD5,GABA,0,VB1,1,chemical,false,false,false,false,true,true,false,false,true,complex
+VD5,GABA,0,VB4,2,chemical,false,false,false,false,true,true,false,false,true,complex
+VD6,GABA,0,AVAL,1,chemical,false,false,false,false,false,true,false,false,false,-
+VD6,GABA,0,PVNR,1,chemical,false,false,false,false,false,false,false,false,false,no pred
+VD6,GABA,0,VA6,3,chemical,false,false,false,false,true,true,false,false,true,complex
+VD6,GABA,0,VB5,1,chemical,false,false,false,false,true,true,false,false,true,complex
+VD7,GABA,0,VA7,2,chemical,false,false,false,false,true,true,false,false,true,complex
+VD7,GABA,0,VB6,2,chemical,false,false,false,false,true,true,false,false,true,complex
+VD7,GABA,0,VB7,1,chemical,false,false,false,false,true,true,false,false,true,complex
+VD8,GABA,0,VA8,2,chemical,false,false,false,false,true,true,false,false,true,complex
+VD8,GABA,0,VA9,1,chemical,false,false,false,false,true,true,false,false,true,complex
+VD8,GABA,0,VB7,2,chemical,false,false,false,false,true,true,false,false,true,complex
+VD9,GABA,0,VA9,3,chemical,false,false,false,false,true,true,false,false,true,complex
+VD9,GABA,0,VB8,2,chemical,false,false,false,false,true,true,false,false,true,complex
 VD10,GABA,0,VA10,2,chemical,false,false,false,false,true,true,false,false,true,complex
-VD10,GABA,0,VB09,1,chemical,false,false,false,false,true,true,false,false,true,complex
+VD10,GABA,0,VB9,1,chemical,false,false,false,false,true,true,false,false,true,complex
 VD11,GABA,0,AVAR,2,chemical,false,false,false,false,false,true,false,false,false,-
-VD11,GABA,0,DD06,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+VD11,GABA,0,DD6,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 VD11,GABA,0,PVT,1,chemical,false,false,false,false,true,false,false,false,false,+
 VD11,GABA,0,VA11,2,chemical,false,false,false,false,true,true,false,false,true,complex
 VD11,GABA,0,VB10,1,chemical,false,false,false,false,true,true,false,false,true,complex
-VD12,GABA,0,DD06,2,chemical,false,false,false,false,false,false,false,false,false,no pred
+VD12,GABA,0,DD6,2,chemical,false,false,false,false,false,false,false,false,false,no pred
 VD12,GABA,0,VA11,3,chemical,false,false,false,false,true,true,false,false,true,complex
 VD12,GABA,0,VA12,13,chemical,false,false,false,false,true,true,false,false,true,complex
 VD12,GABA,0,VB11,1,chemical,false,false,false,false,true,true,false,false,true,complex
 VD13,GABA,0,AVAR,2,chemical,false,false,false,false,false,true,false,false,false,-
-VD13,GABA,0,DD06,3,chemical,false,false,false,false,false,false,false,false,false,no pred
+VD13,GABA,0,DD6,3,chemical,false,false,false,false,false,false,false,false,false,no pred
 VD13,GABA,0,PVCR,1,chemical,false,false,false,false,false,true,false,false,false,-
 VD13,GABA,0,PVWL,1,chemical,false,false,false,false,false,true,false,false,false,-
 VD13,GABA,0,VA12,11,chemical,false,false,false,false,true,true,false,false,true,complex

@@ -83,7 +83,7 @@ def generateStructs():
                         weightList.append(synapseWeight)
                         
                     elif synapseSign == 'complex':
-                        synapseWeight = synapseWeight * weightedChoice(377,1,94,-1) * 0 #if not included
+                        synapseWeight = synapseWeight * weightedChoice(377,1,94,-1) #* 0 #if not included
                         weightList.append(synapseWeight)
                         
                     else: 
@@ -139,7 +139,7 @@ def checkRatios():
     print(signIteration)  
 
 #function by @dinoceros
-def weightedChoice(odds1, outcome1, odds2, outcome2): #unused odds functions
+def weightedChoice(odds1, outcome1, odds2, outcome2): 
         if random.randint(1, odds1 + odds2) <= odds1:
             return outcome1
         else:
