@@ -9,18 +9,18 @@ Arduboy2 arduboy;                 //create arduboy object
 
 /*
   Optimal Thresholds:
-    Simple - 5
-    Simple GJ - breaks?
-    No Comp GJ - breaks?
-    No Comp - 7
-    No Unk GJ - breaks?
-    No Unk - 15
-    Unk Comp GJ - breaks?
-   *Unk Comp - 15
+    Simple - 5??
+    Simple GJ - breaks
+    No Comp - 9?
+    No Comp GJ - breaks
+    No Unk - 10???
+    No Unk GJ - breaks
+   *Unk Comp - 9
+    Unk Comp GJ - breaks
 */
 
 const uint16_t totalNeurons = 302;
-const uint8_t threshold = 15;      //threshold for activation function
+const uint8_t threshold = 10;      //threshold for activation function
 const uint16_t maxSynapse = 65;   //max synapses a neuron can have as inputs
 const uint16_t synapseCount = 8526;
 const uint8_t expressionX = 40;   //X position to draw the expression
@@ -32,7 +32,7 @@ uint8_t sense = 0;                //interface variable to indicate which sense i
 uint8_t option = 0;               //interface variable to indicate which option is selected
 uint8_t posCount = 0;             //interface variable to indicate which sense is being looked at
 uint8_t lastScreen = 0;           //interface variable to indicate last screen before button press
-int8_t synWeight = 0;             //interface variable to indicate the weight of a given synapse
+int16_t synWeight = 0;            //interface variable to indicate the weight of a given synapse
 bool startFlag = true;            //interface flag for title screen to play
 bool startInputFlag = false;      //variable to determine if an input has been selected yet
 float vaRatio = 0;                //muscle ratios for the interface printout
@@ -69,7 +69,7 @@ struct Neuron {
   int16_t cellID;
   int16_t inputLen;
   int16_t inputs[maxSynapse];
-  int16_t weights[maxSynapse];    //global neuron struct for neuron 'n'
+  float weights[maxSynapse];    //global neuron struct for neuron 'n'
 } n;                              
 
 
@@ -1055,7 +1055,7 @@ void printMovementDir(uint16_t xpos, uint16_t ypos) {
  */
 void activationFunction() {  
   uint16_t index = 0;
-  const float hebbianConstant = 1;               //constant representing the amount the learning array affects a given synapse
+  const uint8_t hebbianConstant = 1;               //constant representing the amount the learning array affects a given synapse
 
   //calculate next output for all neurons using the current output list
   for (id; id < totalNeurons; id++) {
@@ -1074,7 +1074,7 @@ void activationFunction() {
     }
     
     static uint16_t learningPos = 0;                 //static variable for the position in the learning array; (functions as "global" var) 
-    int32_t sum = 0;                                 //variable to store a running sum for the neuron
+    uint16_t sum = 0;                                 //variable to store a running sum for the neuron
     bool hebFlag = false;                            //boolean flag that indicates hebbian learning done at the current neuron
     uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
 
@@ -1100,7 +1100,7 @@ void activationFunction() {
       }
 
       if (n.weights[j] >= gapJuncMinVal) {                                         //if the weight has a gap junction indicator (9_)
-        int8_t gapWeight = n.weights[j] - gapJuncMinVal;                           //gap junctions are indicated by weights at 90-99
+        float gapWeight = n.weights[j] - gapJuncMinVal;                           //gap junctions are indicated by weights at 90-99
         int8_t gapOutput = 0;                                          //gap junctions presynapse outputs are adjusted, as they are not binary
         if (outputList[n.inputs[j]]) gapOutput = (1 + offset);          //outputList value is adjusted for non-binary activation
         if (!outputList[n.inputs[j]]) gapOutput = -(1 + offset);
