@@ -8,18 +8,13 @@
 Arduboy2 arduboy;                 //create arduboy object
 
 const uint16_t totalNeurons = 302;
-const uint8_t threshold = 15;      //threshold for activation function
-const uint16_t maxSynapse = 65;   //maximum number of synapses a neuron can have
-const uint16_t synapseCount = 8526;
+const uint16_t maxSynapse = 78;   //maximum number of synapses a neuron can have
 const uint8_t address = EEPROM_STORAGE_SPACE_START;      //eeprom address for save function
+uint16_t id = 0;                   //the current neuron activation function is calculating
 uint16_t tick = 0;                //connectome ticks
-uint16_t autosaveTimer = 10000;    //the number to modulo the tick by to activate autosave
 bool startFlag = true;            //interface flag for title screen to play
-float vaRatio = 0;                //muscle ratios for interface printout
-float vbRatio = 0;
-float daRatio = 0;
-float dbRatio = 0;
-uint8_t foodEaten = 0;            //how much food has been eaten
+bool isForward = false;
+bool isLeft = false;
 uint8_t cursorX = 64;     //cursor
 uint8_t cursorY = 27;     //cursor
 uint8_t wormX = 64;       //worm
@@ -40,25 +35,18 @@ uint8_t obstacleX5 = 75;  //leaf
 uint8_t obstacleY5 = 11;  //leaf
 uint8_t repellentX = 34;  //repellent
 uint8_t repellentY = 52;  //repellent
-uint8_t fullTick = 0;
 bool isRepel = true;      //if theres any repellents
 bool isFood = true;       //if theres any food
 bool isAsleep = false;    //if sleep state is active
-bool sated = false;       //if the worm is not hungry
-uint16_t id = 0;
-const uint8_t maxLearningVal = 7;       //maximum possible value of learning array elements (max: 7, min: -8)
-const uint8_t minLearningVal = -8;
-const uint32_t maxTick = 3628800;
-const uint16_t saveSizeMod = 10;
 const uint8_t screenWidth = 128;
 const uint8_t screenHeight = 64; 
 const uint16_t learnValMax = 963;
-const uint16_t totalLearningNeurons = 50;
 const uint8_t gapJuncMinVal = 90;
+const uint8_t maxLearningVal = 7;         //maximum possible value of learning array elements
+const uint8_t minLearningVal = -8;        //minimum possible value of learning array elements
 
 //massive thanks to Dinokaiz2 for help with the bit array functionality!!!
-SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, synapseCount, -70, true);
-
+SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 8526, -70, true);
 SizedIntArray<4, learnValMax, true> learningArray;  //an array that, for each neuron that does hebbian learning, holds a form of simplified output history
 BitArray<totalNeurons> outputList;     //list of neurons
 BitArray<totalNeurons> nextOutputList; //buffer to solve conflicting time differentials in firing
@@ -196,7 +184,7 @@ void simulation() {
   doAppetite();
 
   //draw stipling in the dirt to indicate depth
-  bool offset = false;
+  /*bool offset = false;
   uint8_t widthOffset = 1;
 
   for (uint8_t j = stiplingStart; j <= screenHeight; j+=stiplingWidth) {
@@ -220,13 +208,13 @@ void simulation() {
       }
     }
     offset = !offset;
-  }
+  }*/
 
-  Sprites::drawOverwrite(obstacleX1, obstacleY1, rock1, 0);
+  //Sprites::drawOverwrite(obstacleX1, obstacleY1, rock2, 0);
+  //Sprites::drawOverwrite(obstacleX3, obstacleY3, rock3, 0);
   Sprites::drawOverwrite(obstacleX2, obstacleY2, stick, 0);
-  Sprites::drawOverwrite(obstacleX3, obstacleY3, rock3, 0);
   Sprites::drawOverwrite(obstacleX4, obstacleY4, leaf, 0);
-  Sprites::drawOverwrite(obstacleX5, obstacleY5, leaf, 0);
+  //Sprites::drawOverwrite(obstacleX5, obstacleY5, leaf, 0);
   Sprites::drawOverwrite(20, 2, sun, 0);    //draw a sun on surface
   Sprites::drawOverwrite(90, 0, tree, 0);   //draw the tree in top right
 
@@ -234,30 +222,30 @@ void simulation() {
   for (uint8_t i = 1; i < screenWidth - 1; i += 10) {
     arduboy.drawPixel(i, 19, WHITE);
     arduboy.drawPixel(i, 18, WHITE);
-    arduboy.drawPixel(i, 17, WHITE);
-    arduboy.drawPixel(i, 16, WHITE);
+    //arduboy.drawPixel(i, 17, WHITE);
+    //arduboy.drawPixel(i, 16, WHITE);
     
     arduboy.drawPixel(i+2, 19, WHITE);
-    arduboy.drawPixel(i+2, 18, WHITE);
-    arduboy.drawPixel(i+2, 17, WHITE);
+    //arduboy.drawPixel(i+2, 18, WHITE);
+    //arduboy.drawPixel(i+2, 17, WHITE);
 
     arduboy.drawPixel(i+4, 19, WHITE);
-    arduboy.drawPixel(i+4, 18, WHITE);
-    arduboy.drawPixel(i+4, 17, WHITE);
+    //arduboy.drawPixel(i+4, 18, WHITE);
+    //arduboy.drawPixel(i+4, 17, WHITE);
 
     arduboy.drawPixel(i+6, 19, WHITE);
     arduboy.drawPixel(i+6, 18, WHITE);
-    arduboy.drawPixel(i+6, 17, WHITE);
-    arduboy.drawPixel(i+6, 16, WHITE);
+    //arduboy.drawPixel(i+6, 17, WHITE);
+    //arduboy.drawPixel(i+6, 16, WHITE);
 
     arduboy.drawPixel(i+8, 19, WHITE);
-    arduboy.drawPixel(i+8, 18, WHITE);
-    arduboy.drawPixel(i+8, 17, WHITE);
+    //arduboy.drawPixel(i+8, 18, WHITE);
+    //arduboy.drawPixel(i+8, 17, WHITE);
 
     arduboy.drawPixel(i+10, 19, WHITE);
     arduboy.drawPixel(i+10, 18, WHITE);
-    arduboy.drawPixel(i+10, 17, WHITE);
-    arduboy.drawPixel(i+10, 16, WHITE);    
+    //arduboy.drawPixel(i+10, 17, WHITE);
+    //arduboy.drawPixel(i+10, 16, WHITE);    
   }
 
   //draw food on screen (store this in sprites.h)
@@ -321,6 +309,8 @@ void simulation() {
  * connectome's tick variable
  */
 void autosave() {
+  const uint16_t autosaveTimer = 10000;    //the number to modulo the tick by to activate autosave
+
   if (tick % autosaveTimer == 0) {
     for (uint16_t i = 0; i < learningArray.size; i++) {  //save each element of the learning array save data
       EEPROM.write(address + i, learningArray.compressed[i]);
@@ -333,6 +323,9 @@ void autosave() {
  * at the proper rate by using the tick variable
  */
 void doAppetite() {
+  static uint8_t foodEaten = 0;            //how much food has been eaten
+  static uint8_t fullTick = 0;
+  static bool sated = false;       //if the worm is not hungry
   uint8_t satThresh = 5;
   uint8_t digestionTime = 1000;
 
@@ -508,12 +501,44 @@ void drawWorm() {
 }
 
 /**
+ * gets worm movements based on output from its network
+ */
+void doMovement() {
+  //AVB: command interneuron, forward
+  if (outputList[55] && outputList[56]) { 
+    isForward = true;
+  }
+  
+  //AVA: command interneuron, reversal
+  if (outputList[53] && outputList[54]) {
+    isForward = false;
+  }
+
+  //if dorsal > ventral, set to left turn; if ventral > dorsal, set to right turn
+  //SMB: amplitude of turn, oscillates with head bends
+  if ((outputList[240] && outputList[241]) || !(outputList[242] && outputList[243])) {
+    isLeft = true;
+  } else if (!(outputList[240] && outputList[241]) || (outputList[242] && outputList[243])) {
+    isLeft = false;
+  }
+
+  //if dorsal > ventral, set to left turn; if ventral > dorsal, set to right turn
+  //SMD: post-reversal amplitude of turn, oscillates with head bends
+  if ((outputList[244] && outputList[245]) || !(outputList[246] && outputList[247])) {
+    isLeft = true;
+  } else if (!(outputList[244] && outputList[245]) || (outputList[246] && outputList[247])) {
+    isLeft = false;
+  }
+}
+
+/**
  * Function to calculate worm's movement based on its muscle outputs
  */
 void wormMove() {
   prevWormDir = wormFacing;                       //update previous worm direction
+  doMovement();
 
-  if (vaRatio + daRatio > vbRatio + dbRatio) {    //worm is moving backward
+  if (!isForward) {    //worm is moving backward
     if (wormFacing == 0 && wormY <= screenHeight && wormY >= 0) {   
       if (!(wormY-1 >= 49  && wormY-1 <= screenHeight 
          && wormY-1 >= 45  && wormY-1 <= screenHeight)
@@ -543,7 +568,7 @@ void wormMove() {
         wormX++;
       }
     }
-  } else {                                        //worm is moving forward
+  } else {            //worm is moving forward
     if (wormFacing == 0 && wormY <= screenHeight && wormY >= 0) {
       if (!(wormY+1 >= 49  && wormY+1 <= screenHeight
          && wormY+1 >= 45  && wormY+1 <= screenHeight)
@@ -575,7 +600,7 @@ void wormMove() {
     }
   }
   
-  if (vaRatio + vbRatio > daRatio + dbRatio) {    //worm is moving left
+  if (isLeft) {    //worm is moving left
     if (wormFacing == 0) {
       wormFacing = 3;
     } else if (wormFacing == 1) {
@@ -585,7 +610,7 @@ void wormMove() {
     } else if (wormFacing == 3) {
       wormFacing = 2;
     }
-  } else {                                        //worm is moving right
+  } else {         //worm is moving right
     if (wormFacing == 0) {
       wormFacing = 1;
     } else if (wormFacing == 1) {
@@ -641,6 +666,7 @@ void drawFaces() {
  * Function to make stepwise gradients on the screen
  */
 void makeGradients(bool isFullRadius, uint8_t compX, uint8_t compY, void (*senseFunction)(), bool isStimulant, bool isPhasic, bool onlyVertical) {
+  const uint32_t maxTick = 3628800;
   const uint8_t smallRad = 25;
   const uint8_t largeRad = 50;
 
@@ -761,11 +787,11 @@ void calculateGradients() {
  */
 void calculateCollisions() {
   //obstacle 1 (rock 1) collisions
-  if ((obstacleX1 <= wormX && wormX <= obstacleX1 + 18) && 
+  /*if ((obstacleX1 <= wormX && wormX <= obstacleX1 + 18) && 
       (obstacleY1 <= wormY && wormY <= obstacleY1 + 15)) {
     //activate harsh touch
     doHarshNoseTouch();
-  }
+  }*/
 
   //obstacle 2 (stick) collisions
   if ((obstacleX2 <= wormX && wormX <= obstacleX2 + 24) && 
@@ -775,11 +801,11 @@ void calculateCollisions() {
   }
 
   //obstacle 3 (rock 3) collisions
-  if ((obstacleX3 <= wormX && wormX <= obstacleX3 + 18) && 
+  /*if ((obstacleX3 <= wormX && wormX <= obstacleX3 + 18) && 
       (obstacleY3 <= wormY && wormY <= obstacleY3 + 19)) {
     //activate harsh touch
     doHarshNoseTouch();
-  }
+  }*/
 
   //obstacle 4 (leaf) collisions
   if ((obstacleX4 <= wormX && wormX <= obstacleX4 + 9) && 
@@ -789,11 +815,11 @@ void calculateCollisions() {
   }
   
   //obstacle 5 (leaf) collisions
-  if ((obstacleX5 <= wormX && wormX <= obstacleX5 + 9) && 
+  /*if ((obstacleX5 <= wormX && wormX <= obstacleX5 + 9) && 
       (obstacleY5 <= wormY && wormY <= obstacleY5 + 8)) {
     //activate gentle touch
     doGentleNoseTouch();
-  }
+  }*/
 
   //if worm hits border, activate harsh touch
   if (wormX == 0 || wormX == screenWidth || wormY == 0 || wormY == screenHeight) {
@@ -971,6 +997,9 @@ void doProprioception() { //phasic, unless held then it becomes tonic
 void activationFunction() {  
   uint16_t index = 0;
   const float hebbianConstant = 1;               //constant representing the amount the learning array affects a given synapse
+  const uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
+  const uint8_t threshold = 10;             //threshold for activation function
+  const uint16_t totalLearningNeurons = 50; //number of neurons with hebbian learning ability, the size of hebbian_neurons[] array
 
   //calculate next output for all neurons using the current output list
   for (id; id < totalNeurons; id++) {
@@ -990,16 +1019,11 @@ void activationFunction() {
     static uint16_t learningPos = 0;                 //static variable for the position in the learning array; (functions as "global" var) 
     int32_t sum = 0;
     bool hebFlag = false;
-    uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
 
     for (uint8_t hebIndex = 0; hebIndex < totalLearningNeurons; hebIndex++) {             //check to see if current ID is in the hebbian-capable neuron  list
       if (HEBBIAN_NEURONS[hebIndex] == id) {                            //if the current neuron being read in is in the hebbian neuron array
         for (uint8_t hebInput = 0; hebInput < n.inputLen; hebInput++) {             //for every presynapse to the current neuron
           n.weights[hebInput] += hebbianConstant * learningArray[learningPos + hebInput];            //adjust its weight based on the learning array
-
-          if (learningPos >= learnValMax) {                                     //unless its at the end
-            learningPos = 0;                                            //then reset the counter to zero
-          }
         }
 
         hebFlag = true;                                                 //flag to mark the neuron's synapse as doing hebbian learning

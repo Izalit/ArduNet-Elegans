@@ -8,31 +8,23 @@
 Arduboy2 arduboy;                 //create arduboy object
 
 const uint16_t totalNeurons = 302;
-const uint8_t threshold = 15;      //threshold for activation function
-const uint16_t maxSynapse = 65;   //max synapses a neuron can have as inputs
-const uint16_t synapseCount = 8526;
+const uint16_t maxSynapse = 78;   //max synapses a neuron can have as inputs
+uint16_t id = 0;                   //the current neuron activation function is calculating
 uint8_t option = 0;               //interface variable to indicate which option is selected
 bool startFlag = true;            //interface flag for title screen to play
 bool isChemotaxis = false;        //flag to know if baseline occurs or not
-float vaRatio = 0;                //muscle ratios for the interface printout
-float vbRatio = 0;
-float daRatio = 0;
-float dbRatio = 0;
-uint16_t id = 0;                  //the current neuron activation function is calculating
 uint16_t tick = 0;                //connectome ticks (resets to zero at 3628800)
 uint8_t selectedOption = 0;       //for if an options screen is selected
-const int8_t maxLearningVal = 7;        //maximum possible value of learning array elements
-const int8_t minLearningVal = -8;
-const uint32_t maxTick = 3628800;
-const uint16_t saveSizeMod = 10;
 const uint16_t learnValMax = 963;
-const uint16_t totalLearningNeurons = 50;
 const uint8_t gapJuncMinVal = 90;
 const uint8_t screenWidth = 128;
 const uint8_t screenHeight = 64; 
+const uint8_t maxLearningVal = 7;         //maximum possible value of learning array elements
+const uint8_t minLearningVal = -8;        //minimum possible value of learning array elements
+bool isForward = false;
+bool isLeft = false;
 
-SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, synapseCount, -70, true);
-uint16_t preSynapticNeuronList[maxSynapse];  //interface array to hold all the different presynaptic neurons
+SizedIntArrayReader<9> NEURAL_ROM(COMPRESSED_NEURAL_ROM, 9806, -70, true);
 SizedIntArray<4, learnValMax, true> learningArray;    //an array that, for each neuron, holds its firing history
 BitArray<totalNeurons> outputList;                    //list of neurons
 BitArray<totalNeurons> nextOutputList;                //buffer to solve conflicting time differentials in firing
@@ -44,7 +36,6 @@ struct Neuron {
   int16_t weights[maxSynapse];    //global neuron struct for neuron 'n'
 } n;                              
 
-
 //setup function
 void setup() {
   arduboy.begin();
@@ -53,6 +44,8 @@ void setup() {
 
 //primary loop function
 void loop() {
+  const uint32_t maxTick = 3628800;
+
   if (!(arduboy.nextFrame())) {  //verify that runs properly
     return;
   }
@@ -131,6 +124,37 @@ void doButtons() {
 }
 
 /**
+ * gets worm movements based on output from its network
+ */
+void doMovement() {
+  //AVB: command interneuron, forward
+  if (outputList[55] && outputList[56]) { 
+    isForward = true;
+  }
+  
+  //AVA: command interneuron, reversal
+  if (outputList[53] && outputList[54]) {
+    isForward = false;
+  }
+
+  //if dorsal > ventral, set to left turn; if ventral > dorsal, set to right turn
+  //SMB: amplitude of turn, oscillates with head bends
+  if ((outputList[240] && outputList[241]) || !(outputList[242] && outputList[243])) {
+    isLeft = true;
+  } else if (!(outputList[240] && outputList[241]) || (outputList[242] && outputList[243])) {
+    isLeft = false;
+  }
+
+  //if dorsal > ventral, set to left turn; if ventral > dorsal, set to right turn
+  //SMD: post-reversal amplitude of turn, oscillates with head bends
+  if ((outputList[244] && outputList[245]) || !(outputList[246] && outputList[247])) {
+    isLeft = true;
+  } else if (!(outputList[244] && outputList[245]) || (outputList[246] && outputList[247])) {
+    isLeft = false;
+  }
+}
+
+/**
  * Function to display the screen that saves data and gives the user the option to 
  * export the eeprom save data
  */
@@ -179,6 +203,8 @@ void doOptions() {
  * Function to do logic for the options serial print subscreen
  */
 void doDeleteSave() {  
+  const uint16_t saveSizeMod = 10;
+
   arduboy.clear();
   
   while (!(arduboy.justPressed(A_BUTTON) && arduboy.justPressed(B_BUTTON))) {  //if user selects NO
@@ -275,8 +301,10 @@ void doSerialHostScreen() {
       break;
     }
 
-    if (isSimulating) activationFunction(); //run simulation if the proper serial command was received
-
+    if (isSimulating) {
+      activationFunction(); //run simulation if the proper serial command was received
+      doMovement();
+    }
 /*                                          Input Legend
                   .MTR = write output matrix to serial,
                   .MSC = write muscle output to serial,
@@ -320,10 +348,8 @@ void doSerialHostScreen() {
       Serial.println(F("]"));                            //print an "output end" char      
     } else if (serInput[0] == '.' && serInput[1] == 'M' && serInput[2] == 'S' && serInput[3] == 'C') {
       Serial.print(F("["));                              //print an "output start" char
-      Serial.print(F("VA:")); Serial.print(vaRatio);     //print comma delimeted output info over serial
-      Serial.print(F(", VB:")); Serial.print(vbRatio);
-      Serial.print(F(", DA:")); Serial.print(daRatio);
-      Serial.print(F(", DB:")); Serial.print(dbRatio);
+      Serial.print(F("isForward:")); Serial.print(isForward);     //print comma delimeted output info over serial
+      Serial.print(F(", isLeft:")); Serial.print(isLeft);
       Serial.println(F("]"));                            //print an "output end" char
     } else if (serInput[0] == 'B' && serInput[1] == 'A' && serInput[2] == 'S' && serInput[3] == 'E') {
       /*if (serInput[4] == 'T') tonic(__, __, __, doBaseline);
@@ -373,13 +399,13 @@ void doSerialHostScreen() {
       doProprioception();
     } else {  //handle the error in serial message
       arduboy.setCursor(20, 3);
-      arduboy.print("SERIAL ERROR!");
+      arduboy.print(F("SERIAL ERROR!"));
       arduboy.setCursor(5, 20);
-      arduboy.print("unexpected serial");
+      arduboy.print(F("unexpected serial"));
       arduboy.setCursor(5, 30);
-      arduboy.print("code: ");
+      arduboy.print(F("code: "));
       arduboy.print(serInput[0] + serInput[1] + serInput[2] + serInput[3] + serInput[4]);
-      arduboy.print("?");
+      arduboy.print(F("?"));
     }
 
     arduboy.pollButtons();
@@ -750,6 +776,9 @@ void doProprioception() { //phasic, unless held then it becomes tonic
 void activationFunction() {  
   uint16_t index = 0;
   const float hebbianConstant = 1;               //constant representing the amount the learning array affects a given synapse
+  const uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
+  const uint8_t threshold = 10;             //threshold for activation function
+  const uint16_t totalLearningNeurons = 50; //number of neurons with hebbian learning ability, the size of hebbian_neurons[] array
 
   //calculate next output for all neurons using the current output list
   for (id; id < totalNeurons; id++) {
@@ -769,16 +798,11 @@ void activationFunction() {
     static uint16_t learningPos = 0;                 //static variable for the position in the learning array; (functions as "global" var) 
     int32_t sum = 0;                                 //fill the neuron struct with the information of the ith neuron
     bool hebFlag = false;
-    uint8_t offset = 2;                              //value to adjust how much "charge" a gap junction sends to next neuron
 
     for (uint8_t hebIndex = 0; hebIndex < totalLearningNeurons; hebIndex++) {             //check to see if current ID is in the hebbian-capable neuron  list
       if (HEBBIAN_NEURONS[hebIndex] == id) {                            //if the current neuron being read in is in the hebbian neuron array
         for (uint8_t hebInput = 0; hebInput < n.inputLen; hebInput++) {             //for every presynapse to the current neuron
           n.weights[hebInput] += hebbianConstant * learningArray[learningPos + hebInput];            //adjust its weight based on the learning array
-
-          if (learningPos >= learnValMax) {                                     //unless its at the end
-            learningPos = 0;                                            //then reset the counter to zero
-          }
         }
 
         hebFlag = true;                                                 //flag to mark the neuron's synapse as doing hebbian learning
